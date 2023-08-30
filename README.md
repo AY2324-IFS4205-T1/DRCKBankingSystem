@@ -3,6 +3,8 @@
 DRCK Banking System
 This is from application-skeleton-branch
 
+This skeleton authentication application is based on the following tutorial: <https://www.youtube.com/watch?v=diB38AvVkHw>
+
 ## Set Up Instructions
 
 ### Virtual Environment
@@ -18,6 +20,12 @@ If you are not using Anaconda, set up using pip.
 
 1. `pip install -r requirements`
 
-### Start Server Locally
+### Start Locally
 
+`cd backend`
 `python manage.py runserver`
+
+AND
+
+`cd frontend`
+`npm start`

@@ -1,5 +1,5 @@
 """
-URL configuration for django_project project.
+URL configuration for backend project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.2/topics/http/urls/
@@ -14,12 +14,12 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path, include
-from django.views.generic.base import TemplateView
+from django.urls import path
+from user_api import views
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
-    path("", include("django.contrib.auth.urls")),
-    path("", TemplateView.as_view(template_name="home.html"), name="home")
+	path('register', views.UserRegister.as_view(), name='register'),
+	path('login', views.UserLogin.as_view(), name='login'),
+	path('logout', views.UserLogout.as_view(), name='logout'),
+	path('user', views.UserView.as_view(), name='user'),
 ]
