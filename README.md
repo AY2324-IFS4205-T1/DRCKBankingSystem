@@ -29,3 +29,21 @@ AND
 
 `cd frontend`
 `npm start`
+
+## Tasks Assignment
+
+### Darren
+
+* Task 1
+
+### Rebecca
+
+* Task 1
+
+### Chua Wei
+
+* Task 1
+
+### Kwok
+
+* Implemented a skeleton version of the code including register/login/logout function
