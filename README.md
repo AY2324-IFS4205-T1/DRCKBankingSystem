@@ -46,4 +46,5 @@ AND
 
 ### Kwok
 
-* Implemented a skeleton version of the code including register/login/logout function
+* Implemented a skeleton version of the code including register/login/logout function based on [this tutorial](https://learndjango.com/tutorials/django-login-and-logout-tutorial)
+* Implemented multiple pages in a web architecture based on [this tutorial](https://www.geeksforgeeks.org/how-to-create-a-multi-page-website-using-react-js/)
