@@ -22,6 +22,15 @@ If you are not using Anaconda, set up using pip.
 
 ### Set up Database
 
+`sudo -i -u postgres psql`
+`postgres=# create database drck_banking;`
+`postgres=# create user django with encrypted password 'password';`
+`postgres=# grant all privileges on database drck_banking to django;`
+`postgres=# \c drck_banking postgres`
+`postgres=# grant all on schema public to django;`
+
+`python manage.py migrate`
+
 ### Start Locally
 
 `cd backend`
