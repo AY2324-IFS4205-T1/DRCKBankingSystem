@@ -87,7 +87,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': "django_test",
+        'NAME': "drck_banking",
         "USER": "django",
         "PASSWORD": "password",
         "HOST": "localhost",
@@ -146,3 +146,18 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# SSL/HTTPS
+# https://docs.djangoproject.com/en/4.2/topics/security/#ssl-https
+# i have no idea what the effect of these are, so i have not uncommented
+# SECURE_SSL_REDIRECT = True
+# SESSION_COOKIE_SECURE = True
+# SECURE_HSTS_SECONDS = 3600 ## if it does not break the system, recommended 31536000
+
+# CSRF
+# https://docs.djangoproject.com/en/4.2/ref/csrf/
+# CSRF_COOKIE_SECURE = True
+
+# Clickjacking
+# https://docs.djangoproject.com/en/4.2/ref/clickjacking/
+# X_FRAME_OPTIONS = "DENY"

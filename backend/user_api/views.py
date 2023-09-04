@@ -4,13 +4,13 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import UserRegisterSerializer, UserLoginSerializer, UserSerializer
 from rest_framework import permissions, status
-from .validations import custom_validation, validate_email, validate_password
+from .validations import Validations
 
 
 class UserRegister(APIView):
 	permission_classes = (permissions.AllowAny,)
 	def post(self, request):
-		clean_data = custom_validation(request.data)
+		clean_data = Validations().custom_validation(request.data)
 		serializer = UserRegisterSerializer(data=clean_data)
 		if serializer.is_valid(raise_exception=True):
 			user = serializer.create(clean_data)
@@ -25,8 +25,8 @@ class UserLogin(APIView):
 	##
 	def post(self, request):
 		data = request.data
-		assert validate_email(data)
-		assert validate_password(data)
+		assert Validations().validate_email(data)
+		assert Validations().validate_password(data)
 		serializer = UserLoginSerializer(data=data)
 		if serializer.is_valid(raise_exception=True):
 			user = serializer.check_user(data)
@@ -49,3 +49,36 @@ class UserView(APIView):
 	def get(self, request):
 		serializer = UserSerializer(request.user)
 		return Response({'user': serializer.data}, status=status.HTTP_200_OK)
+
+
+
+'''
+user (home)
+- login page
+    register
+    login
+    logout
+    user
+- apply
+    apply
+- balance
+    view_balance
+- transfer
+    transfer
+- atm
+    deposit
+    withdraw
+
+staff (home)
+- login page
+    staff_login
+	staff_logout
+	staff
+- applications
+    approve
+	reject
+- logs
+    view_logs
+- research
+    view_research_data
+'''

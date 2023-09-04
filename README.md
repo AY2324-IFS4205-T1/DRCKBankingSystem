@@ -20,6 +20,8 @@ If you are not using Anaconda, set up using pip.
 
 1. `pip install -r requirements`
 
+### Set up Database
+
 ### Start Locally
 
 `cd backend`
@@ -28,6 +30,7 @@ If you are not using Anaconda, set up using pip.
 AND
 
 `cd frontend`
+`npm install`
 `npm start`
 
 ## Tasks Assignment
@@ -46,5 +49,5 @@ AND
 
 ### Kwok
 
-* Implemented a skeleton version of the code including register/login/logout function based on [this tutorial](https://learndjango.com/tutorials/django-login-and-logout-tutorial)
+* Implemented a skeleton version of the code including register/login/logout function based on [this tutorial](https://www.youtube.com/watch?v=diB38AvVkHw) and borrowing code from [this repository](https://github.com/dotja/authentication_app_react_django_rest)
 * Implemented multiple pages in a web architecture based on [this tutorial](https://www.geeksforgeeks.org/how-to-create-a-multi-page-website-using-react-js/)
