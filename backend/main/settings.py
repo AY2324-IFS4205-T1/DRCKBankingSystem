@@ -88,8 +88,33 @@ DATABASES = {
         'PASSWORD': 'password',
         'HOST': 'localhost',
         'PORT': '5432'
-    }
+    },
+    'customer': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'drck_banking',
+        'USER': 'django',
+        'PASSWORD': 'password',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    },
+    'django': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'drck_banking',
+        'USER': 'django',
+        'PASSWORD': 'password',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    },
+    'staff': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'drck_banking',
+        'USER': 'django',
+        'PASSWORD': 'password',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    },
 }
+
 
 
 # Password validation
