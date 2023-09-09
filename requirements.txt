@@ -1,0 +1,5 @@
+asgiref==3.7.2 # ASGI specs, helper code, and adapters
+Django==4.2.5 # A high-level Python web framework that encourages rapid development and clean, pragmatic design.
+django-cors-headers==4.2.0 # django-cors-headers is a Django application for handling the server headers required for Cross-Origin Resource Sharing (CORS).
+djangorestframework==3.14.0 # Web APIs for Django, made easy.
+psycopg2==2.9.7 # psycopg2 - Python-PostgreSQL Database Adapter

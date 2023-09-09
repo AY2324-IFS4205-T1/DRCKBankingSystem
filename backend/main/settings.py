@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-))*_n#0zg1@e2i1%af2qd91xhg20c-$u-_x3!r!b^$xcx7&0an'
+SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -83,35 +84,11 @@ DATABASES = {
         'OPTIONS': {
             'options': '-c search_path=django'
         },
-        'NAME': 'drck_banking',
-        'USER': 'django',
-        'PASSWORD': 'password',
-        'HOST': 'localhost',
-        'PORT': '5432'
-    },
-    'customer': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'drck_banking',
-        'USER': 'django',
-        'PASSWORD': 'password',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    },
-    'django': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'drck_banking',
-        'USER': 'django',
-        'PASSWORD': 'password',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    },
-    'staff': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'drck_banking',
-        'USER': 'django',
-        'PASSWORD': 'password',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': os.environ['POSTGRES_DBNAME_AUTH'],
+        'USER': os.environ['POSTGRES_USER_AUTH'],
+        'PASSWORD': os.environ['POSTGRES_PASSWORD_AUTH'],
+        'HOST': os.environ['POSTGRES_HOST_AUTH'],
+        'PORT': os.environ['POSTGRES_PORT_AUTH']
     },
 }
 
