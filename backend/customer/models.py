@@ -44,7 +44,7 @@ class Accounts(models.Model):
     type_id = models.ForeignKey(AccountTypes, on_delete=models.CASCADE)
     balance = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     status = models.CharField(max_length=1, choices=AccountStatus.choices)
-    date_created = models.DateTimeField()
+    date_created = models.DateTimeField(auto_now_add=True)
 
 
 class Transactions(models.Model):
@@ -53,11 +53,12 @@ class Transactions(models.Model):
     recipient_id = models.ForeignKey(Accounts, related_name='received_transactions', on_delete=models.CASCADE)
     description = models.CharField(max_length=255)
     amount = models.DecimalField(max_digits=12, decimal_places=2)
-    date = models.DateTimeField()
+    date = models.DateTimeField(auto_now_add=True)
     
     class Meta:
         db_table = 'customer"."transactions'
         
+    # Will review this another day
     def clean_account(self):
         if self.sender_id == self.recipient_id:
             raise ValueError("Sender account should not be recipient account")
