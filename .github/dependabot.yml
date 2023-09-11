@@ -25,5 +25,5 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
-    target-branch: skeleton2
+    target-branch: skeleton-frontend
 
