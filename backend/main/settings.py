@@ -11,7 +11,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-import os
+from datetime import timedelta
+from rest_framework.settings import api_settings
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
+SECRET_KEY = "*c#mdol)b&!1e@!rsc$ij4a#@_=k556bmjxpr_ja!##vb*q)lk"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -39,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'knox',
     'user',
     'customer',
     'staff'
@@ -84,11 +86,11 @@ DATABASES = {
         'OPTIONS': {
             'options': '-c search_path=django'
         },
-        'NAME': os.environ['POSTGRES_DBNAME_AUTH'],
-        'USER': os.environ['POSTGRES_USER_AUTH'],
-        'PASSWORD': os.environ['POSTGRES_PASSWORD_AUTH'],
-        'HOST': os.environ['POSTGRES_HOST_AUTH'],
-        'PORT': os.environ['POSTGRES_PORT_AUTH']
+        'NAME': "drck_banking",
+        'USER': "postgres",
+        'PASSWORD': "password",
+        'HOST': "localhost",
+        'PORT': "5432"
     },
 }
 
@@ -103,6 +105,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': { 'min_length': 8, }
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -135,5 +138,21 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Custom user authentication model
 AUTH_USER_MODEL = "user.User"
 AUTHENTICATION_BACKENDS = ['user.authentication.UserAuth'] #'django.contrib.auth.backends.ModelBackend'
+
+# Knox Authentication Module
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication', ),
+}
+
+REST_KNOX = {
+    'SECURE_HASH_ALGORITHM':'cryptography.hazmat.primitives.hashes.SHA512',
+    'AUTH_TOKEN_CHARACTER_LENGTH': 64, # By default, it is set to 64 characters (this shouldn't need changing).
+    'TOKEN_TTL': timedelta(minutes=45), # The default is 10 hours i.e., timedelta(hours=10)).
+    'USER_SERIALIZER': 'knox.serializers.UserSerializer',
+    'TOKEN_LIMIT_PER_USER': None, # By default, this option is disabled and set to None -- thus no limit.
+    'AUTO_REFRESH': False, # This defines if the token expiry time is extended by TOKEN_TTL each time the token is used.
+    'EXPIRY_DATETIME_FORMAT': api_settings.DATETIME_FORMAT,
+}
