@@ -16,11 +16,22 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from knox import views as knox_views
 
-from customer.views import RegistrationView, LoginView
+from customer.views import CustomerRegistrationView, CustomerLoginView
+from staff.views import StaffLoginView
 
 urlpatterns = [
     #path('admin/', admin.site.urls),
-    path('register', RegistrationView.as_view(), name='register'),
-    path('login', LoginView.as_view(), name='login')
+
+    #Customer
+    path('customer/register', CustomerRegistrationView.as_view(), name='customerRegister'),
+    path('customer/login', CustomerLoginView.as_view(), name='customerLogin'),
+
+    #Staff
+    #path('staff/register', StaffRegistrationView.as_view(), name='staffRegister'),
+    path('staff/login', CustomerLoginView.as_view(), name='staffLogin'),
+
+    #In logout, header key: Authorization, Value: Token 3510ff361b..
+    path('logout', knox_views.LogoutView.as_view(), name='logout'),
 ]

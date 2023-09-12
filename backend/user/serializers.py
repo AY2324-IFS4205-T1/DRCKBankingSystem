@@ -1,10 +1,10 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
-from django.contrib.auth.password_validation import validate_password
 from .models import User
 from customer.serializers import CustomerSerializer
+from staff.serializers import StaffSerializer
 
-class UserSerializer(serializers.ModelSerializer):
+class UserRegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
     class Meta:
@@ -13,12 +13,27 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         new_user = None
-        validate_password(validated_data['password'])
+        user_type = self.context['type']
+        print(user_type)
+        print( User.user_type.CUSTOMER)
 
-        customer_serializer = CustomerSerializer(data=self.initial_data)
-        if customer_serializer.is_valid():
-            new_user = User.objects.create_user(**validated_data, type=self.context['type'])
-            customer_serializer.save(user=new_user)
+        if user_type == User.user_type.CUSTOMER:
+            customer_serializer = CustomerSerializer(data=self.initial_data)
+            if customer_serializer.is_valid():
+                new_user = User.objects.create_user(**validated_data, type=self.context['type'])
+                customer_serializer.save(user=new_user)
+
+        # This should be commented in production state
+        # elif user_type == User.user_type.STAFF:
+        #     staff_serializer = StaffSerializer(data=self.inital_data)
+        #     if staff_serializer.is_valid():
+        #         new_user = User.objects.create_user(**validated_data, type=self.context['type'])
+        #         staff_serializer.save(user=new_user)
+
+        
+        # if new_user == None:
+            # Handle exception here
+        
         return new_user
     
 class LoginSerializer(serializers.Serializer):
