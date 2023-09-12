@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 from datetime import timedelta
 from rest_framework.settings import api_settings
@@ -22,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "*c#mdol)b&!1e@!rsc$ij4a#@_=k556bmjxpr_ja!##vb*q)lk"
+SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -86,11 +87,11 @@ DATABASES = {
         'OPTIONS': {
             'options': '-c search_path=django'
         },
-        'NAME': "drck_banking",
-        'USER': "postgres",
-        'PASSWORD': "password",
-        'HOST': "localhost",
-        'PORT': "5432"
+        'NAME': os.environ["POSTGRES_DBNAME_AUTH"],
+        'USER': os.environ["POSTGRES_USER_AUTH"],
+        'PASSWORD': os.environ["POSTGRES_PASSWORD_AUTH"],
+        'HOST': os.environ["POSTGRES_HOST_AUTH"],
+        'PORT': os.environ["POSTGRES_PORT_AUTH"]
     },
 }
 
