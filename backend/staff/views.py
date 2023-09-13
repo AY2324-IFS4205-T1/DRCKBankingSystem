@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from knox.views import LoginView as KnoxLoginView
-from staff.serializers import ApproveSerializer, RejectSerializer
+from staff.serializers import ApproveSerializer, GetOpenTicketsSerializer, RejectSerializer
 from user.serializers import UserRegisterSerializer, LoginSerializer
 
 staff_type = {'type': 'S'}
@@ -31,7 +31,8 @@ class StaffRegistrationView(APIView):
             serializer.save()
             return Response(status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
+
 class StaffLoginView(KnoxLoginView):
     serializer_class = LoginSerializer
     permission_classes = (permissions.AllowAny,)
@@ -50,6 +51,7 @@ class StaffLoginView(KnoxLoginView):
 
             return Response(response.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class ApproveView(APIView):
     '''
@@ -80,3 +82,13 @@ class RejectView(APIView):
             return Response(status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+
+class GetOpenTicketsView(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    authentication_classes = (SessionAuthentication,)
+    
+    def get(self, request):
+        serializer = GetOpenTicketsSerializer().get_open_tickets_list()
+        return Response({'open_tickets': serializer}, status=status.HTTP_200_OK)
+
+

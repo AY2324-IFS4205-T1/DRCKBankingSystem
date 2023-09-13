@@ -58,7 +58,7 @@ class RejectSerializer(serializers.Serializer):
 class GetOpenTicketsSerializer(serializers.Serializer):
     
     def __init__(self):
-        self.all_open_tickets = Tickets.objects.filter(status=Tickets.TicketStatus.OPEN).order_by("opened_date").values()
+        self.all_open_tickets = Tickets.objects.filter(status=Tickets.TicketStatus.OPEN).order_by("created_date").values()
 
     def get_open_tickets_list(self):
         return list(self.all_open_tickets)
