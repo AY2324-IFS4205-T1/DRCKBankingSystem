@@ -10,14 +10,23 @@ from user.serializers import UserRegisterSerializer, LoginSerializer
 staff_type = {'type': 'S'}
 
 # Create your views here.
-# class StaffRegistrationView(APIView):
-#     def post(self, request):        
-#         serializer = UserRegisterSerializer(data=request.data, context=staff_type)
+# username: test
+# email: test@gmail.com
+# phone_no: 12345678
+# password: password
+# first_name: first
+# last_name: last
+# birth_date: 2023-01-01
+# title: cleaner
+# gender: M
+class StaffRegistrationView(APIView):
+    def post(self, request):        
+        serializer = UserRegisterSerializer(data=request.data, context=staff_type)
 
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class StaffLoginView(KnoxLoginView):
     serializer_class = LoginSerializer

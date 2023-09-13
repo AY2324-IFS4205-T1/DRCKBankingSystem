@@ -10,7 +10,7 @@ class StaffSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Staff
-        fields = ('user', 'department', 'first_name', 'last_name', 'title', 'birth_date', 'gender')
+        fields = ('user', 'first_name', 'last_name', 'title', 'birth_date', 'gender')
 
 
 class GetAccountTypesSerializer(serializers.Serializer):

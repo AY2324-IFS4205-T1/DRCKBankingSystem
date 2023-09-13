@@ -20,9 +20,9 @@ customer_type = {'type': 'C'}
 # identity_no: S1234567B
 # address: jurong
 # nationality: africa
-# gender: m
+# gender: M
 class CustomerRegistrationView(APIView):
-    def post(self, request):        
+    def post(self, request):      
         serializer = UserRegisterSerializer(data=request.data, context=customer_type)
 
         if serializer.is_valid():

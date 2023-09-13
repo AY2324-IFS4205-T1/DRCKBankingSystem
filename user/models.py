@@ -3,8 +3,6 @@ from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, Permis
 
 class UserManager(BaseUserManager):
     def create_user(self, username, email, phone_no, type, password=None):
-        # if not username or not type:
-        #     raise ValueError("Must have username and type")
         
         user = self.model(
             username=username,
