@@ -59,62 +59,19 @@ class DepositSerializer(serializers.Serializer):
         return ticket
 
 
-
-class DepositSeerializer(serializers.ModelSerializer):
-    user = serializers.Field(required=False)
-
-    class Meta:
-        model = Transactions
-        fields = ("amount")
-    
-    def __init__(self, user_id, **kwargs):
-        self.user_id = Customer.objects.get(user=user_id)
+class WithdrawSerializer(serializers.Serializer):
+    def __init__(self, user_id, json_dict, **kwargs):
+        self.customer = Customer.objects.get(user=user_id)
+        self.customer_account = Accounts.objects.get(user=self.customer)
+        self.amount = json_dict["amount"]
         super().__init__(**kwargs)
 
     def create(self, validated_data):
-        transaction = Transactions.objects.create(**validated_data)
-        transaction.description = "Deposit"
+        ticket = Transactions.objects.create(sender=self.customer_account, description="Withdrawal", amount=self.amount)
+        self.customer_account.balance = self.customer_account.balance - self.amount
+        self.customer_account.save()
+        return ticket
 
-        # TODO: figure out how to handle atm account
-        sender = Accounts.objects.get()
-        transaction.sender_id = sender
-
-        receiver = Accounts.objects.get(user=self.user_id)
-        transaction.recipient_id = receiver
-        receiver.balance = receiver.balance + transaction.amount
-
-        transaction.save()
-        receiver.save()
-        return transaction
-
-
-class WithdrawSerializer(serializers.ModelSerializer):
-    user = serializers.Field(required=False)
-
-    class Meta:
-        model = Transactions
-        fields = ("amount")
-    
-    def __init__(self, user_id, **kwargs):
-        self.user_id = Customer.objects.get(user=user_id)
-        super().__init__(**kwargs)
-
-    def create(self, validated_data):
-        transaction = Transactions.objects.create(**validated_data)
-        transaction.description = "Withdrawal"
-
-        # TODO: figure out how to handle atm account
-        receiver = Accounts.objects.get()
-        transaction.recipient_id = receiver
-
-        sender = Accounts.objects.get(user=self.user_id)
-        transaction.sender_id = sender
-        receiver.balance = receiver.balance - transaction.amount
-
-        transaction.save()
-        receiver.save()
-        return transaction
-    
 
 class TransferSerializer(serializers.ModelSerializer):
     user = serializers.Field(required=False)
