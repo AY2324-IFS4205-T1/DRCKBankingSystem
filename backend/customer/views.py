@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from knox.views import LoginView as KnoxLoginView
-from customer.serializers import ApplySerializer, GetAccountTypesSerializer, GetBalanceSerializer
+from customer.serializers import ApplySerializer, DepositSerializer, GetAccountTypesSerializer, GetBalanceSerializer
 from user.serializers import UserRegisterSerializer, LoginSerializer
 
 customer_type = {'type': 'C'}
@@ -85,4 +85,20 @@ class GetBalanceView(APIView):
     def get(self, request):
         serializer = GetBalanceSerializer(request.user).get_balance()
         return Response({'balance': serializer}, status=status.HTTP_200_OK)
+
+
+class DepositView(APIView):
+    '''
+    amount: 50
+    '''
+    permission_classes = (permissions.IsAuthenticated,)
+    authentication_classes = (SessionAuthentication,)
+    
+    def post(self, request):
+        serializer = DepositSerializer(request.user, request.data, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
