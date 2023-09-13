@@ -13,26 +13,6 @@ class StaffSerializer(serializers.ModelSerializer):
         fields = ('user', 'department', 'first_name', 'last_name', 'title', 'birth_date', 'gender')
 
 
-class UserApplySerializer(serializers.ModelSerializer):
-    user = serializers.Field(required=False)
-
-    class Meta:
-        model = Tickets
-        fields = ("user", "account_type_id")
-    
-    def __init__(self, user_id, **kwargs):
-        self.user_id = user_id
-        super().__init__(**kwargs)
-
-    def create(self, validated_data):
-        ticket = Tickets.objects.create(**validated_data)
-        ticket.status = Tickets.TicketStatus.OPEN
-        ticket.opened_by = Customer.objects.get(user = self.user_id)
-        # this will not work until accounttypes is populated
-        # ticket.account_type_id = AccountTypes.objects.get(name = self.initial_data["account_type"])
-        ticket.save()
-        return ticket
-
 
 class StaffApproveSerializer(serializers.ModelSerializer):
     user = serializers.Field(required=False)

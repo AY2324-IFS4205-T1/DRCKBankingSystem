@@ -59,12 +59,11 @@ class Tickets(models.Model):
         ]
         
     class TicketStatus(models.TextChoices):
-        CLOSED = "C"
         OPEN = "O"
         APPROVED = "A"
+        REJECTED = "R"
     
     ticket = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    # Will review this another day
     ticket_type = models.ForeignKey(TicketTypes, on_delete=models.PROTECT, null=True)
     account_type = models.ForeignKey(AccountTypes, on_delete=models.PROTECT)
     status = models.CharField(max_length=1, choices=TicketStatus.choices)

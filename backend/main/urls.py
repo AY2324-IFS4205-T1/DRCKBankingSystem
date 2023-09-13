@@ -18,21 +18,21 @@ from django.contrib import admin
 from django.urls import path
 from knox import views as knox_views
 
-from customer.views import CustomerRegistrationView, CustomerLoginView, GetAccountTypes
+from customer.views import ApplyView, CustomerRegistrationView, CustomerLoginView, GetAccountTypesView
 from staff.views import StaffLoginView
 
 urlpatterns = [
-    #path('admin/', admin.site.urls),
+    # path('admin/', admin.site.urls),
+    # Customer
+    path("customer/register", CustomerRegistrationView.as_view(), name="customerRegister"),
+    path("customer/login", CustomerLoginView.as_view(), name="customerLogin"),
+    path("customer/get_account_types", GetAccountTypesView.as_view(),name="customerGetAccountTypes",),
+    path("customer/apply", ApplyView.as_view(), name="apply"),
 
-    #Customer
-    path('customer/register', CustomerRegistrationView.as_view(), name='customerRegister'),
-    path('customer/login', CustomerLoginView.as_view(), name='customerLogin'),
-    path("customer/get_account_types", GetAccountTypes.as_view(), name="customerGetAccountTypes"),
+    # Staff
+    # path('staff/register', StaffRegistrationView.as_view(), name='staffRegister'),
+    path("staff/login", CustomerLoginView.as_view(), name="staffLogin"),
 
-    #Staff
-    #path('staff/register', StaffRegistrationView.as_view(), name='staffRegister'),
-    path('staff/login', CustomerLoginView.as_view(), name='staffLogin'),
-
-    #In logout, header key: Authorization, Value: Token 3510ff361b..
-    path('logout', knox_views.LogoutView.as_view(), name='logout'),
+    # In logout, header key: Authorization, Value: Token 3510ff361b..
+    path("logout", knox_views.LogoutView.as_view(), name="logout"),
 ]
