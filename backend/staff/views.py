@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from knox.views import LoginView as KnoxLoginView
-from staff.serializers import ApproveSerializer
+from staff.serializers import ApproveSerializer, RejectSerializer
 from user.serializers import UserRegisterSerializer, LoginSerializer
 
 staff_type = {'type': 'S'}
@@ -48,12 +48,12 @@ class StaffLoginView(KnoxLoginView):
             if request.user.is_authenticated:
                 request.user.auth_token_set.all().delete()
 
-            return Response(response.data, status=status.HTTP_201_CREATED)
+            return Response(response.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ApproveView(APIView):
     '''
-    ticket: d1fa1bcc-c558-4f45-86eb-fef2caff0ecb
+    ticket_id: d1fa1bcc-c558-4f45-86eb-fef2caff0ecb
     '''
     permission_classes = (permissions.IsAuthenticated,)
     authentication_classes = (SessionAuthentication,)
@@ -63,5 +63,20 @@ class ApproveView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class RejectView(APIView):
+    '''
+    ticket_id: b69eed6a-d494-48c1-84e7-6b53ed3ab5db
+    '''
+    permission_classes = (permissions.IsAuthenticated,)
+    authentication_classes = (SessionAuthentication,)
+    
+    def post(self, request):
+        serializer = RejectSerializer(request.user, request.data, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     

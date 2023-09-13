@@ -16,13 +16,13 @@ class StaffSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         return Staff.objects.create(**validated_data)
 
+
 class ApproveSerializer(serializers.Serializer):
     
     def __init__(self, user_id, json_dict, **kwargs):
         self.staff = Staff.objects.get(user=user_id)
         self.ticket = json_dict["ticket_id"]
         self.ticket = Tickets.objects.get(ticket=self.ticket)
-        print("ticket", self.ticket)
         super().__init__(**kwargs)
 
     def create(self, validated_data):
@@ -39,24 +39,20 @@ class ApproveSerializer(serializers.Serializer):
         return account
 
 
-class StaffRejectSerializer(serializers.ModelSerializer):
-    user = serializers.Field(required=False)
-
-    class Meta:
-        model = Tickets
-        fields = ("ticket_id",)
+class RejectSerializer(serializers.Serializer):
     
-    def __init__(self, user_id, **kwargs):
-        self.user_id = user_id
+    def __init__(self, user_id, json_dict, **kwargs):
+        self.staff = Staff.objects.get(user=user_id)
+        self.ticket = json_dict["ticket_id"]
+        self.ticket = Tickets.objects.get(ticket=self.ticket)
         super().__init__(**kwargs)
 
     def create(self, validated_data):
-        ticket = Tickets.objects.get(**validated_data)
-        ticket.status = Tickets.TicketStatus.REJECTED
-        ticket.closed_by = Staff.objects.get(user = self.user_id)
-        ticket.closed_date = datetime.now()
-        ticket.save()
-        return ticket
+        self.ticket.status = Tickets.TicketStatus.REJECTED
+        self.ticket.closed_by = self.staff
+        self.ticket.closed_date = make_aware(datetime.now())
+        self.ticket.save()
+        return self.ticket
 
 
 class GetOpenTicketsSerializer(serializers.Serializer):
