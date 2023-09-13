@@ -21,14 +21,12 @@ class UserRegisterSerializer(serializers.ModelSerializer):
             if customer_serializer.is_valid():
                 new_user = User.objects.create_user(**validated_data, type=self.context['type'])
                 customer_serializer.save(user=new_user)
-
-        # This should be commented in production state
         elif user_type == User.user_type.STAFF:
-            staff_serializer = StaffSerializer(data=initial_data)
+            staff_serializer = StaffSerializer(data=self.initial_data)
             if staff_serializer.is_valid():
                 new_user = User.objects.create_user(**validated_data, type=self.context['type'])
                 staff_serializer.save(user=new_user)
-        
+
         # if new_user == None:
             # Handle exception here
         
@@ -38,31 +36,16 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField()
-    type = serializers.SerializerMethodField()
+    user_type = serializers.SerializerMethodField()
 
     def validate(self, data):
         username = data['username']
         password = data['password']
-        type = self.context['type']
-
-        user = authenticate(request=self.context.get('request'), username=username, password=password, type=type)
+        user_type = self.context['type']
+        user = authenticate(request=self.context.get('request'), username=username, password=password, type=user_type)
 
         if not user:
             raise serializers.ValidationError()
         
         data['user'] = user
         return data
-
-
-class GetBalanceSerializer(serializers.Serializer):
-    
-    def __init__(self, user_id):
-        self.user_id = Staff.objects.get(user = user_id)
-        self.closed_tickets = Tickets.objects.filter(closed_by=self.user_id).exclude(status=Tickets.TicketStatus.OPEN).order_by("closed_date").reverse().values()
-
-    def get_closed_tickets_list(self):
-        return list(self.closed_tickets)
-
-
-
-

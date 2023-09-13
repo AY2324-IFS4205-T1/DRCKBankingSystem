@@ -32,7 +32,7 @@ class StaffRegistrationView(APIView):
             return Response(status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
+      
 class StaffLoginView(KnoxLoginView):
     serializer_class = LoginSerializer
     permission_classes = (permissions.AllowAny,)
@@ -99,5 +99,3 @@ class GetClosedTicketsView(APIView):
     def get(self, request):
         serializer = GetClosedTicketsSerializer(request.user).get_closed_tickets_list()
         return Response({'open_tickets': serializer}, status=status.HTTP_200_OK)
-
-

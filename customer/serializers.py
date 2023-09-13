@@ -3,6 +3,7 @@ from rest_framework import serializers
 from staff.models import Tickets
 from .models import AccountTypes, Accounts, Customer, Transactions
 
+
 class CustomerSerializer(serializers.ModelSerializer):
     user = serializers.Field(required=False)
 
@@ -92,4 +93,3 @@ class TransferSerializer(serializers.Serializer):
         self.customer_account.save()
         self.recipient_account.save()
         return ticket
-

@@ -11,6 +11,7 @@ from user.serializers import UserRegisterSerializer, LoginSerializer
 
 customer_type = {'type': 'C'}
 
+
 class CustomerRegistrationView(APIView):
     '''
     username: test
@@ -47,10 +48,9 @@ class CustomerLoginView(KnoxLoginView):
         serializer = self.serializer_class(data=request.data, context=customer_type)
         
         if serializer.is_valid():
-            user = serializer.validated_data['user'] # type: ignore
+            user = serializer.validated_data['user']
             login(request, user)
             response = super().post(request, format=None)
-
             return Response(response.data, status=status.HTTP_201_CREATED)
     
 

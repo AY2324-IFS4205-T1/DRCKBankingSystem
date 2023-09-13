@@ -165,6 +165,6 @@ gitleaks.toml
 .vscode
 
 # Migrations
-backend/customer/migrations/
-backend/user/migrations/
-backend/staff/migrations/
+customer/migrations/
+user/migrations/
+staff/migrations/

@@ -2,10 +2,7 @@ from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 
 class UserManager(BaseUserManager):
-    def create_user(self, username, email, phone_no, type, password=None):
-        # if not username or not type:
-        #     raise ValueError("Must have username and type")
-        
+    def create_user(self, username, email, phone_no, type, password=None):        
         user = self.model(
             username=username,
             email=self.normalize_email(email),

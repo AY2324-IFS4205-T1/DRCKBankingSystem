@@ -23,6 +23,7 @@ from staff.views import ApproveView, GetClosedTicketsView, GetOpenTicketsView, R
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
+  
     # Customer
     path("customer/register", CustomerRegistrationView.as_view(), name="customerRegister"),
     path("customer/login", CustomerLoginView.as_view(), name="customerLogin"),

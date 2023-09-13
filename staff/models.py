@@ -3,14 +3,6 @@ from customer.models import AccountTypes, Customer
 from user.models import User
 import uuid
 
-class Departments(models.Model):
-    class Meta:
-        db_table = 'staff"."departments'
-    
-    department = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=255)
-
-
 # Create your models here.
 class Staff(models.Model):
     class Meta:
@@ -28,27 +20,12 @@ class Staff(models.Model):
     gender = models.CharField(max_length=1, choices=Gender.choices)
 
 
-class DeptManager(models.Model):
-    class Meta:
-        db_table = 'staff"."dept_manager'
-        constraints = [
-            models.UniqueConstraint(fields=['department', 'user'], name='dept_manager_unique'),
-            models.CheckConstraint(check=models.Q(end_date__isnull=True) | models.Q(end_date__gt=models.F('start_date')), name='end_date_check'),
-        ]
-    
-    department = models.ForeignKey(Departments, on_delete=models.CASCADE)
-    user = models.ForeignKey(Staff, on_delete=models.CASCADE)
-    start_date = models.DateField()
-    end_date = models.DateField(null=True)
-
-
 class TicketTypes(models.Model):
     class Meta:
         db_table = 'staff"."ticket_types'
 
-    ticket_type = models.AutoField(primary_key=True)
+    ticket_type_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
-    department = models.ForeignKey(Departments, null=True, on_delete=models.CASCADE)
 
 
 class Tickets(models.Model):

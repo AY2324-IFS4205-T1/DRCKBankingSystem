@@ -17,6 +17,15 @@ class StaffSerializer(serializers.ModelSerializer):
         return Staff.objects.create(**validated_data)
 
 
+class GetAccountTypesSerializer(serializers.Serializer):
+    
+    def __init__(self):
+        self.all_account_types = AccountTypes.objects.all().values_list("name", flat=True)
+
+    def get_account_type_list(self):
+        return list(self.all_account_types)
+
+      
 class ApproveSerializer(serializers.Serializer):
     
     def __init__(self, user_id, json_dict, **kwargs):
@@ -72,4 +81,3 @@ class GetClosedTicketsSerializer(serializers.Serializer):
 
     def get_closed_tickets_list(self):
         return list(self.closed_tickets)
-
