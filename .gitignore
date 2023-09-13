@@ -163,3 +163,8 @@ cython_debug/
 gitleaks.toml
 .pre-commit-config.yaml
 .vscode
+
+# Migrations
+backend/customer/migrations/
+backend/user/migrations/
+backend/staff/migrations/

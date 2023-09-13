@@ -1,4 +1,5 @@
 from django.db import models
+from customer.models import AccountTypes, Customer
 from user.models import User
 import uuid
 
@@ -64,11 +65,12 @@ class Tickets(models.Model):
     
     ticket = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     # Will review this another day
-    ticket_type = models.ForeignKey(TicketTypes, on_delete=models.PROTECT)
+    ticket_type = models.ForeignKey(TicketTypes, on_delete=models.PROTECT, null=True)
+    account_type = models.ForeignKey(AccountTypes, on_delete=models.PROTECT)
     status = models.CharField(max_length=1, choices=TicketStatus.choices)
-    created_by = models.ForeignKey(Staff, related_name='created_tickets', on_delete=models.PROTECT)
+    created_by = models.ForeignKey(Customer, related_name='created_tickets', on_delete=models.PROTECT)
     created_date = models.DateTimeField(auto_now_add=True)
-    closed_by = models.ForeignKey(Staff, related_name='closed_tickets', on_delete=models.PROTECT)
+    closed_by = models.ForeignKey(Staff, related_name='closed_tickets', on_delete=models.PROTECT, null=True)
     closed_date = models.DateTimeField(null=True)
 
 

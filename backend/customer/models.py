@@ -40,7 +40,7 @@ class Accounts(models.Model):
         CLOSED = "C"
 
     account = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(Customer, on_delete=models.CASCADE)
     type = models.ForeignKey(AccountTypes, on_delete=models.CASCADE)
     balance = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     status = models.CharField(max_length=1, choices=AccountStatus.choices)
@@ -67,4 +67,3 @@ class Transactions(models.Model):
             raise ValueError("Withdrawal amount is too much")
         elif self.type in ['T'] and self.amount > self.sender_id.balance:
             raise ValueError("Transfer amount is too much")
-	
