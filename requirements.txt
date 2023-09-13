@@ -4,3 +4,4 @@ django-cors-headers==4.2.0 # django-cors-headers is a Django application for han
 django-rest-knox==4.2.0 # Django-rest-knox library provides models and views to handle token-based authentication in a more secure and extensible wa
 djangorestframework==3.14.0 # Web APIs for Django, made easy.
 psycopg2==2.9.7 # psycopg2 - Python-PostgreSQL Database Adapter
+django-cors-headers==4.2.0 # Django Cors headers
