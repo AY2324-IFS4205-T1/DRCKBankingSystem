@@ -1,3 +1,18 @@
+import { useState } from "react";
+
+export async function Submit(event) {
+  event.preventDefault();
+
+  const formData = new FormData(event.target);
+  console.log(formData);
+  const response = await fetch("asd/", {
+    method: "POST",
+    body: formData,
+  });
+  const data = await response.json();
+  console.log(data);
+}
+
 export default function CustomerLogin() {
   return (
     <>
@@ -18,17 +33,17 @@ export default function CustomerLogin() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" action="#" method="POST">
+          <form className="space-y-6" onSubmit={Submit} method="POST">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
-                Email address
+              <label htmlFor="username" className="block text-sm font-medium leading-6 text-gray-900">
+                Username
               </label>
               <div className="mt-2">
                 <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
+                  id="username"
+                  name="username"
+                  type="username"
+                  autoComplete="username"
                   required
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
