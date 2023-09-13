@@ -1,4 +1,5 @@
 from datetime import datetime
+from django.utils.timezone import make_aware
 from rest_framework import serializers
 
 from customer.models import AccountTypes, Accounts, Customer, Transactions
@@ -10,32 +11,30 @@ class StaffSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Staff
-        fields = ('user', 'department', 'first_name', 'last_name', 'title', 'birth_date', 'gender')
+        fields = ('user', 'first_name', 'last_name', 'title', 'birth_date', 'gender')
 
+    def create(self, validated_data):
+        return Staff.objects.create(**validated_data)
 
-
-class StaffApproveSerializer(serializers.ModelSerializer):
-    user = serializers.Field(required=False)
-
-    class Meta:
-        model = Tickets
-        fields = ("ticket_id",)
+class ApproveSerializer(serializers.Serializer):
     
-    def __init__(self, user_id, **kwargs):
-        self.user_id = user_id
+    def __init__(self, user_id, json_dict, **kwargs):
+        self.staff = Staff.objects.get(user=user_id)
+        self.ticket = json_dict["ticket_id"]
+        self.ticket = Tickets.objects.get(ticket=self.ticket)
+        print("ticket", self.ticket)
         super().__init__(**kwargs)
 
     def create(self, validated_data):
-        ticket = Tickets.objects.get(**validated_data)
-        ticket.status = Tickets.TicketStatus.APPROVED
-        ticket.closed_by = Staff.objects.get(user = self.user_id)
-        ticket.closed_date = datetime.now()
-        ticket.save()
-        self.make_account(ticket.opened_by, ticket.account_type_id)
-        return ticket
+        self.ticket.status = Tickets.TicketStatus.APPROVED
+        self.ticket.closed_by = self.staff
+        self.ticket.closed_date = make_aware(datetime.now())
+        self.ticket.save()
+        self.make_account()
+        return self.ticket
     
-    def make_account(self, user_model, account_type):
-        account = Accounts.objects.create(user_id=user_model, type_id=account_type, status=Accounts.AccountStatus.ACTIVE)
+    def make_account(self):
+        account = Accounts.objects.create(user=self.ticket.created_by, type=self.ticket.account_type, status=Accounts.AccountStatus.ACTIVE)
         account.save()
         return account
 

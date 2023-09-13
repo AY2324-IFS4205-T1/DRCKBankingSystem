@@ -19,7 +19,7 @@ from django.urls import path
 from knox import views as knox_views
 
 from customer.views import ApplyView, CustomerRegistrationView, CustomerLoginView, GetAccountTypesView
-from staff.views import StaffLoginView
+from staff.views import ApproveView, StaffLoginView, StaffRegistrationView
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
@@ -30,8 +30,9 @@ urlpatterns = [
     path("customer/apply", ApplyView.as_view(), name="apply"),
 
     # Staff
-    # path('staff/register', StaffRegistrationView.as_view(), name='staffRegister'),
-    path("staff/login", CustomerLoginView.as_view(), name="staffLogin"),
+    path('staff/register', StaffRegistrationView.as_view(), name='staffRegister'),
+    path("staff/login", StaffLoginView.as_view(), name="staffLogin"),
+    path("staff/approve", ApproveView.as_view(), name="approve"),
 
     # In logout, header key: Authorization, Value: Token 3510ff361b..
     path("logout", knox_views.LogoutView.as_view(), name="logout"),

@@ -21,7 +21,7 @@ class CustomerRegistrationView(APIView):
     last_name: last
     birth_date: 2023-01-01
     identity_no: S1234567B
-    address": jurong
+    address: jurong
     nationality: africa
     gender: m
     '''
