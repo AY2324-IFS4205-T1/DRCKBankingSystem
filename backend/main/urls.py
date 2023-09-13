@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from knox import views as knox_views
 
-from customer.views import ApplyView, CustomerRegistrationView, CustomerLoginView, GetAccountTypesView
+from customer.views import ApplyView, CustomerRegistrationView, CustomerLoginView, GetAccountTypesView, GetBalanceView
 from staff.views import ApproveView, GetClosedTicketsView, GetOpenTicketsView, RejectView, StaffLoginView, StaffRegistrationView
 
 urlpatterns = [
@@ -28,6 +28,7 @@ urlpatterns = [
     path("customer/login", CustomerLoginView.as_view(), name="customerLogin"),
     path("customer/get_account_types", GetAccountTypesView.as_view(),name="customerGetAccountTypes",),
     path("customer/apply", ApplyView.as_view(), name="apply"),
+    path("customer/balance", GetBalanceView.as_view(), name="balance"),
 
     # Staff
     path('staff/register', StaffRegistrationView.as_view(), name='staffRegister'),

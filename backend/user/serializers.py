@@ -33,7 +33,8 @@ class UserRegisterSerializer(serializers.ModelSerializer):
             # Handle exception here
         
         return new_user
-    
+
+
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField()
@@ -51,3 +52,17 @@ class LoginSerializer(serializers.Serializer):
         
         data['user'] = user
         return data
+
+
+class GetBalanceSerializer(serializers.Serializer):
+    
+    def __init__(self, user_id):
+        self.user_id = Staff.objects.get(user = user_id)
+        self.closed_tickets = Tickets.objects.filter(closed_by=self.user_id).exclude(status=Tickets.TicketStatus.OPEN).order_by("closed_date").reverse().values()
+
+    def get_closed_tickets_list(self):
+        return list(self.closed_tickets)
+
+
+
+
