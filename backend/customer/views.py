@@ -90,6 +90,7 @@ class GetBalanceView(APIView):
 class DepositView(APIView):
     '''
     amount: 50
+    description: string
     '''
     permission_classes = (permissions.IsAuthenticated,)
     authentication_classes = (SessionAuthentication,)
@@ -105,6 +106,7 @@ class DepositView(APIView):
 class WithdrawView(APIView):
     '''
     amount: 50
+    description: string
     '''
     permission_classes = (permissions.IsAuthenticated,)
     authentication_classes = (SessionAuthentication,)
@@ -121,6 +123,7 @@ class TransferView(APIView):
     '''
     recipient_id: b7ee7413-3dbd-4fde-96b8-658dfc02b62f
     amount: 50
+    description: string
     '''
     permission_classes = (permissions.IsAuthenticated,)
     authentication_classes = (SessionAuthentication,)

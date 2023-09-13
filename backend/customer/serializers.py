@@ -50,10 +50,11 @@ class DepositSerializer(serializers.Serializer):
         self.customer = Customer.objects.get(user=user_id)
         self.customer_account = Accounts.objects.get(user=self.customer)
         self.amount = json_dict["amount"]
+        self.description = json_dict["description"]
         super().__init__(**kwargs)
 
     def create(self, validated_data):
-        ticket = Transactions.objects.create(recipient=self.customer_account, description="Deposit", amount=self.amount)
+        ticket = Transactions.objects.create(recipient=self.customer_account, description=self.description, amount=self.amount, transaction_type=Transactions.TransactionTypes.DEPOSIT)
         self.customer_account.balance = self.customer_account.balance + self.amount
         self.customer_account.save()
         return ticket
@@ -64,10 +65,11 @@ class WithdrawSerializer(serializers.Serializer):
         self.customer = Customer.objects.get(user=user_id)
         self.customer_account = Accounts.objects.get(user=self.customer)
         self.amount = json_dict["amount"]
+        self.description = json_dict["description"]
         super().__init__(**kwargs)
 
     def create(self, validated_data):
-        ticket = Transactions.objects.create(sender=self.customer_account, description="Withdrawal", amount=self.amount)
+        ticket = Transactions.objects.create(sender=self.customer_account, description=self.description, amount=self.amount, transaction_type=Transactions.TransactionTypes.WITHDRAWAL)
         self.customer_account.balance = self.customer_account.balance - self.amount
         self.customer_account.save()
         return ticket
@@ -78,12 +80,13 @@ class TransferSerializer(serializers.Serializer):
         self.customer = Customer.objects.get(user=user_id)
         self.customer_account = Accounts.objects.get(user=self.customer)
         self.amount = json_dict["amount"]
+        self.description = json_dict["description"]
         self.recipient_account = json_dict["recipient_id"]
         self.recipient_account = Accounts.objects.get(account=self.recipient_account)
         super().__init__(**kwargs)
 
     def create(self, validated_data):
-        ticket = Transactions.objects.create(sender=self.customer_account, description="Transfer", amount=self.amount)
+        ticket = Transactions.objects.create(sender=self.customer_account, description=self.description, amount=self.amount, transaction_type=Transactions.TransactionTypes.TRANSFER)
         self.customer_account.balance = self.customer_account.balance - self.amount
         self.recipient_account.balance = self.recipient_account.balance + self.amount
         self.customer_account.save()

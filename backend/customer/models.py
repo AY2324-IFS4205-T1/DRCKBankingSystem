@@ -47,16 +47,22 @@ class Accounts(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
 
 
-class Transactions(models.Model):
+class Transactions(models.Model):    
+    class Meta:
+        db_table = 'customer"."transactions'
+    
+    class TransactionTypes(models.TextChoices):
+        DEPOSIT = "D"
+        WITHDRAWAL = "W"
+        TRANSFER = "T"
+    
     transaction = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    transaction_type = models.CharField(max_length=1, choices=TransactionTypes.choices)
     sender = models.ForeignKey(Accounts, related_name='sent_transactions', on_delete=models.CASCADE, null=True)
     recipient = models.ForeignKey(Accounts, related_name='received_transactions', on_delete=models.CASCADE, null=True)
     description = models.CharField(max_length=255)
     amount = models.DecimalField(max_digits=12, decimal_places=2)
     date = models.DateTimeField(auto_now_add=True)
-    
-    class Meta:
-        db_table = 'customer"."transactions'
         
     # Will review this another day
     def clean_account(self):
