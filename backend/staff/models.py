@@ -72,24 +72,3 @@ class Tickets(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     closed_by = models.ForeignKey(Staff, related_name='closed_tickets', on_delete=models.PROTECT, null=True)
     closed_date = models.DateTimeField(null=True)
-
-
-# Log Schema
-# class LogAccount(models.Model):
-#     class Meta:
-#         db_table = 'staff"."log_accounts'
-
-#     id = models.AutoField(primary_key=True)
-#     user_id = models.ForeignKey(User, on_delete=models.PROTECT)
-#     time = models.DateTimeField()
-#     ip = models.GenericIPAddressField(protocol='both')
-
-
-# class LogCalls(models.Model):
-#     class Meta:
-#         db_table = 'staff"."log_calls'
-
-#     id = models.IntegerField(primary_key=True)
-#     user_id = models.ForeignKey(User, on_delete=models.PROTECT)
-#     time = models.DateTimeField()
-#     action = models.CharField(max_length=255)

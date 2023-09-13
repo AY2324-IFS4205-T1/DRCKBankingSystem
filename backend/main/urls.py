@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from knox import views as knox_views
 
-from customer.views import CustomerRegistrationView, CustomerLoginView
+from customer.views import CustomerRegistrationView, CustomerLoginView, GetAccountTypes
 from staff.views import StaffLoginView
 
 urlpatterns = [
@@ -27,6 +27,7 @@ urlpatterns = [
     #Customer
     path('customer/register', CustomerRegistrationView.as_view(), name='customerRegister'),
     path('customer/login', CustomerLoginView.as_view(), name='customerLogin'),
+    path("customer/get_account_types", GetAccountTypes.as_view(), name="customerGetAccountTypes"),
 
     #Staff
     #path('staff/register', StaffRegistrationView.as_view(), name='staffRegister'),

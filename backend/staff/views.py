@@ -37,3 +37,16 @@ class StaffLoginView(KnoxLoginView):
 
             return Response(response.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+'''
+GetAccountTypes
+UserApply
+StaffApprove
+StaffReject
+GetOpenTickets
+GetClosedTickets
+UserBalance
+UserTransfer
+UserDeposit
+UserWithdraw
+'''

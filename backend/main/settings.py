@@ -162,6 +162,6 @@ REST_KNOX = {
 
 # CORS header
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost/",
-    "http://127.0.0.1/",
+    "http://localhost",
+    "http://127.0.0.1",
 ]

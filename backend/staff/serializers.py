@@ -13,15 +13,6 @@ class StaffSerializer(serializers.ModelSerializer):
         fields = ('user', 'department', 'first_name', 'last_name', 'title', 'birth_date', 'gender')
 
 
-class GetAccountTypesSerializer(serializers.Serializer):
-    
-    def __init__(self):
-        self.all_account_types = AccountTypes.objects.all().values_list("name", flat=True)
-
-    def get_account_type_list(self):
-        return list(self.all_account_types)
-
-
 class UserApplySerializer(serializers.ModelSerializer):
     user = serializers.Field(required=False)
 

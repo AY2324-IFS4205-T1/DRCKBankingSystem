@@ -14,9 +14,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         new_user = None
         user_type = self.context['type']
-        print(user_type)
-        print( User.user_type.CUSTOMER)
-
+        
         if user_type == User.user_type.CUSTOMER:
             customer_serializer = CustomerSerializer(data=self.initial_data)
             if customer_serializer.is_valid():
