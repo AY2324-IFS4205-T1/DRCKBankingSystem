@@ -18,11 +18,10 @@ def get_userids():
 
 
 def get_random_birthdate():
-    # Generate a random date within the specified range
     random_date = start_date + timedelta(days=random.randint(0, (end_date - start_date).days))
-    # Format the date as "YYYY-MM-DD"
     formatted_date = random_date.strftime("%Y-%m-%d")
     return formatted_date
+
 
 def get_random_identity_number(): #based of: regex='^[STFG]\d{7}[A-Z]$'
     first_char = random.choice("STFG")
@@ -31,18 +30,18 @@ def get_random_identity_number(): #based of: regex='^[STFG]\d{7}[A-Z]$'
     identity_no = f"{first_char}{digits}{last_char}"
     return identity_no
 
+
 def get_random_address():
-    # Generate a random 6-digit number
     six_digit_number = random.randint(100000, 999999)
     return str(six_digit_number)
+
 
 def get_random_nationality():
     # List of possible nationalities
     nationalities = ["Chinese", "Malay", "Indian", "France", "Germany", "Iceland", "Denmark", "Netherlands", "Norway", "Japanese", "Korean"]
-    
-    # Choose a random nationality from the list
     random_nationality = random.choice(nationalities)
     return random_nationality
+
 
 def get_random_gender():
     genders = ["M", "F"]
@@ -53,9 +52,9 @@ def get_random_account_type():
     return random.choice(types)
 
 def get_random_balance():
-    # Generate a random 6-digit number
     balance = random.randint(1, 999999)
     return str(balance)
+
 
 def get_random_account_id(check):
     if check == 0:
@@ -66,19 +65,18 @@ def get_random_account_id(check):
             account_id = list(Accounts.objects.values_list('account', flat=True))
             new_account_id = random.choice(account_id)
             if new_account_id != check:
-                # print(new_account_id)
                 return new_account_id
+
 
 def get_random_transaction_value(sender_id):
     # Check the sender's balance before generating the random number
     s = Accounts.objects.get(account=sender_id)
     balance = float(s.balance)
-    # print(balance)
-    # print(sender_id)
     random_amount = round(random.uniform(1, balance), 2)
     return random_amount
 
 
+# Functions for Generation of Dataset in Customer Schema
 def generate_auth_user(num_users):
     data = []
     for i in range(1, num_users + 1):
@@ -100,7 +98,7 @@ def generate_auth_user(num_users):
         json.dump(data, json_file, indent=4)
 
 
-# Create a list of dictionaries representing model instances
+
 def generate_customer():
     user_ids = get_userids()
     data = []
@@ -120,15 +118,12 @@ def generate_customer():
             }
         }
         data.append(user_data)
-
-    # Write the data to a JSON file
     with open("fixtures/customers.json", "w") as json_file:
         json.dump(data, json_file, indent=4)
 
 def generate_account():
     user_ids = get_userids()
     data = []
-
     for i, user_id in enumerate(user_ids):
         user_data = {
             "model": "customer.Accounts",
@@ -142,7 +137,6 @@ def generate_account():
         }
         data.append(user_data)
 
-    # Write the data to a JSON file
     with open("fixtures/accounts.json", "w") as json_file:
         json.dump(data, json_file, indent=4)
 
@@ -166,20 +160,19 @@ def generate_transaction(num_transactions):
         }
         data.append(user_data)
 
-    # Write the data to a JSON file
     with open("fixtures/transactions.json", "w") as json_file:
         json.dump(data, json_file, indent=4)
 
 
-# Define the command as a list of arguments
 def load_data(fixture_file):
     command = ["python", "manage.py", "loaddata", str(fixture_file)]
     try:
-        # Run the command
         subprocess.run(command, check=True)
     except subprocess.CalledProcessError as e:
         print(f"Command failed with error: {e}")
 
+
+# Main Function
 # Define number of users you want to generate
 generate_auth_user(10)
 load_data("fixtures/auth_users.json")
