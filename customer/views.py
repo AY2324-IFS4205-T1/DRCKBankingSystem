@@ -89,6 +89,7 @@ class GetBalanceView(APIView):
 
 class DepositView(APIView):
     '''
+    account_id: 
     amount: 50
     description: string
     '''
@@ -105,6 +106,7 @@ class DepositView(APIView):
 
 class WithdrawView(APIView):
     '''
+    account_id: 
     amount: 50
     description: string
     '''
@@ -121,6 +123,7 @@ class WithdrawView(APIView):
 
 class TransferView(APIView):
     '''
+    sender_id: 
     recipient_id: b7ee7413-3dbd-4fde-96b8-658dfc02b62f
     amount: 50
     description: string
