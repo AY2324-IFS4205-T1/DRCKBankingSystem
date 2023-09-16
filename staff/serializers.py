@@ -1,13 +1,13 @@
 from datetime import datetime
+
 from django.utils.timezone import make_aware
 from rest_framework import serializers
 
-from customer.models import AccountTypes, Accounts, Customer, Transactions
+from customer.models import Accounts, AccountTypes
 from staff.validations import validate_open_ticket, validate_ticket_id
+
 from .models import Staff, Tickets
 
-from django.core.exceptions import ObjectDoesNotExist
-from rest_framework.serializers import ValidationError
 
 class StaffSerializer(serializers.ModelSerializer):
     user = serializers.Field(required=False)

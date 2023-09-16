@@ -18,8 +18,12 @@ from django.contrib import admin
 from django.urls import path
 from knox import views as knox_views
 
-from customer.views import ApplyView, CustomerRegistrationView, CustomerLoginView, DepositView, GetAccountTypesView, GetBalanceView, TransferView, WithdrawView
-from staff.views import ApproveView, GetClosedTicketsView, GetOpenTicketsView, RejectView, StaffLoginView, StaffRegistrationView
+from customer.views import (ApplyView, CustomerLoginView,
+                            CustomerRegistrationView, DepositView,
+                            GetAccountTypesView, GetBalanceView, TransferView,
+                            WithdrawView)
+from staff.views import (ApproveView, GetClosedTicketsView, GetOpenTicketsView,
+                         RejectView, StaffLoginView, StaffRegistrationView)
 
 urlpatterns = [
     # path('admin/', admin.site.urls),

@@ -1,13 +1,13 @@
 from django.contrib.auth import login
-
-from rest_framework import status, permissions
+from knox.views import LoginView as KnoxLoginView
+from rest_framework import permissions, status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from knox.views import LoginView as KnoxLoginView
-from staff.serializers import ApproveSerializer, GetClosedTicketsSerializer, GetOpenTicketsSerializer, RejectSerializer
-from user.serializers import UserRegisterSerializer, LoginSerializer
+from staff.serializers import (ApproveSerializer, GetClosedTicketsSerializer,
+                               GetOpenTicketsSerializer, RejectSerializer)
+from user.serializers import LoginSerializer, UserRegisterSerializer
 
 staff_type = {'type': 'S'}
 

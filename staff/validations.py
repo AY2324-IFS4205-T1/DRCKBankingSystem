@@ -3,6 +3,7 @@ from rest_framework.serializers import ValidationError
 
 from staff.models import Tickets
 
+
 def validate_ticket_id(ticket_id):
     try:
         ticket = Tickets.objects.get(ticket=ticket_id)

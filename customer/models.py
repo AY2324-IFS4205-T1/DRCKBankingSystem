@@ -1,7 +1,10 @@
-from django.db import models
-from django.core.validators import RegexValidator
-from user.models import User
 import uuid
+
+from django.core.validators import RegexValidator
+from django.db import models
+
+from user.models import User
+
 
 # Create your models here.
 class Customer(models.Model):

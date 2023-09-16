@@ -1,7 +1,10 @@
+import uuid
+
 from django.db import models
+
 from customer.models import AccountTypes, Customer
 from user.models import User
-import uuid
+
 
 # Create your models here.
 class Staff(models.Model):

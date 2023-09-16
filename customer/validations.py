@@ -1,8 +1,9 @@
 import decimal
+
 from django.core import exceptions
 from rest_framework.serializers import ValidationError
 
-from customer.models import AccountTypes, Accounts, Customer
+from customer.models import Accounts, AccountTypes, Customer
 
 
 def validate_account_type(account_type):
