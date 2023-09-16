@@ -1,7 +1,9 @@
 from rest_framework import serializers
 
+from customer.validations import validate_account, validate_account_type, validate_amount, validate_description
 from staff.models import Tickets
-from .models import AccountTypes, Accounts, Customer, Transactions
+
+from .models import Accounts, AccountTypes, Customer, Transactions
 
 
 class CustomerSerializer(serializers.ModelSerializer):
@@ -29,11 +31,14 @@ class ApplySerializer(serializers.Serializer):
         self.user_id = user_id
         self.account_type = json_dict["account_type"]
         super().__init__(**kwargs)
+    
+    def validate(self, attrs):
+        self.account_type_model = validate_account_type(self.account_type)
+        return super().validate(attrs)
 
     def create(self, validated_data):
         customer = Customer.objects.get(user=self.user_id)
-        account_type = AccountTypes.objects.get(name=self.account_type)
-        ticket = Tickets.objects.create(created_by=customer, account_type=account_type, status = Tickets.TicketStatus.OPEN)
+        ticket = Tickets.objects.create(created_by=customer, account_type=self.account_type_model, status = Tickets.TicketStatus.OPEN)
         return ticket
 
 
@@ -55,12 +60,17 @@ class DepositSerializer(serializers.Serializer):
         self.amount = json_dict["amount"]
         self.description = json_dict["description"]
         super().__init__(**kwargs)
+    
+    def validate(self, attrs):
+        self.customer_account = validate_account(self.account_id)
+        self.amount = validate_amount(self.amount)
+        self.description = validate_description(self.description)
+        return super().validate(attrs)
 
     def create(self, validated_data):
-        customer_account = Accounts.objects.get(acount=self.account_id)
-        ticket = Transactions.objects.create(recipient=customer_account, description=self.description, amount=self.amount, transaction_type=Transactions.TransactionTypes.DEPOSIT)
-        customer_account.balance = customer_account.balance + self.amount
-        customer_account.save()
+        ticket = Transactions.objects.create(recipient=self.customer_account, description=self.description, amount=self.amount, transaction_type=Transactions.TransactionTypes.DEPOSIT)
+        self.customer_account.balance = self.customer_account.balance + self.amount
+        self.customer_account.save()
         return ticket
 
 
@@ -71,12 +81,17 @@ class WithdrawSerializer(serializers.Serializer):
         self.amount = json_dict["amount"]
         self.description = json_dict["description"]
         super().__init__(**kwargs)
+    
+    def validate(self, attrs):
+        self.customer_account = validate_account(self.account_id)
+        self.amount = validate_amount(self.amount)
+        self.description = validate_description(self.description)
+        return super().validate(attrs)
 
     def create(self, validated_data):
-        customer_account = Accounts.objects.get(acount=self.account_id)
-        ticket = Transactions.objects.create(sender=customer_account, description=self.description, amount=self.amount, transaction_type=Transactions.TransactionTypes.WITHDRAWAL)
-        customer_account.balance = customer_account.balance - self.amount
-        customer_account.save()
+        ticket = Transactions.objects.create(sender=self.customer_account, description=self.description, amount=self.amount, transaction_type=Transactions.TransactionTypes.WITHDRAWAL)
+        self.customer_account.balance = self.customer_account.balance - self.amount
+        self.customer_account.save()
         return ticket
 
 
@@ -88,13 +103,18 @@ class TransferSerializer(serializers.Serializer):
         self.description = json_dict["description"]
         self.recipient_id = json_dict["recipient_id"]
         super().__init__(**kwargs)
+    
+    def validate(self, attrs):
+        self.sender_account = validate_account(self.sender_id)
+        self.recipient_id = validate_account(self.recipient_id)
+        self.amount = validate_amount(self.amount)
+        self.description = validate_description(self.description)
+        return super().validate(attrs)
 
     def create(self, validated_data):
-        sender_account = Accounts.objects.get(account=self.sender_id)
-        recipient_account = Accounts.objects.get(account=self.recipient_id)
-        ticket = Transactions.objects.create(sender=sender_account, description=self.description, amount=self.amount, transaction_type=Transactions.TransactionTypes.TRANSFER)
-        sender_account.balance = sender_account.balance - self.amount
-        recipient_account.balance = recipient_account.balance + self.amount
-        sender_account.save()
-        recipient_account.save()
+        ticket = Transactions.objects.create(sender=self.sender_account, description=self.description, amount=self.amount, transaction_type=Transactions.TransactionTypes.TRANSFER)
+        self.sender_account.balance = self.sender_account.balance - self.amount
+        self.recipient_id.balance = self.recipient_id.balance + self.amount
+        self.sender_account.save()
+        self.recipient_id.save()
         return ticket

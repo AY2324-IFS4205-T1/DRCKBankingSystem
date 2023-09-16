@@ -3,8 +3,11 @@ from django.utils.timezone import make_aware
 from rest_framework import serializers
 
 from customer.models import AccountTypes, Accounts, Customer, Transactions
+from staff.validations import validate_ticket_id
 from .models import Staff, Tickets
 
+from django.core.exceptions import ObjectDoesNotExist
+from rest_framework.serializers import ValidationError
 
 class StaffSerializer(serializers.ModelSerializer):
     user = serializers.Field(required=False)
@@ -31,18 +34,21 @@ class ApproveSerializer(serializers.Serializer):
         self.ticket_id = json_dict["ticket_id"]
         super().__init__(**kwargs)
 
+    def validate(self, attrs):
+        self.ticket = validate_ticket_id(self.ticket_id)
+        return super().validate(attrs)
+
     def create(self, validated_data):
         staff = Staff.objects.get(user=self.user_id)
-        ticket = Tickets.objects.get(ticket=self.ticket_id)
-        ticket.status = Tickets.TicketStatus.APPROVED
-        ticket.closed_by = staff
-        ticket.closed_date = make_aware(datetime.now())
-        self.make_account(ticket)
-        ticket.save()
-        return ticket
+        self.ticket.status = Tickets.TicketStatus.APPROVED
+        self.ticket.closed_by = staff
+        self.ticket.closed_date = make_aware(datetime.now())
+        self.make_account()
+        self.ticket.save()
+        return self.ticket
     
-    def make_account(self, ticket):
-        account = Accounts.objects.create(user=ticket.created_by, type=ticket.account_type, status=Accounts.AccountStatus.ACTIVE)
+    def make_account(self):
+        account = Accounts.objects.create(user=self.ticket.created_by, type=self.ticket.account_type, status=Accounts.AccountStatus.ACTIVE)
         account.save()
         return account
 
@@ -54,14 +60,17 @@ class RejectSerializer(serializers.Serializer):
         self.ticket_id = json_dict["ticket_id"]
         super().__init__(**kwargs)
 
+    def validate(self, attrs):
+        self.ticket = validate_ticket_id(self.ticket_id)
+        return super().validate(attrs)
+
     def create(self, validated_data):
         staff = Staff.objects.get(user=self.user_id)
-        ticket = Tickets.objects.get(ticket=self.ticket_id)
-        ticket.status = Tickets.TicketStatus.REJECTED
-        ticket.closed_by = staff
-        ticket.closed_date = make_aware(datetime.now())
-        ticket.save()
-        return ticket
+        self.ticket.status = Tickets.TicketStatus.REJECTED
+        self.ticket.closed_by = staff
+        self.ticket.closed_date = make_aware(datetime.now())
+        self.ticket.save()
+        return self.ticket
 
 
 class GetOpenTicketsSerializer(serializers.Serializer):

@@ -1,13 +1,15 @@
 from django.contrib.auth import login
-
-from rest_framework import status, permissions
+from knox.views import LoginView as KnoxLoginView
+from rest_framework import permissions, status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from knox.views import LoginView as KnoxLoginView
-from customer.serializers import ApplySerializer, DepositSerializer, GetAccountTypesSerializer, GetBalanceSerializer, TransferSerializer, WithdrawSerializer
-from user.serializers import UserRegisterSerializer, LoginSerializer
+from customer.serializers import (ApplySerializer, DepositSerializer,
+                                  GetAccountTypesSerializer,
+                                  GetBalanceSerializer, TransferSerializer,
+                                  WithdrawSerializer)
+from user.serializers import LoginSerializer, UserRegisterSerializer
 
 customer_type = {'type': 'C'}
 
@@ -48,7 +50,7 @@ class CustomerLoginView(KnoxLoginView):
         serializer = self.serializer_class(data=request.data, context=customer_type)
         
         if serializer.is_valid():
-            user = serializer.validated_data['user']
+            user = serializer.validated_data['user'] # type: ignore
             login(request, user)
             response = super().post(request, format=None)
             return Response(response.data, status=status.HTTP_201_CREATED)
@@ -89,7 +91,7 @@ class GetBalanceView(APIView):
 
 class DepositView(APIView):
     '''
-    account_id: 
+    account_id: 89c46857-d9f7-4f5d-b221-0936b78e8b7b
     amount: 50
     description: string
     '''
@@ -106,7 +108,7 @@ class DepositView(APIView):
 
 class WithdrawView(APIView):
     '''
-    account_id: 
+    account_id: 89c46857-d9f7-4f5d-b221-0936b78e8b7b
     amount: 50
     description: string
     '''

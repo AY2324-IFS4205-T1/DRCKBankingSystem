@@ -41,7 +41,7 @@ class StaffLoginView(KnoxLoginView):
         serializer = self.serializer_class(data=request.data, context=staff_type)
         
         if serializer.is_valid():
-            user = serializer.validated_data['user']
+            user = serializer.validated_data['user'] # type: ignore
             login(request, user)
             response = super().post(request, format=None)
 
