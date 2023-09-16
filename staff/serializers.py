@@ -3,7 +3,7 @@ from django.utils.timezone import make_aware
 from rest_framework import serializers
 
 from customer.models import AccountTypes, Accounts, Customer, Transactions
-from staff.validations import validate_ticket_id
+from staff.validations import validate_open_ticket, validate_ticket_id
 from .models import Staff, Tickets
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -36,6 +36,7 @@ class ApproveSerializer(serializers.Serializer):
 
     def validate(self, attrs):
         self.ticket = validate_ticket_id(self.ticket_id)
+        assert validate_open_ticket(self.ticket)
         return super().validate(attrs)
 
     def create(self, validated_data):
@@ -62,6 +63,7 @@ class RejectSerializer(serializers.Serializer):
 
     def validate(self, attrs):
         self.ticket = validate_ticket_id(self.ticket_id)
+        assert validate_open_ticket(self.ticket)
         return super().validate(attrs)
 
     def create(self, validated_data):

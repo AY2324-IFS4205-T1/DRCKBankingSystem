@@ -125,7 +125,7 @@ class WithdrawView(APIView):
 
 class TransferView(APIView):
     '''
-    sender_id: 
+    sender_id: 89c46857-d9f7-4f5d-b221-0936b78e8b7b
     recipient_id: b7ee7413-3dbd-4fde-96b8-658dfc02b62f
     amount: 50
     description: string
