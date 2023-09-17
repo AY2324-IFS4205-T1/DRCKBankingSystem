@@ -20,6 +20,7 @@ from knox import views as knox_views
 
 from customer.views import CustomerRegistrationView, CustomerLoginView
 from staff.views import StaffRegistrationView
+from user.views import AuthenticationTestView
 
 urlpatterns = [
     #path('admin/', admin.site.urls),
@@ -34,4 +35,6 @@ urlpatterns = [
 
     #In logout, header key: Authorization, Value: Token 3510ff361b..
     path('logout', knox_views.LogoutView.as_view(), name='logout'),
+
+    path('authtest', AuthenticationTestView.as_view(), name='authtest'),
 ]
