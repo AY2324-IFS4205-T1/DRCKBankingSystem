@@ -64,7 +64,7 @@ class ApproveView(APIView):
         serializer = ApproveSerializer(request.user, request.data, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(status=status.HTTP_201_CREATED)
+            return Response(status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -98,4 +98,4 @@ class GetClosedTicketsView(APIView):
     
     def get(self, request):
         serializer = GetClosedTicketsSerializer(request.user).get_closed_tickets_list()
-        return Response({'open_tickets': serializer}, status=status.HTTP_200_OK)
+        return Response({'closed_tickets': serializer}, status=status.HTTP_200_OK)

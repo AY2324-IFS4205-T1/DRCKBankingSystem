@@ -29,16 +29,16 @@ class GetAccountTypesSerializer(serializers.Serializer):
 class ApplySerializer(serializers.Serializer):
     def __init__(self, user_id, json_dict, **kwargs):
         self.user_id = user_id
-        self.account_type = json_dict["account_type"]
+        self.json_dict = json_dict
         super().__init__(**kwargs)
     
     def validate(self, attrs):
-        self.account_type_model = validate_account_type(self.account_type)
+        self.account_type = validate_account_type(self.json_dict)
         return super().validate(attrs)
 
     def create(self, validated_data):
         customer = Customer.objects.get(user=self.user_id)
-        ticket = Tickets.objects.create(created_by=customer, account_type=self.account_type_model, status = Tickets.TicketStatus.OPEN)
+        ticket = Tickets.objects.create(created_by=customer, account_type=self.account_type, status = Tickets.TicketStatus.OPEN)
         return ticket
 
 
@@ -56,16 +56,14 @@ class GetBalanceSerializer(serializers.Serializer):
 class DepositSerializer(serializers.Serializer):
     def __init__(self, user_id, json_dict, **kwargs):
         self.user_id = user_id
-        self.account_id = json_dict["account_id"]
-        self.amount = json_dict["amount"]
-        self.description = json_dict["description"]
+        self.json_dict = json_dict
         super().__init__(**kwargs)
     
     def validate(self, attrs):
-        self.customer_account = validate_account(self.account_id)
+        self.customer_account = validate_account(self.json_dict)
         assert validate_account_owner(self.user_id, self.customer_account)
-        self.amount = validate_amount(self.amount)
-        self.description = validate_description(self.description)
+        self.amount = validate_amount(self.json_dict)
+        self.description = validate_description(self.json_dict)
         return super().validate(attrs)
 
     def create(self, validated_data):
@@ -78,17 +76,15 @@ class DepositSerializer(serializers.Serializer):
 class WithdrawSerializer(serializers.Serializer):
     def __init__(self, user_id, json_dict, **kwargs):
         self.user_id = user_id
-        self.account_id = json_dict["account_id"]
-        self.amount = json_dict["amount"]
-        self.description = json_dict["description"]
+        self.json_dict = json_dict
         super().__init__(**kwargs)
     
     def validate(self, attrs):
-        self.customer_account = validate_account(self.account_id)
+        self.customer_account = validate_account(self.json_dict)
         assert validate_account_owner(self.user_id, self.customer_account)
-        self.amount = validate_amount(self.amount)
+        self.amount = validate_amount(self.json_dict)
         assert validate_sufficient_amount(self.customer_account, self.amount)
-        self.description = validate_description(self.description)
+        self.description = validate_description(self.json_dict)
         return super().validate(attrs)
 
     def create(self, validated_data):
@@ -101,28 +97,25 @@ class WithdrawSerializer(serializers.Serializer):
 class TransferSerializer(serializers.Serializer):
     def __init__(self, user_id, json_dict, **kwargs):
         self.user_id = user_id
-        self.sender_id = json_dict["sender_id"]
-        self.amount = json_dict["amount"]
-        self.description = json_dict["description"]
-        self.recipient_id = json_dict["recipient_id"]
+        self.json_dict = json_dict
         super().__init__(**kwargs)
     
     def validate(self, attrs):
-        self.sender_account = validate_account(self.sender_id)
+        self.sender_account = validate_account(self.json_dict, "sender_id")
         assert validate_account_owner(self.user_id, self.sender_account)
-        self.recipient_account = validate_account(self.recipient_id)
+        self.recipient_account = validate_account(self.json_dict, "recipient_id")
         assert validate_sender_recipient(self.sender_account, self.recipient_account)
         self.initial_total = self.sender_account.balance + self.recipient_account.balance
-        self.amount = validate_amount(self.amount)
+        self.amount = validate_amount(self.json_dict)
         assert validate_sufficient_amount(self.sender_account, self.amount)
-        self.description = validate_description(self.description)
+        self.description = validate_description(self.json_dict)
         return super().validate(attrs)
 
     def create(self, validated_data):
         ticket = Transactions.objects.create(sender=self.sender_account, description=self.description, amount=self.amount, transaction_type=Transactions.TransactionTypes.TRANSFER)
         self.sender_account.balance = self.sender_account.balance - self.amount
         self.recipient_account.balance = self.recipient_account.balance + self.amount
-        assert validate_total_balance(self.initial_total, self.sender_account.balance, self.recipient_account.balance):
+        assert validate_total_balance(self.initial_total, self.sender_account.balance, self.recipient_account.balance)
         self.sender_account.save()
         self.recipient_account.save()
         return ticket

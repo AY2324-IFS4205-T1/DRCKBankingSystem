@@ -6,14 +6,25 @@ from rest_framework.serializers import ValidationError
 from customer.models import Accounts, AccountTypes, Customer
 
 
-def validate_account_type(account_type):
+def validate_account_type(json_dict):
+    try:
+        account_type = json_dict["account_type"]
+    except KeyError:
+        raise ValidationError("Field 'account_type' missing.")
+    
     try:
         account_type = AccountTypes.objects.get(name=account_type)
     except exceptions.ObjectDoesNotExist:
         raise ValidationError("Account type given does not exist.")
+    
     return account_type
 
-def validate_account(account_id):
+def validate_account(json_dict, id_type="account_id"):
+    try:
+        account_id = json_dict[id_type]
+    except KeyError:
+        raise ValidationError("Field '" + id_type + "' is missing.")
+    
     try:
         account = Accounts.objects.get(account=account_id)
     except exceptions.ValidationError as validation_error:
@@ -23,7 +34,12 @@ def validate_account(account_id):
             raise validation_error
     return account
 
-def validate_amount(amount):
+def validate_amount(json_dict):
+    try:
+        amount = json_dict["amount"]
+    except KeyError:
+        raise ValidationError("Field 'amount' missing.")
+    
     try:
         amount = float(amount)
     except Exception:
@@ -36,7 +52,12 @@ def validate_amount(amount):
     decimal.getcontext().prec = 2
     return decimal.Decimal(amount)
 
-def validate_description(description):
+def validate_description(json_dict):
+    try:
+        description = json_dict["description"]
+    except KeyError:
+        raise ValidationError("Field 'description' missing.")
+    
     description = str(description)
     if len(description) > 255:
         raise ValidationError("Description cannot be longer than 255 characters")

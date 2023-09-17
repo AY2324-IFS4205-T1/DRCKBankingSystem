@@ -31,11 +31,11 @@ class ApproveSerializer(serializers.Serializer):
     
     def __init__(self, user_id, json_dict, **kwargs):
         self.user_id = user_id
-        self.ticket_id = json_dict["ticket_id"]
+        self.json_dict = json_dict
         super().__init__(**kwargs)
 
     def validate(self, attrs):
-        self.ticket = validate_ticket_id(self.ticket_id)
+        self.ticket = validate_ticket_id(self.json_dict)
         assert validate_open_ticket(self.ticket)
         return super().validate(attrs)
 
@@ -58,11 +58,11 @@ class RejectSerializer(serializers.Serializer):
     
     def __init__(self, user_id, json_dict, **kwargs):
         self.user_id = user_id
-        self.ticket_id = json_dict["ticket_id"]
+        self.json_dict = json_dict
         super().__init__(**kwargs)
 
     def validate(self, attrs):
-        self.ticket = validate_ticket_id(self.ticket_id)
+        self.ticket = validate_ticket_id(self.json_dict)
         assert validate_open_ticket(self.ticket)
         return super().validate(attrs)
 

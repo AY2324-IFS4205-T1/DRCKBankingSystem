@@ -1,3 +1,4 @@
+from decimal import Decimal
 import uuid
 
 from django.core.validators import RegexValidator
@@ -45,7 +46,7 @@ class Accounts(models.Model):
     account = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(Customer, on_delete=models.CASCADE)
     type = models.ForeignKey(AccountTypes, on_delete=models.CASCADE)
-    balance = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    balance = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal(0))
     status = models.CharField(max_length=1, choices=AccountStatus.choices)
     date_created = models.DateTimeField(auto_now_add=True)
 
@@ -66,13 +67,13 @@ class Transactions(models.Model):
     description = models.CharField(max_length=255)
     amount = models.DecimalField(max_digits=12, decimal_places=2)
     date = models.DateTimeField(auto_now_add=True)
-        
+    
     # Will review this another day
-    def clean_account(self):
-        if self.sender_id == self.recipient_id:
-            raise ValueError("Sender account should not be recipient account")
-    def clean_amount(self):
-        if self.type in ['W'] and self.amount > self.sender_id.balance:
-            raise ValueError("Withdrawal amount is too much")
-        elif self.type in ['T'] and self.amount > self.sender_id.balance:
-            raise ValueError("Transfer amount is too much")
+    # def clean_account(self):
+    #     if self.sender_id == self.recipient_id:
+    #         raise ValueError("Sender account should not be recipient account")
+    # def clean_amount(self):
+    #     if self.type in ['W'] and self.amount > self.sender_id.balance:
+    #         raise ValueError("Withdrawal amount is too much")
+    #     elif self.type in ['T'] and self.amount > self.sender_id.balance:
+    #         raise ValueError("Transfer amount is too much")

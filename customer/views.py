@@ -40,7 +40,7 @@ class CustomerRegistrationView(APIView):
 class CustomerLoginView(KnoxLoginView):
     '''
     username: test
-    password: password
+    password: testpassword
     Please keep the token for logout
     '''
     serializer_class = LoginSerializer
@@ -53,7 +53,8 @@ class CustomerLoginView(KnoxLoginView):
             user = serializer.validated_data['user'] # type: ignore
             login(request, user)
             response = super().post(request, format=None)
-            return Response(response.data, status=status.HTTP_201_CREATED)
+            return Response(response.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
 class GetAccountTypesView(APIView):
@@ -67,7 +68,7 @@ class GetAccountTypesView(APIView):
 
 class ApplyView(APIView):
     '''
-    account_type: savings / credit card / investments
+    account_type: Savings / Credit Card / Investments
     '''
     permission_classes = (permissions.IsAuthenticated,)
     authentication_classes = (SessionAuthentication,)
@@ -76,7 +77,7 @@ class ApplyView(APIView):
         serializer = ApplySerializer(request.user, request.data, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(status=status.HTTP_201_CREATED)
+            return Response(status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

@@ -43,8 +43,8 @@ urlpatterns = [
     path("staff/login", StaffLoginView.as_view(), name="staffLogin"),
     path("staff/approve", ApproveView.as_view(), name="approve"),
     path("staff/reject", RejectView.as_view(), name="reject"),
-    path("staff/get_open_tickets", GetOpenTicketsView.as_view(), name="get_open_tickets"),
-    path("staff/get_closed_tickets", GetClosedTicketsView.as_view(), name="get_closed_tickets"),
+    path("staff/get_open_tickets", GetOpenTicketsView.as_view(), name="getOpenTickets"),
+    path("staff/get_closed_tickets", GetClosedTicketsView.as_view(), name="getClosedTickets"),
 
     # In logout, header key: Authorization, Value: Token 3510ff361b..
     path("logout", knox_views.LogoutView.as_view(), name="logout"),

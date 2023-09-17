@@ -4,7 +4,12 @@ from rest_framework.serializers import ValidationError
 from staff.models import Tickets
 
 
-def validate_ticket_id(ticket_id):
+def validate_ticket_id(json_dict):
+    try:
+        ticket_id = json_dict["ticket_id"]
+    except KeyError:
+        raise ValidationError("Field 'ticket_id' missing.")
+
     try:
         ticket = Tickets.objects.get(ticket=ticket_id)
     except ObjectDoesNotExist:
