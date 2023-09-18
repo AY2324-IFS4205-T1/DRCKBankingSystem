@@ -8,7 +8,12 @@ on:
   pull_request:
       types: [opened, synchronize, reopened]
 env:
-  DJANGO_DEBUG: "True"
+  DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+  POSTGRES_HOST_AUTH: "postgres"
+  POSTGRES_PORT_AUTH: "5432"
+  POSTGRES_DBNAME_AUTH: "drck_banking"
+  POSTGRES_USER_AUTH: ${{ secrets.POSTGRES_USER }}
+  POSTGRES_PASSWORD_AUTH: ${{ secrets.POSTGRES_PASSWORD }}
   
 jobs:
   build:
@@ -66,26 +71,10 @@ jobs:
         run: |
           python manage.py makemigrations
           python manage.py migrate
-        env:
-          DJANGO_DEBUG: ${{ env.DJANGO_DEBUG }}
-          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
-          POSTGRES_HOST: "postgres"
-          POSTGRES_PORT: "5432"
-          POSTGRES_DB: "drck_banking"
-          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          
+
       - name: Run Coverage on Application
         run: |
           coverage run manage.py test --keepdb
-        env:
-          DJANGO_DEBUG: ${{ env.DJANGO_DEBUG }}
-          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
-          POSTGRES_HOST: "postgres"
-          POSTGRES_PORT: "5432"
-          POSTGRES_DB: "drck_banking"
-          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
           
       - name: Export Coverage to xml
         run: coverage xml -o coverage-reports/coverage-report.xml
