@@ -5,4 +5,4 @@ django-rest-knox==4.2.0 # Django-rest-knox library provides models and views to 
 djangorestframework==3.14.0 # Web APIs for Django, made easy.
 psycopg2-binary==2.9.7 # psycopg2 - Python-PostgreSQL Database Adapter
 
-coverage==7.3.1 # for code coverage purposes
+
