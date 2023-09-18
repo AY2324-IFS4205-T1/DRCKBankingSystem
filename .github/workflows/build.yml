@@ -65,6 +65,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           apt install -y curl
+          apt install -y jq
           
       - name: Install coverage.py
         run: |
