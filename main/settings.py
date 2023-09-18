@@ -96,7 +96,7 @@ DATABASES = {
         'HOST': os.environ["POSTGRES_HOST_AUTH"],
         'PORT': os.environ["POSTGRES_PORT_AUTH"],
         'TEST': {
-            'NAME': 'test_drck_banking',
+            'NAME': 'drck_banking',
         }
     },
 }
