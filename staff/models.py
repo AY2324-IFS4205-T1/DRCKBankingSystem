@@ -1,7 +1,10 @@
+import uuid
+
 from django.db import models
+
 from customer.models import AccountTypes, Customer
 from user.models import User
-import uuid
+
 
 # Create your models here.
 class Staff(models.Model):
@@ -19,12 +22,14 @@ class Staff(models.Model):
     birth_date = models.DateField()
     gender = models.CharField(max_length=1, choices=Gender.choices)
 
+
 class TicketTypes(models.Model):
     class Meta:
         db_table = 'staff"."ticket_types'
 
     ticket_type_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
+
 
 class Tickets(models.Model):
     class Meta:
@@ -34,11 +39,11 @@ class Tickets(models.Model):
         ]
         
     class TicketStatus(models.TextChoices):
-        CLOSED = "C"
         OPEN = "O"
         APPROVED = "A"
+        REJECTED = "R"
     
-    ticket_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    ticket = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     ticket_type = models.ForeignKey(TicketTypes, on_delete=models.PROTECT, null=True)
     account_type = models.ForeignKey(AccountTypes, on_delete=models.PROTECT)
     status = models.CharField(max_length=1, choices=TicketStatus.choices)
