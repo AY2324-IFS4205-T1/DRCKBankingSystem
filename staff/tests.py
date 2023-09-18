@@ -12,34 +12,34 @@ open_ticket_id = "073eb525-7eb8-4ac7-a372-0955465cfb80"
 class TestGetOpenTickets(TestAuthentication): # staff action
     def test_should_not_get_open_tickets(self):
         response = self.client.get(reverse("getOpenTickets"))
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_should_get_open_tickets(self):
         self.login_staff_1()
-        response = self.client.get(reverse("getOpenTickets"))
+        response = self.client.get(reverse("getOpenTickets"), **self.header)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
 class TestGetClosedTickets(TestAuthentication): # staff action
     def test_should_not_get_closed_tickets(self):
         response = self.client.get(reverse("getClosedTickets"))
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
         self.login_staff_1()
-        response = self.client.get(reverse("getClosedTickets"))
+        response = self.client.get(reverse("getClosedTickets"), **self.header)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         response = json.loads(response.content.decode('utf-8'))
         self.assertEqual(len(response["closed_tickets"]), 3)
 
         self.login_staff_2()
-        response = self.client.get(reverse("getClosedTickets"))
+        response = self.client.get(reverse("getClosedTickets"), **self.header)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         response = json.loads(response.content.decode('utf-8'))
         self.assertEqual(len(response["closed_tickets"]), 0)
 
     def test_should_get_open_tickets(self):
         self.login_staff_1()
-        response = self.client.get(reverse("getClosedTickets"))
+        response = self.client.get(reverse("getClosedTickets"), **self.header)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
@@ -51,25 +51,25 @@ class TestApprove(TestAuthentication): # staff action
         already_rejected = {"ticket_id": rejected_ticket_id}
 
         response = self.client.post(reverse("approve"), bad_field)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
         self.login_staff_1()
-        response = self.client.post(reverse("approve"), bad_field)
+        response = self.client.post(reverse("approve"), bad_field, **self.header)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-        response = self.client.post(reverse("approve"), bad_type)
+        response = self.client.post(reverse("approve"), bad_type, **self.header)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-        response = self.client.post(reverse("approve"), already_approved)
+        response = self.client.post(reverse("approve"), already_approved, **self.header)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-        response = self.client.post(reverse("approve"), already_rejected)
+        response = self.client.post(reverse("approve"), already_rejected, **self.header)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_should_approve(self):
         self.login_staff_1()
         sample_approve = {"ticket_id": open_ticket_id}
-        response = self.client.post(reverse("approve"), sample_approve)
+        response = self.client.post(reverse("approve"), sample_approve, **self.header)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
@@ -81,24 +81,24 @@ class TestReject(TestAuthentication): # staff action
         already_rejected = {"ticket_id": rejected_ticket_id}
 
         response = self.client.post(reverse("reject"), bad_field)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
         self.login_staff_1()
-        response = self.client.post(reverse("reject"), bad_field)
+        response = self.client.post(reverse("reject"), bad_field, **self.header)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-        response = self.client.post(reverse("reject"), bad_type)
+        response = self.client.post(reverse("reject"), bad_type, **self.header)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-        response = self.client.post(reverse("reject"), already_approved)
+        response = self.client.post(reverse("reject"), already_approved, **self.header)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-        response = self.client.post(reverse("reject"), already_rejected)
+        response = self.client.post(reverse("reject"), already_rejected, **self.header)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_should_reject(self):
         self.login_staff_1()
         sample_reject = {"ticket_id": open_ticket_id}
-        response = self.client.post(reverse("reject"), sample_reject)
+        response = self.client.post(reverse("reject"), sample_reject, **self.header)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 

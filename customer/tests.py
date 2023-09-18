@@ -9,11 +9,11 @@ test2_account_id = "315d9b27-1ba3-4ed8-a5c9-1bdfd042560c"
 class TestGetAccountTypes(TestAuthentication): # customer action
     def test_should_not_access_get_account_types(self):
         response = self.client.get(reverse("customerGetAccountTypes"))
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
     
     def test_access_get_account_types(self):
         self.login_customer_1()
-        response = self.client.get(reverse("customerGetAccountTypes"))
+        response = self.client.get(reverse("customerGetAccountTypes"), **self.header)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
@@ -23,29 +23,30 @@ class TestApply(TestAuthentication): # customer action
         bad_type = {"account_type": "savingsssss"}
 
         response = self.client.post(reverse("apply"), bad_field)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
         self.login_customer_1()
-        response = self.client.post(reverse("apply"), bad_field)
+        response = self.client.post(reverse("apply"), bad_field, **self.header)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-        response = self.client.post(reverse("apply"), bad_type)
+        response = self.client.post(reverse("apply"), bad_type, **self.header)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_should_apply(self):
         sample_apply = {"account_type": "Savings"}
         self.login_customer_1()
-        response = self.client.post(reverse("apply"), sample_apply)
+        response = self.client.post(reverse("apply"), sample_apply, **self.header)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
 
 class TestGetBalance(TestAuthentication): # customer action
     def test_should_not_get_balance(self):
         response = self.client.get(reverse("balance"))
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_should_get_balance(self):
         self.login_customer_1()
-        response = self.client.get(reverse("balance"))
+        response = self.client.get(reverse("balance"), **self.header)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
@@ -62,20 +63,18 @@ class TestDeposit(TestAuthentication): # customer action
         bad_type_description_long = {"account_id": test1_account_id, "amount": 50, "description": "a"*256}
 
         response = self.client.post(reverse("deposit"), bad_field_account_id)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
         requests = [bad_field_account_id, bad_field_amount, bad_field_description, bad_type_account_id, bad_type_not_my_account_id, bad_type_amount_str, bad_type_amount_2dp, bad_type_amount_0, bad_type_description_long]
         self.login_customer_1()
         for request in requests:
-            response = self.client.post(reverse("deposit"), request)
-            if response.status_code == status.HTTP_200_OK:
-                print(request)
+            response = self.client.post(reverse("deposit"), request, **self.header)
             self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_should_deposit(self):
         self.login_customer_1()
         sample_deposit = {"account_id": test1_account_id, "amount": 50, "description": "string"}
-        response = self.client.post(reverse("deposit"), sample_deposit)
+        response = self.client.post(reverse("deposit"), sample_deposit, **self.header)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
@@ -93,20 +92,18 @@ class TestWithdraw(TestAuthentication): # customer action
         bad_type_description_long = {"account_id": test1_account_id, "amount": 50, "description": "a"*256}
 
         response = self.client.post(reverse("withdraw"), bad_field_account_id)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
         requests = [bad_field_account_id, bad_field_amount, bad_field_description, bad_type_account_id, bad_type_not_my_account_id, bad_type_amount_str, bad_type_amount_2dp, bad_type_amount_0, bad_type_amount_too_much, bad_type_description_long]
         self.login_customer_1()
         for request in requests:
-            response = self.client.post(reverse("withdraw"), request)
-            if response.status_code == status.HTTP_200_OK:
-                print(request)
+            response = self.client.post(reverse("withdraw"), request, **self.header)
             self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_should_withdraw(self):
         self.login_customer_1()
         sample_withdrawal = {"account_id": test1_account_id, "amount": 50, "description": "string"}
-        response = self.client.post(reverse("withdraw"), sample_withdrawal)
+        response = self.client.post(reverse("withdraw"), sample_withdrawal, **self.header)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
@@ -127,18 +124,18 @@ class TestTransfer(TestAuthentication): # customer action
         bad_type_description_long = {"sender_id": test1_account_id, "recipient_id": test2_account_id, "amount": 50, "description": "a"*256}
 
         response = self.client.post(reverse("transfer"), bad_field_sender_id)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
         requests = [bad_field_sender_id, bad_field_recipient_id, bad_field_amount, bad_field_description, bad_type_sender_id, bad_type_recipient_id, bad_type_not_my_account_id, bad_type_same_accounts, bad_type_amount_str, bad_type_amount_2dp, bad_type_amount_0, bad_type_amount_too_much, bad_type_description_long]
         self.login_customer_1()
         for request in requests:
-            response = self.client.post(reverse("transfer"), request)
+            response = self.client.post(reverse("transfer"), request, **self.header)
             self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_should_transfer(self):
         self.login_customer_1()
         sample_transfer = {"sender_id": test1_account_id, "recipient_id": test2_account_id, "amount": 50, "description": "string"}
-        response = self.client.post(reverse("transfer"), sample_transfer)
+        response = self.client.post(reverse("transfer"), sample_transfer, **self.header)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
