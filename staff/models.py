@@ -23,14 +23,6 @@ class Staff(models.Model):
     gender = models.CharField(max_length=1, choices=Gender.choices)
 
 
-class TicketTypes(models.Model):
-    class Meta:
-        db_table = 'staff"."ticket_types'
-
-    ticket_type_id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=255)
-
-
 class Tickets(models.Model):
     class Meta:
         db_table = 'staff"."tickets'
@@ -38,13 +30,18 @@ class Tickets(models.Model):
             models.CheckConstraint(check=models.Q(closed_date__isnull=True) | models.Q(closed_date__gt=models.F('created_date')), name='closed_date_check'),
         ]
         
+    class TicketType(models.TextChoices):
+        OPEN_ACCOUNT = "O"
+        CLOSE_ACCOUNT = "C"
+        
     class TicketStatus(models.TextChoices):
         OPEN = "O"
         APPROVED = "A"
         REJECTED = "R"
+
     
     ticket = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    ticket_type = models.ForeignKey(TicketTypes, on_delete=models.PROTECT, null=True)
+    ticket_type = models.CharField(max_length=1, choices=TicketType.choices)
     account_type = models.ForeignKey(AccountTypes, on_delete=models.PROTECT)
     status = models.CharField(max_length=1, choices=TicketStatus.choices)
     created_by = models.ForeignKey(Customer, related_name='created_tickets', on_delete=models.PROTECT)

@@ -20,8 +20,9 @@ class Customer(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     birth_date = models.DateField()
-    identity_no = models.CharField(max_length=9, validators=[RegexValidator(regex='^[STFG]\d{7}[A-Z]$', message='Invalid Identity Number')])
+    identity_no = models.CharField(max_length=9, validators=[RegexValidator(regex='^[STFG][0-9]{7}[A-Z]$', message='Invalid Identity Number')])
     address = models.CharField(max_length=255)
+    postal_code = models.CharField(max_length=6, validators=[RegexValidator(regex='^[0-9]{6}$', message='Invalid postal code')])
     nationality = models.CharField(max_length=20)
     gender = models.CharField(max_length=1, choices=Gender.choices)
 

@@ -6,7 +6,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from staff.serializers import (ApproveSerializer, GetClosedTicketsSerializer,
-                               GetOpenTicketsSerializer, RejectSerializer)
+                               GetOpenTicketsSerializer, RejectSerializer, StaffSerializer)
+from user.models import User
 from user.serializers import LoginSerializer, UserRegisterSerializer
 
 staff_type = {'type': 'S'}
@@ -25,12 +26,16 @@ class StaffRegistrationView(APIView):
     gender: M
     '''
     def post(self, request):        
-        serializer = UserRegisterSerializer(data=request.data, context=staff_type)
+        user_serializer = UserRegisterSerializer(data=request.data, context=staff_type)
+        staff_serializer = StaffSerializer(data=request.data)
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if user_serializer.is_valid():
+            if staff_serializer.is_valid():
+                new_user = user_serializer.save(type=User.user_type.STAFF)
+                staff_serializer.save(user=new_user)
+                return Response(status=status.HTTP_201_CREATED)
+            return Response(staff_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
       
 class StaffLoginView(KnoxLoginView):

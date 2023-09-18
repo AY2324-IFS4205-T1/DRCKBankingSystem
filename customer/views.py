@@ -5,10 +5,11 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from customer.serializers import (ApplySerializer, DepositSerializer,
-                                  GetAccountTypesSerializer,
+from customer.serializers import (ApplySerializer, CustomerSerializer,
+                                  DepositSerializer, GetAccountTypesSerializer,
                                   GetBalanceSerializer, TransferSerializer,
                                   WithdrawSerializer)
+from user.models import User
 from user.serializers import LoginSerializer, UserRegisterSerializer
 
 customer_type = {'type': 'C'}
@@ -25,16 +26,21 @@ class CustomerRegistrationView(APIView):
     birth_date: 2023-01-01
     identity_no: S1234567B
     address: jurong
+    postal_code: 123456
     nationality: africa
-    gender: m
+    gender: M
     '''
     def post(self, request):        
-        serializer = UserRegisterSerializer(data=request.data, context=customer_type)
+        user_serializer = UserRegisterSerializer(data=request.data)
+        customer_serializer = CustomerSerializer(data=request.data)
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if user_serializer.is_valid():
+            if customer_serializer.is_valid():
+                new_user = user_serializer.save(type=User.user_type.CUSTOMER)
+                customer_serializer.save(user=new_user)
+                return Response(status=status.HTTP_201_CREATED)
+            return Response(customer_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CustomerLoginView(KnoxLoginView):
