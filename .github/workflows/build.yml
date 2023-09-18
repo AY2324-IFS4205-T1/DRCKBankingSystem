@@ -66,6 +66,14 @@ jobs:
         run: |
           python manage.py makemigrations
           python manage.py migrate
+        env:
+          DJANGO_DEBUG: ${{ env.DJANGO_DEBUG }}
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          POSTGRES_HOST: "postgres"
+          POSTGRES_PORT: "5432"
+          POSTGRES_DB: "drck_banking"
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
           
       - name: Run Coverage on Application
         run: |
