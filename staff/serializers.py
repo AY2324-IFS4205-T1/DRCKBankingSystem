@@ -1,6 +1,4 @@
-from datetime import datetime
-
-from django.utils.timezone import make_aware
+from django.utils import timezone
 from rest_framework import serializers
 
 from customer.models import Accounts, AccountTypes
@@ -43,7 +41,7 @@ class ApproveSerializer(serializers.Serializer):
         staff = Staff.objects.get(user=self.user_id)
         self.ticket.status = Tickets.TicketStatus.APPROVED
         self.ticket.closed_by = staff
-        self.ticket.closed_date = make_aware(datetime.now())
+        self.ticket.closed_date = timezone.now()
         self.make_account()
         self.ticket.save()
         return self.ticket
@@ -70,7 +68,7 @@ class RejectSerializer(serializers.Serializer):
         staff = Staff.objects.get(user=self.user_id)
         self.ticket.status = Tickets.TicketStatus.REJECTED
         self.ticket.closed_by = staff
-        self.ticket.closed_date = make_aware(datetime.now())
+        self.ticket.closed_date = timezone.now()
         self.ticket.save()
         return self.ticket
 
