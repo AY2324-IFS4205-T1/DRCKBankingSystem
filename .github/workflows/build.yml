@@ -14,8 +14,7 @@ jobs:
   build:
     name: DRCK Backend Workflow CI
     runs-on: ubuntu-latest
-    container: python:3.11-slim
-    
+    container: python:3.11-bullseye
     services:
       postgres:
         # Docker Hub image
@@ -59,7 +58,7 @@ jobs:
         with:
           python-version: '3.11'
           
-      - name: Install PostgreSQL development packages
+      - name: Install prerequisites for psycopg2
         run: |
           apt-get update
           apt-get install -y libpq-dev
