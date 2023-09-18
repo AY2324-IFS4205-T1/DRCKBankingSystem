@@ -50,6 +50,7 @@ jobs:
           psql -h postgres -d test_drck_banking -U ${{ secrets.POSTGRES_USER }} -c 'GRANT ALL ON SCHEMA django to ${{ secrets.POSTGRES_USER }};'
           psql -h postgres -d test_drck_banking -U ${{ secrets.POSTGRES_USER }} -c 'GRANT ALL ON SCHEMA customer to ${{ secrets.POSTGRES_USER }};'
           psql -h postgres -d test_drck_banking -U ${{ secrets.POSTGRES_USER }} -c 'GRANT ALL ON SCHEMA staff to ${{ secrets.POSTGRES_USER }};'
+          psql -h postgres -d test_drck_banking -U ${{ secrets.POSTGRES_USER }} -c 'SET SEARCH_PATH TO django;'
         env:
           PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
           
