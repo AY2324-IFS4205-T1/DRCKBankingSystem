@@ -49,3 +49,11 @@ drck_banking=# exit
 ```
 
 To run tests: `python manage.py test --keepdb`. This is because with Postgres, Django cannot create new schemas on its own, so we have to preserve the above setup. By default, all entries should be deleted after testing.
+
+## For code coverage
+
+```basg
+pip install coverage==7.3.1
+coverage run manage.py test --keepdb
+coverage xml -o coverage-reports/coverage.xml
+```

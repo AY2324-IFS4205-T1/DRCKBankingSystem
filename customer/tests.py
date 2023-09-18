@@ -52,7 +52,7 @@ class TestDeposit(TestAuthentication): # customer action
         bad_field_account_id = {"acount_iiiiid": "daa55c76-8b9c-4d7c-8ad9-ec485daa76f9", "amount": 50, "description": "string"}
         bad_field_amount = {"account_id": "daa55c76-8b9c-4d7c-8ad9-ec485daa76f9", "ammmmmount": 50, "description": "string"}
         bad_field_description = {"account_id": "daa55c76-8b9c-4d7c-8ad9-ec485daa76f9", "amount": 50, "ddddddescription": "string"}
-        bad_type_account_id = {"account_id": "blah blah", "amount": 50, "description": "string"}
+        bad_type_account_id = {"account_id": "", "amount": 50, "description": "string"}
         bad_type_not_my_account_id = {"account_id": "315d9b27-1ba3-4ed8-a5c9-1bdfd042560c", "amount": 50, "description": "string"}
         bad_type_amount_str = {"account_id": "daa55c76-8b9c-4d7c-8ad9-ec485daa76f9", "amount": "50abc", "description": "string"}
         bad_type_amount_2dp = {"account_id": "daa55c76-8b9c-4d7c-8ad9-ec485daa76f9", "amount": 50.00001, "description": "string"}
@@ -82,7 +82,7 @@ class TestWithdraw(TestAuthentication): # customer action
         bad_field_account_id = {"acount_iiiiid": "daa55c76-8b9c-4d7c-8ad9-ec485daa76f9", "amount": 50, "description": "string"}
         bad_field_amount = {"account_id": "daa55c76-8b9c-4d7c-8ad9-ec485daa76f9", "ammmmmount": 50, "description": "string"}
         bad_field_description = {"account_id": "daa55c76-8b9c-4d7c-8ad9-ec485daa76f9", "amount": 50, "ddddddescription": "string"}
-        bad_type_account_id = {"account_id": "blah blah", "amount": 50, "description": "string"}
+        bad_type_account_id = {"account_id": "", "amount": 50, "description": "string"}
         bad_type_not_my_account_id = {"account_id": "315d9b27-1ba3-4ed8-a5c9-1bdfd042560c", "amount": 50, "description": "string"}
         bad_type_amount_str = {"account_id": "daa55c76-8b9c-4d7c-8ad9-ec485daa76f9", "amount": "50abc", "description": "string"}
         bad_type_amount_2dp = {"account_id": "daa55c76-8b9c-4d7c-8ad9-ec485daa76f9", "amount": 50.00001, "description": "string"}
@@ -114,8 +114,8 @@ class TestTransfer(TestAuthentication): # customer action
         bad_field_recipient_id = {"sender_id": "daa55c76-8b9c-4d7c-8ad9-ec485daa76f9", "rrrecipient_id": "315d9b27-1ba3-4ed8-a5c9-1bdfd042560c", "amount": 50, "description": "string"}
         bad_field_amount = {"sender_id": "daa55c76-8b9c-4d7c-8ad9-ec485daa76f9", "recipient_id": "315d9b27-1ba3-4ed8-a5c9-1bdfd042560c", "ammmount": 50, "description": "string"}
         bad_field_description = {"sender_id": "daa55c76-8b9c-4d7c-8ad9-ec485daa76f9", "recipient_id": "315d9b27-1ba3-4ed8-a5c9-1bdfd042560c", "amount": 50, "ddddescription": "string"}
-        bad_type_sender_id = {"sender_id": "blah blah", "recipient_id": "315d9b27-1ba3-4ed8-a5c9-1bdfd042560c", "amount": 50, "description": "string"}
-        bad_type_recipient_id = {"sender_id": "daa55c76-8b9c-4d7c-8ad9-ec485daa76f9", "recipient_id": "blah blah", "amount": 50, "description": "string"}
+        bad_type_sender_id = {"sender_id": "", "recipient_id": "315d9b27-1ba3-4ed8-a5c9-1bdfd042560c", "amount": 50, "description": "string"}
+        bad_type_recipient_id = {"sender_id": "daa55c76-8b9c-4d7c-8ad9-ec485daa76f9", "recipient_id": "", "amount": 50, "description": "string"}
         bad_type_not_my_account_id = {"sender_id": "315d9b27-1ba3-4ed8-a5c9-1bdfd042560c", "recipient_id": "daa55c76-8b9c-4d7c-8ad9-ec485daa76f9", "amount": 50, "description": "string"}
         bad_type_same_accounts = {"sender_id": "daa55c76-8b9c-4d7c-8ad9-ec485daa76f9", "recipient_id": "daa55c76-8b9c-4d7c-8ad9-ec485daa76f9", "amount": 50, "description": "string"}
         bad_type_amount_str = {"sender_id": "daa55c76-8b9c-4d7c-8ad9-ec485daa76f9", "recipient_id": "315d9b27-1ba3-4ed8-a5c9-1bdfd042560c", "amount": "50abc", "description": "string"}

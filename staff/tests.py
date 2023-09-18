@@ -42,8 +42,8 @@ class TestGetClosedTickets(TestAuthentication): # staff action
 
 class TestApprove(TestAuthentication): # staff action
     def test_should_not_approve(self):
-        bad_field = {"tiiiiicket_id": "blah blah"}
-        bad_type = {"ticket_id": "blah blah"}
+        bad_field = {"tiiiiicket_id": ""}
+        bad_type = {"ticket_id": ""}
         already_approved = {"ticket_id": "0d9cd690-5141-4e99-8fd0-992ca2ecfa9c"}
         already_rejected = {"ticket_id": "ce77f63a-063b-43d0-b7f3-85972b8f81c4"}
 
@@ -72,8 +72,8 @@ class TestApprove(TestAuthentication): # staff action
 
 class TestReject(TestAuthentication): # staff action
     def test_should_not_reject(self):
-        bad_field = {"tiiiiicket_id": "blah blah"}
-        bad_type = {"ticket_id": "blah blah"}
+        bad_field = {"tiiiiicket_id": ""}
+        bad_type = {"ticket_id": ""}
         already_approved = {"ticket_id": "0d9cd690-5141-4e99-8fd0-992ca2ecfa9c"}
         already_rejected = {"ticket_id": "ce77f63a-063b-43d0-b7f3-85972b8f81c4"}
 
