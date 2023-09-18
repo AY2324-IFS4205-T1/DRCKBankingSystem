@@ -11,7 +11,7 @@ env:
   DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
   POSTGRES_HOST_AUTH: "postgres"
   POSTGRES_PORT_AUTH: "5432"
-  POSTGRES_DBNAME_AUTH: "drck_banking"
+  POSTGRES_DBNAME_AUTH: "test_drck_banking"
   POSTGRES_USER_AUTH: ${{ secrets.POSTGRES_USER }}
   POSTGRES_PASSWORD_AUTH: ${{ secrets.POSTGRES_PASSWORD }}
   
@@ -26,7 +26,7 @@ jobs:
         image: postgres
         # Provide the db name, user, and password for postgres
         env:
-          POSTGRES_DB: "drck_banking"
+          POSTGRES_DB: "test_drck_banking"
           POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         # Set health checks to wait until postgres has started
@@ -44,14 +44,14 @@ jobs:
           
       - name: Setup database
         run: |
-          psql -h postgres -d drck_banking -U ${{ secrets.POSTGRES_USER }} -c 'GRANT ALL PRIVILEGES ON DATABASE drck_banking to ${{ secrets.POSTGRES_USER }}'
-          psql -h postgres -d drck_banking -U ${{ secrets.POSTGRES_USER }} -c 'CREATE SCHEMA django;'
-          psql -h postgres -d drck_banking -U ${{ secrets.POSTGRES_USER }} -c 'CREATE SCHEMA customer;'
-          psql -h postgres -d drck_banking -U ${{ secrets.POSTGRES_USER }} -c 'CREATE SCHEMA staff;'
-          psql -h postgres -d drck_banking -U ${{ secrets.POSTGRES_USER }} -c 'GRANT ALL ON SCHEMA django to ${{ secrets.POSTGRES_USER }};'
-          psql -h postgres -d drck_banking -U ${{ secrets.POSTGRES_USER }} -c 'GRANT ALL ON SCHEMA customer to ${{ secrets.POSTGRES_USER }};'
-          psql -h postgres -d drck_banking -U ${{ secrets.POSTGRES_USER }} -c 'GRANT ALL ON SCHEMA staff to ${{ secrets.POSTGRES_USER }};'
-          psql -h postgres -d drck_banking -U ${{ secrets.POSTGRES_USER }} -c 'SET SEARCH_PATH TO django;'
+          psql -h postgres -d test_drck_banking -U ${{ secrets.POSTGRES_USER }} -c 'GRANT ALL PRIVILEGES ON DATABASE test_drck_banking to ${{ secrets.POSTGRES_USER }}'
+          psql -h postgres -d test_drck_banking -U ${{ secrets.POSTGRES_USER }} -c 'CREATE SCHEMA django;'
+          psql -h postgres -d test_drck_banking -U ${{ secrets.POSTGRES_USER }} -c 'CREATE SCHEMA customer;'
+          psql -h postgres -d test_drck_banking -U ${{ secrets.POSTGRES_USER }} -c 'CREATE SCHEMA staff;'
+          psql -h postgres -d test_drck_banking -U ${{ secrets.POSTGRES_USER }} -c 'GRANT ALL ON SCHEMA django to ${{ secrets.POSTGRES_USER }};'
+          psql -h postgres -d test_drck_banking -U ${{ secrets.POSTGRES_USER }} -c 'GRANT ALL ON SCHEMA customer to ${{ secrets.POSTGRES_USER }};'
+          psql -h postgres -d test_drck_banking -U ${{ secrets.POSTGRES_USER }} -c 'GRANT ALL ON SCHEMA staff to ${{ secrets.POSTGRES_USER }};'
+          psql -h postgres -d test_drck_banking -U ${{ secrets.POSTGRES_USER }} -c 'SET SEARCH_PATH TO django;'
         env:
           PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
           
