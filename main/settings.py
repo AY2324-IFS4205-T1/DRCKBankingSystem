@@ -94,7 +94,10 @@ DATABASES = {
         'USER': os.environ["POSTGRES_USER_AUTH"],
         'PASSWORD': os.environ["POSTGRES_PASSWORD_AUTH"],
         'HOST': os.environ["POSTGRES_HOST_AUTH"],
-        'PORT': os.environ["POSTGRES_PORT_AUTH"]
+        'PORT': os.environ["POSTGRES_PORT_AUTH"],
+        'TEST': {
+            'NAME': 'drck_banking',
+        }
     },
 }
 
