@@ -39,15 +39,14 @@ class TestApply(TestAuthentication): # customer action
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
-class TestGetCustomerTicketsBalance(TestAuthentication): # customer action
-    def test_should_not_get_balance(self):
+class TestGetCustomerTickets(TestAuthentication): # customer action
+    def test_should_not_get_tickets(self):
         response = self.client.get(reverse("getCustomerTickets"))
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    def test_should_get_balance(self):
+    def test_should_get_tickets(self):
         self.login_customer_1()
         response = self.client.get(reverse("getCustomerTickets"), **self.header)
-        print(response.json())
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
