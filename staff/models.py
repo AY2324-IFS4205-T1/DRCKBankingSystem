@@ -12,15 +12,16 @@ class Staff(models.Model):
         db_table = 'staff"."staff_info'
 
     class Gender(models.TextChoices):
-        FEMALE = "F"
-        MALE = "M"	
+        FEMALE = "Female"
+        MALE = "Male"
+        OTHERS = "Others"
 
     user = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     title = models.CharField(max_length=255)
     birth_date = models.DateField()
-    gender = models.CharField(max_length=1, choices=Gender.choices)
+    gender = models.CharField(max_length=6, choices=Gender.choices)
 
 
 class Tickets(models.Model):
@@ -31,19 +32,19 @@ class Tickets(models.Model):
         ]
         
     class TicketType(models.TextChoices):
-        OPEN_ACCOUNT = "O"
-        CLOSE_ACCOUNT = "C"
+        OPEN_ACCOUNT = "Opening Account"
+        CLOSE_ACCOUNT = "Closing Account"
         
     class TicketStatus(models.TextChoices):
-        OPEN = "O"
-        APPROVED = "A"
-        REJECTED = "R"
+        OPEN = "Open"
+        APPROVED = "Approved"
+        REJECTED = "Rejected"
 
     
     ticket = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    ticket_type = models.CharField(max_length=1, choices=TicketType.choices)
+    ticket_type = models.CharField(max_length=15, choices=TicketType.choices)
     account_type = models.ForeignKey(AccountTypes, on_delete=models.PROTECT)
-    status = models.CharField(max_length=1, choices=TicketStatus.choices)
+    status = models.CharField(max_length=8, choices=TicketStatus.choices)
     created_by = models.ForeignKey(Customer, related_name='created_tickets', on_delete=models.PROTECT)
     created_date = models.DateTimeField(auto_now_add=True)
     closed_by = models.ForeignKey(Staff, related_name='closed_tickets', on_delete=models.PROTECT, null=True)

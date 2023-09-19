@@ -13,8 +13,9 @@ class Customer(models.Model):
         db_table = 'customer"."customer_info'
 
     class Gender(models.TextChoices):
-        FEMALE = "F"
-        MALE = "M"
+        FEMALE = "Female"
+        MALE = "Male"
+        OTHERS = "Others"
     
     class Nationalities(models.TextChoices):
         Afghans = "Afghans"
@@ -247,7 +248,7 @@ class Customer(models.Model):
     address = models.CharField(max_length=255)
     postal_code = models.CharField(max_length=6, validators=[RegexValidator(regex='^[0-9]{6}$', message='Invalid postal code')])
     nationality = models.CharField(max_length=30, choices=Nationalities.choices)
-    gender = models.CharField(max_length=1, choices=Gender.choices)
+    gender = models.CharField(max_length=6, choices=Gender.choices)
 
 
 class AccountTypes(models.Model):
@@ -263,15 +264,15 @@ class Accounts(models.Model):
         db_table = 'customer"."accounts'
     
     class AccountStatus(models.TextChoices):
-        ACTIVE = "A"
-        PENDING = "P"
-        CLOSED = "C"
+        ACTIVE = "Active"
+        PENDING = "Pending"
+        CLOSED = "Closed"
 
     account = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(Customer, on_delete=models.CASCADE)
     type = models.ForeignKey(AccountTypes, on_delete=models.CASCADE)
     balance = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal(0))
-    status = models.CharField(max_length=1, choices=AccountStatus.choices)
+    status = models.CharField(max_length=7, choices=AccountStatus.choices)
     date_created = models.DateTimeField(auto_now_add=True)
 
 
@@ -280,24 +281,14 @@ class Transactions(models.Model):
         db_table = 'customer"."transactions'
     
     class TransactionTypes(models.TextChoices):
-        DEPOSIT = "D"
-        WITHDRAWAL = "W"
-        TRANSFER = "T"
+        DEPOSIT = "Deposit"
+        WITHDRAWAL = "Withdrawal"
+        TRANSFER = "Transfer"
     
     transaction = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    transaction_type = models.CharField(max_length=1, choices=TransactionTypes.choices)
+    transaction_type = models.CharField(max_length=10, choices=TransactionTypes.choices)
     sender = models.ForeignKey(Accounts, related_name='sent_transactions', on_delete=models.CASCADE, null=True)
     recipient = models.ForeignKey(Accounts, related_name='received_transactions', on_delete=models.CASCADE, null=True)
     description = models.CharField(max_length=255)
     amount = models.DecimalField(max_digits=12, decimal_places=2)
     date = models.DateTimeField(auto_now_add=True)
-    
-    # Will review this another day
-    # def clean_account(self):
-    #     if self.sender_id == self.recipient_id:
-    #         raise ValueError("Sender account should not be recipient account")
-    # def clean_amount(self):
-    #     if self.type in ['W'] and self.amount > self.sender_id.balance:
-    #         raise ValueError("Withdrawal amount is too much")
-    #     elif self.type in ['T'] and self.amount > self.sender_id.balance:
-    #         raise ValueError("Transfer amount is too much")

@@ -12,7 +12,7 @@ from customer.serializers import (ApplySerializer, CustomerSerializer,
 from user.models import User
 from user.serializers import LoginSerializer, UserRegisterSerializer
 
-customer_type = {'type': 'C'}
+customer_type = {'type': 'Customer'}
 
 
 class CustomerRegistrationView(APIView):

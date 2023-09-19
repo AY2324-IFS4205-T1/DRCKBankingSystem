@@ -10,7 +10,7 @@ from staff.serializers import (ApproveSerializer, GetClosedTicketsSerializer,
 from user.models import User
 from user.serializers import LoginSerializer, UserRegisterSerializer
 
-staff_type = {'type': 'S'}
+staff_type = {'type': 'Staff'}
 
 # Create your views here.
 class StaffRegistrationView(APIView):
