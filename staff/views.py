@@ -5,14 +5,9 @@ from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from staff.serializers import (
-    ApproveSerializer,
-    GetClosedTicketsSerializer,
-    GetOpenTicketsSerializer,
-    RejectSerializer,
-    StaffSerializer,
-    TicketDetailsSerializer,
-)
+from staff.serializers import (ApproveSerializer, GetClosedTicketsSerializer,
+                               GetOpenTicketsSerializer, RejectSerializer,
+                               StaffSerializer, TicketDetailsSerializer)
 from user.models import User
 from user.serializers import LoginSerializer, UserRegisterSerializer
 

@@ -27,7 +27,7 @@ class CustomerRegistrationView(APIView):
     identity_no: S1234567B
     address: jurong
     postal_code: 123456
-    nationality: Singaporean
+    citizenship: Singaporean Citizen
     gender: M
     '''
     def post(self, request):        

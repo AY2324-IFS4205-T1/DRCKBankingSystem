@@ -1,9 +1,10 @@
 import json
-from django.utils import timezone
+
 from django.core.serializers import serialize
+from django.utils import timezone
 from rest_framework import serializers
 
-from customer.models import Accounts, AccountTypes, Customer
+from customer.models import Accounts, AccountTypes
 from staff.validations import validate_open_ticket, validate_ticket_id
 
 from .models import Staff, Tickets

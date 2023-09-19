@@ -47,7 +47,6 @@ class TestGetCustomerTickets(TestAuthentication): # customer action
     def test_should_get_tickets(self):
         self.login_customer_1()
         response = self.client.get(reverse("getCustomerTickets"), **self.header)
-        print(response.json())
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
