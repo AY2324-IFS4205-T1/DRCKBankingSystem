@@ -6,7 +6,6 @@ This script generates a random dataset that populates the Customer Schema and th
 # Warnings
 General:
 * Assumes that id in django.auth_user starts from 1 (can be modified)
-* Assumes all auth_users are customers regardless of type 
 * Number of auth_users and transactions must be modified in the code
 * Due to primary key concerns, try to run script only once or clear database using delete.sql before running agian
 

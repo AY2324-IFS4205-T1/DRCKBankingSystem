@@ -15,7 +15,8 @@ end_date = datetime.now()
 
 
 def get_userids():
-    user_ids = list(User.objects.values_list('id', flat=True))
+    user_ids = list(User.objects.filter(type='C').values_list('id', flat=True))
+    # print(user_ids)
     return user_ids
 
 
@@ -155,7 +156,7 @@ def generate_customer():
 def generate_account():
     user_ids = get_userids()
     data = []
-    for i, user_id in enumerate(user_ids):
+    for i,user_id in enumerate(user_ids):
         user_data = {
             "model": "customer.Accounts",
             "fields": {
@@ -203,9 +204,9 @@ def load_data(fixture_file):
         print(f"Command failed with error: {e}")
 
 
-# Main Function
-# Define number of users you want to generate
-generate_auth_user(50)
+# # Main Function
+# # Define number of users you want to generate
+generate_auth_user(10)
 load_data("fixtures/auth_users.json")
 
 generate_customer()
@@ -223,3 +224,4 @@ generate_transaction(75)
 load_data("fixtures/transactions.json")
 
 print("Customer schema is populated!")
+# get_userids()
