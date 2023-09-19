@@ -1,15 +1,17 @@
 import json
 import random
 import string
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from user.models import User
 from customer.models import AccountTypes, Accounts
 from django.utils import timezone
 import subprocess
+from django.utils.timezone import make_aware
+import pytz
 
 # Global variables
-start_date = timezone.datetime(1920, 1, 1, tzinfo=timezone.utc)
-end_date = timezone.now()
+start_date = datetime(1920, 1, 1)
+end_date = datetime.now()
 
 
 def get_userids():
@@ -19,7 +21,8 @@ def get_userids():
 
 def get_random_birthdate():
     random_date = start_date + timedelta(days=random.randint(0, (end_date - start_date).days))
-    formatted_date = random_date.strftime("%Y-%m-%d")
+    # print(type(random_date))
+    formatted_date = make_aware(random_date).strftime("%Y-%m-%d")
     return formatted_date
 
 
@@ -41,6 +44,34 @@ def get_random_nationality():
     nationalities = ["Chinese", "Malay", "Indian", "France", "Germany", "Iceland", "Denmark", "Netherlands", "Norway", "Japanese", "Korean"]
     random_nationality = random.choice(nationalities)
     return random_nationality
+
+
+def get_random_datetime():
+    now = datetime.utcnow()
+
+    start_year = 1990
+    end_year = now.year
+    # print(end_year)
+
+    year = random.randint(start_year, end_year)
+    month = random.randint(1, 12)
+    # Months have different days 
+    if month == 2:
+        day = random.randint(1, 28) # i am NOT doing leap years
+    elif month == 1 | month == 3 | month == 5 | month == 7 | month == 8 | month == 10 | month == 12:
+        day = random.randint(1, 31)
+    else: 
+        day = random.randint(1, 30) 
+    
+    hour = random.randint(0, 23)
+    minute = random.randint(0, 59)
+    second = random.randint(0, 59)
+
+    current_datetime = datetime.now()
+    new = current_datetime.replace(year, month, day, hour, minute, second)
+    choose_datetime = min(current_datetime, new)
+    random_datetime = choose_datetime.isoformat()
+    return random_datetime
 
 
 def get_random_gender():
@@ -132,7 +163,7 @@ def generate_account():
                 "type": get_random_account_type(),
                 "balance": get_random_balance(),
                 "status": "A",
-                "date_created": get_random_birthdate()
+                "date_created": get_random_datetime()
             }
         }
         data.append(user_data)
@@ -153,9 +184,9 @@ def generate_transaction(num_transactions):
             "fields": {
                 "sender": str(sender_account),
                 "recipient": str(recipient_account),
-                "description": "im scared null so value",
+                "description": "",
                 "amount": str(balance),
-                "date": get_random_birthdate()
+                "date": get_random_datetime()
             }
         }
         data.append(user_data)
@@ -174,7 +205,7 @@ def load_data(fixture_file):
 
 # Main Function
 # Define number of users you want to generate
-generate_auth_user(10)
+generate_auth_user(50)
 load_data("fixtures/auth_users.json")
 
 generate_customer()
@@ -188,7 +219,7 @@ generate_account()
 load_data("fixtures/accounts.json")
 
 # Define number of transactions you want to generate
-generate_transaction(15)
+generate_transaction(75)
 load_data("fixtures/transactions.json")
 
 print("Customer schema is populated!")
