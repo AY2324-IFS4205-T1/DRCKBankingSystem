@@ -20,9 +20,9 @@ from knox import views as knox_views
 
 from customer.views import (ApplyView, CustomerLoginView,
                             CustomerRegistrationView, DepositView,
-                            GetAccountTypesView, GetBalanceView, TransferView,
+                            GetAccountTypesView, GetBalanceView, GetCustomerTicketsView, TransferView,
                             WithdrawView)
-from staff.views import (ApproveView, GetClosedTicketsView, GetOpenTicketsView,
+from staff.views import (ApproveView, GetClosedTicketsView, GetOpenTicketsView, TicketDetailsView,
                          RejectView, StaffLoginView, StaffRegistrationView)
 
 urlpatterns = [
@@ -33,6 +33,7 @@ urlpatterns = [
     path("customer/login", CustomerLoginView.as_view(), name="customerLogin"),
     path("customer/get_account_types", GetAccountTypesView.as_view(),name="customerGetAccountTypes",),
     path("customer/apply", ApplyView.as_view(), name="apply"),
+    path("customer/get_tickets", GetCustomerTicketsView.as_view(), name="getCustomerTickets"),
     path("customer/balance", GetBalanceView.as_view(), name="balance"),
     path("customer/deposit", DepositView.as_view(), name="deposit"),
     path("customer/withdraw", WithdrawView.as_view(), name="withdraw"),
@@ -45,6 +46,7 @@ urlpatterns = [
     path("staff/reject", RejectView.as_view(), name="reject"),
     path("staff/get_open_tickets", GetOpenTicketsView.as_view(), name="getOpenTickets"),
     path("staff/get_closed_tickets", GetClosedTicketsView.as_view(), name="getClosedTickets"),
+    path("staff/ticket_details", TicketDetailsView.as_view(), name="ticketDetails"),
 
     # In logout, header key: Authorization, Value: Token 3510ff361b..
     path("logout", knox_views.LogoutView.as_view(), name="logout"),

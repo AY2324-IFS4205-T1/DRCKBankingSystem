@@ -102,3 +102,24 @@ class TestReject(TestAuthentication): # staff action
         response = self.client.post(reverse("reject"), sample_reject, **self.header)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+
+class TestTicketDetails(TestAuthentication): # staff action
+    def test_should_not_tickets_details(self):
+        bad_field = {"tiiiiicket_id": ""}
+        bad_type = {"ticket_id": ""}
+
+        response = self.client.post(reverse("ticketDetails"), bad_field)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        self.login_staff_1()
+        response = self.client.post(reverse("ticketDetails"), bad_field, **self.header)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        response = self.client.post(reverse("ticketDetails"), bad_type, **self.header)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_should_ticket_details(self):
+        self.login_staff_1()
+        sample_ticket_details = {"ticket_id": open_ticket_id}
+        response = self.client.post(reverse("ticketDetails"), sample_ticket_details, **self.header)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)

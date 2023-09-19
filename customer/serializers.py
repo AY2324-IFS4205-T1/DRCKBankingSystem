@@ -11,7 +11,7 @@ class CustomerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Customer
-        fields = ('user', 'first_name', 'last_name', 'birth_date', 'identity_no', 'address', 'postal_code', 'nationality', 'gender')
+        fields = ('user', 'first_name', 'last_name', 'birth_date', 'identity_no', 'address', 'postal_code', 'citizenship', 'gender')
 
     def create(self, validated_data):
         return Customer.objects.create(**validated_data)
@@ -40,6 +40,17 @@ class ApplySerializer(serializers.Serializer):
         customer = Customer.objects.get(user=self.user_id)
         ticket = Tickets.objects.create(created_by=customer, account_type=self.account_type, status = Tickets.TicketStatus.OPEN)
         return ticket
+
+
+class GetCustomerTicketsSerializer(serializers.Serializer):
+    
+    def __init__(self, user_id):
+        self.user_id = user_id
+
+    def get_customer_tickets(self):
+        user_id = Customer.objects.get(user = self.user_id)
+        tickets = Tickets.objects.filter(created_by=user_id).values("ticket_type", "account_type", "status", "created_date", "closed_date")
+        return list(tickets)
 
 
 class GetBalanceSerializer(serializers.Serializer):
