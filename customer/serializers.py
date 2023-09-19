@@ -42,6 +42,17 @@ class ApplySerializer(serializers.Serializer):
         return ticket
 
 
+class GetCustomerTicketsSerializer(serializers.Serializer):
+    
+    def __init__(self, user_id):
+        self.user_id = user_id
+
+    def get_customer_tickets(self):
+        user_id = Customer.objects.get(user = self.user_id)
+        tickets = Tickets.objects.filter(created_by=user_id).values("ticket_type", "account_type", "status", "created_date", "closed_date")
+        return list(tickets)
+
+
 class GetBalanceSerializer(serializers.Serializer):
     
     def __init__(self, user_id):

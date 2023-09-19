@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 
 from customer.serializers import (ApplySerializer, CustomerSerializer,
                                   DepositSerializer, GetAccountTypesSerializer,
-                                  GetBalanceSerializer, TransferSerializer,
+                                  GetBalanceSerializer, GetCustomerTicketsSerializer, TransferSerializer,
                                   WithdrawSerializer)
 from user.models import User
 from user.serializers import LoginSerializer, UserRegisterSerializer
@@ -85,6 +85,15 @@ class ApplyView(APIView):
             serializer.save()
             return Response(status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class GetCustomerTicketsView(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
+    
+    def get(self, request):
+        serializer = GetCustomerTicketsSerializer(request.user).get_customer_tickets()
+        return Response({'balance': serializer}, status=status.HTTP_200_OK)
 
 
 class GetBalanceView(APIView):
