@@ -1,8 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 from .models import User
-from customer.serializers import CustomerSerializer
-from staff.serializers import StaffSerializer
 
 class UserRegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -11,26 +9,8 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         model = User
         fields = ('username', 'email', 'phone_no', 'password')
 
-    def create(self, validated_data):
-        new_user = None
-        user_type = self.context['type']
-        initial_data = self.initial_data
-        
-        if user_type == User.user_type.CUSTOMER:
-            customer_serializer = CustomerSerializer(data=initial_data)
-            if customer_serializer.is_valid():
-                new_user = User.objects.create_user(**validated_data, type=self.context['type'])
-                customer_serializer.save(user=new_user)
-        elif user_type == User.user_type.STAFF:
-            staff_serializer = StaffSerializer(data=self.initial_data)
-            if staff_serializer.is_valid():
-                new_user = User.objects.create_user(**validated_data, type=self.context['type'])
-                staff_serializer.save(user=new_user)
-
-        # if new_user == None:
-            # Handle exception here
-        
-        return new_user
+    def create(self, validated_data):        
+        return User.objects.create_user(**validated_data)
 
 
 class LoginSerializer(serializers.Serializer):

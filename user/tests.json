@@ -736,7 +736,8 @@
             "birth_date": "2023-01-01",
             "identity_no": "S1234567B",
             "address": "jurong",
-            "nationality": "singaporean",
+            "postal_code": "123456",
+            "nationality": "Singaporean",
             "gender": "M"
         }
     },
@@ -749,7 +750,8 @@
             "birth_date": "2023-01-01",
             "identity_no": "S1234567B",
             "address": "jurong",
-            "nationality": "singaporean",
+            "postal_code": "123456",
+            "nationality": "Singaporean",
             "gender": "M"
         }
     },
@@ -833,7 +835,7 @@
         "model": "staff.tickets",
         "pk": "073eb525-7eb8-4ac7-a372-0955465cfb80",
         "fields": {
-            "ticket_type": null,
+            "ticket_type": "O",
             "account_type": 3,
             "status": "O",
             "created_by": 1,
@@ -846,7 +848,7 @@
         "model": "staff.tickets",
         "pk": "0d9cd690-5141-4e99-8fd0-992ca2ecfa9c",
         "fields": {
-            "ticket_type": null,
+            "ticket_type": "O",
             "account_type": 1,
             "status": "A",
             "created_by": 1,
@@ -859,7 +861,7 @@
         "model": "staff.tickets",
         "pk": "4581a8c1-93b1-4a86-b882-eba9191d36ab",
         "fields": {
-            "ticket_type": null,
+            "ticket_type": "O",
             "account_type": 1,
             "status": "A",
             "created_by": 2,
@@ -872,7 +874,7 @@
         "model": "staff.tickets",
         "pk": "ce77f63a-063b-43d0-b7f3-85972b8f81c4",
         "fields": {
-            "ticket_type": null,
+            "ticket_type": "O",
             "account_type": 2,
             "status": "R",
             "created_by": 1,

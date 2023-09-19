@@ -1,14 +1,15 @@
 from django.contrib.auth import login
+from knox.auth import TokenAuthentication
 from knox.views import LoginView as KnoxLoginView
 from rest_framework import permissions, status
-from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from customer.serializers import (ApplySerializer, DepositSerializer,
-                                  GetAccountTypesSerializer,
+from customer.serializers import (ApplySerializer, CustomerSerializer,
+                                  DepositSerializer, GetAccountTypesSerializer,
                                   GetBalanceSerializer, TransferSerializer,
                                   WithdrawSerializer)
+from user.models import User
 from user.serializers import LoginSerializer, UserRegisterSerializer
 
 customer_type = {'type': 'C'}
@@ -25,16 +26,21 @@ class CustomerRegistrationView(APIView):
     birth_date: 2023-01-01
     identity_no: S1234567B
     address: jurong
-    nationality: africa
-    gender: m
+    postal_code: 123456
+    nationality: Singaporean
+    gender: M
     '''
     def post(self, request):        
-        serializer = UserRegisterSerializer(data=request.data, context=customer_type)
+        user_serializer = UserRegisterSerializer(data=request.data)
+        customer_serializer = CustomerSerializer(data=request.data)
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if user_serializer.is_valid():
+            if customer_serializer.is_valid():
+                new_user = user_serializer.save(type=User.user_type.CUSTOMER)
+                customer_serializer.save(user=new_user)
+                return Response(status=status.HTTP_201_CREATED)
+            return Response(customer_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CustomerLoginView(KnoxLoginView):
@@ -59,7 +65,7 @@ class CustomerLoginView(KnoxLoginView):
 
 class GetAccountTypesView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
-    authentication_classes = (SessionAuthentication,)
+    authentication_classes = (TokenAuthentication,)
     
     def get(self, request):
         serializer = GetAccountTypesSerializer(request.user).get_account_type_list()
@@ -71,7 +77,7 @@ class ApplyView(APIView):
     account_type: Savings / Credit Card / Investments
     '''
     permission_classes = (permissions.IsAuthenticated,)
-    authentication_classes = (SessionAuthentication,)
+    authentication_classes = (TokenAuthentication,)
     
     def post(self, request):
         serializer = ApplySerializer(request.user, request.data, data=request.data)
@@ -83,7 +89,7 @@ class ApplyView(APIView):
 
 class GetBalanceView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
-    authentication_classes = (SessionAuthentication,)
+    authentication_classes = (TokenAuthentication,)
     
     def get(self, request):
         serializer = GetBalanceSerializer(request.user).get_balance()
@@ -97,7 +103,7 @@ class DepositView(APIView):
     description: string
     '''
     permission_classes = (permissions.IsAuthenticated,)
-    authentication_classes = (SessionAuthentication,)
+    authentication_classes = (TokenAuthentication,)
     
     def post(self, request):
         serializer = DepositSerializer(request.user, request.data, data=request.data)
@@ -114,7 +120,7 @@ class WithdrawView(APIView):
     description: string
     '''
     permission_classes = (permissions.IsAuthenticated,)
-    authentication_classes = (SessionAuthentication,)
+    authentication_classes = (TokenAuthentication,)
     
     def post(self, request):
         serializer = WithdrawSerializer(request.user, request.data, data=request.data)
@@ -132,7 +138,7 @@ class TransferView(APIView):
     description: string
     '''
     permission_classes = (permissions.IsAuthenticated,)
-    authentication_classes = (SessionAuthentication,)
+    authentication_classes = (TokenAuthentication,)
     
     def post(self, request):
         serializer = TransferSerializer(request.user, request.data, data=request.data)

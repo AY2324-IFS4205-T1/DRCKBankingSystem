@@ -52,8 +52,8 @@ To run tests: `python manage.py test --keepdb`. This is because with Postgres, D
 
 ## For code coverage
 
-```basg
+```bash
 pip install coverage==7.3.1
 coverage run manage.py test --keepdb
-coverage xml -o coverage-reports/coverage.xml
+coverage xml -o coverage-reports/coverage-report.xml
 ```
