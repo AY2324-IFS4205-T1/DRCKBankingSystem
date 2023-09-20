@@ -12,6 +12,10 @@ class TestAuthentication(APITestCase):
         response = self.client.post(reverse("customerLogin"), login)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.header = {"HTTP_AUTHORIZATION": f"Token {response.data['token']}"}
+
+        # Check to see if its authenticated by checking Token
+        response = self.client.get(reverse("auth_check"), **self.header)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         # self.client.credentials(HTTP_AUTHORIZATION="Token " + response.data['token'])
 
     def login_customer_2(self):
@@ -19,6 +23,10 @@ class TestAuthentication(APITestCase):
         response = self.client.post(reverse("customerLogin"), login)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.header = {"HTTP_AUTHORIZATION": f"Token {response.data['token']}"}
+
+        # Check to see if its authenticated by checking Token
+        response = self.client.get(reverse("auth_check"), **self.header)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         # self.client.credentials(HTTP_AUTHORIZATION="Token " + response.data['token'])
 
     def login_staff_1(self):
@@ -26,6 +34,10 @@ class TestAuthentication(APITestCase):
         response = self.client.post(reverse("staffLogin"), login)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.header = {"HTTP_AUTHORIZATION": f"Token {response.data['token']}"}
+
+        # Check to see if its authenticated by checking Token
+        response = self.client.get(reverse("auth_check"), **self.header)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         # self.client.credentials(HTTP_AUTHORIZATION="Token " + response.data['token'])
 
     def login_staff_2(self):
@@ -33,6 +45,10 @@ class TestAuthentication(APITestCase):
         response = self.client.post(reverse("staffLogin"), login)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.header = {"HTTP_AUTHORIZATION": f"Token {response.data['token']}"}
+
+        # Check to see if its authenticated by checking Token
+        response = self.client.get(reverse("auth_check"), **self.header)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         # self.client.credentials(HTTP_AUTHORIZATION="Token " + response.data['token'])
 
     def test_logins(self):
