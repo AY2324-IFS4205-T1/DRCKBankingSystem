@@ -2,8 +2,7 @@ from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 
 class UserManager(BaseUserManager):
-    def create_user(self, username, email, phone_no, type, password=None):
-        
+    def create_user(self, username, email, phone_no, type, password=None):        
         user = self.model(
             username=username,
             email=self.normalize_email(email),
@@ -23,14 +22,14 @@ class User(AbstractBaseUser, PermissionsMixin):
         unique_together = [["username","type"]]
         
     class user_type(models.TextChoices):
-        CUSTOMER = "C"
-        STAFF = "S"
+        CUSTOMER = "Customer"
+        STAFF = "Staff"
 
     username = models.CharField(max_length=150)
     password = models.CharField(max_length=128)
     email = models.EmailField()
     phone_no = models.CharField(max_length=8)
-    type = models.CharField(max_length=1, choices=user_type.choices)
+    type = models.CharField(max_length=8, choices=user_type.choices)
     date_joined = models.DateTimeField(auto_now_add=True)
     last_login = models.DateTimeField(auto_now=True, null=True)
     is_active = models.BooleanField(default=True)

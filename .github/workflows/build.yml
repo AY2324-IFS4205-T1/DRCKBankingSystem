@@ -1,0 +1,99 @@
+name: DRCK Backend Workflow CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+      types: [opened, synchronize, reopened]
+env:
+  DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+  POSTGRES_HOST_AUTH: "postgres"
+  POSTGRES_PORT_AUTH: "5432"
+  POSTGRES_DBNAME_AUTH: "test_drck_banking"
+  POSTGRES_USER_AUTH: ${{ secrets.POSTGRES_USER }}
+  POSTGRES_PASSWORD_AUTH: ${{ secrets.POSTGRES_PASSWORD }}
+  
+jobs:
+  build:
+    name: DRCK Backend Workflow CI
+    runs-on: ubuntu-latest
+    container: python:3.11-slim
+    services:
+      postgres:
+        # Docker Hub image
+        image: postgres
+        # Provide the db name, user, and password for postgres
+        env:
+          POSTGRES_DB: "test_drck_banking"
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+          
+    steps:
+      - name: Install PostgreSQL client
+        run: |
+          apt-get update
+          apt-get install --yes postgresql-client
+          
+      - name: Setup database
+        run: |
+          psql -h postgres -d test_drck_banking -U ${{ secrets.POSTGRES_USER }} -c 'GRANT ALL PRIVILEGES ON DATABASE test_drck_banking to ${{ secrets.POSTGRES_USER }}'
+          psql -h postgres -d test_drck_banking -U ${{ secrets.POSTGRES_USER }} -c 'CREATE SCHEMA django;'
+          psql -h postgres -d test_drck_banking -U ${{ secrets.POSTGRES_USER }} -c 'CREATE SCHEMA customer;'
+          psql -h postgres -d test_drck_banking -U ${{ secrets.POSTGRES_USER }} -c 'CREATE SCHEMA staff;'
+          psql -h postgres -d test_drck_banking -U ${{ secrets.POSTGRES_USER }} -c 'GRANT ALL ON SCHEMA django to ${{ secrets.POSTGRES_USER }};'
+          psql -h postgres -d test_drck_banking -U ${{ secrets.POSTGRES_USER }} -c 'GRANT ALL ON SCHEMA customer to ${{ secrets.POSTGRES_USER }};'
+          psql -h postgres -d test_drck_banking -U ${{ secrets.POSTGRES_USER }} -c 'GRANT ALL ON SCHEMA staff to ${{ secrets.POSTGRES_USER }};'
+          psql -h postgres -d test_drck_banking -U ${{ secrets.POSTGRES_USER }} -c 'SET SEARCH_PATH TO django;'
+        env:
+          PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          
+      - name: Checkout repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          apt install -y curl
+          apt install -y jq
+          
+      - name: Install coverage.py
+        run: |
+          pip install coverage==7.3.1
+          
+      - name: Migrate database
+        run: |
+          python manage.py makemigrations
+          python manage.py migrate
+
+      - name: Run Coverage on Application
+        run: |
+          coverage run manage.py test --keepdb
+          
+      - name: Export Coverage to xml
+        run: coverage xml -o coverage-reports/coverage-report.xml
+        
+      - name: Start SonarScan    
+        uses: SonarSource/sonarqube-scan-action@master
+        with:
+          args: >
+            -Dsonar.python.version=3.11
+            -Dsonar.projectKey=AY2324-IFS4205-T1_DRCKBankingSystem_AYo8DPeJasLbqRBPmWsv
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      # If you wish to fail your job when the Quality Gate is red, uncomment the
+      # following lines. This would typically be used to fail a deployment.
+      - uses: sonarsource/sonarqube-quality-gate-action@master
+        timeout-minutes: 5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
