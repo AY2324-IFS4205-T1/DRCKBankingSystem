@@ -42,19 +42,20 @@ def get_random_address():
 
 def get_random_nationality():
     # List of possible nationalities
-    nationalities = ["Chinese", "Malay", "Indian", "France", "Germany", "Iceland", "Denmark", "Netherlands", "Norway", "Japanese", "Korean"]
+    nationalities = ["Singaporean", "Foreigner", "PR"]
     random_nationality = random.choice(nationalities)
     return random_nationality
 
 
 def get_random_datetime():
     now = datetime.utcnow()
-
-    start_year = 1990
+    # TODO: Change this back
+    start_year = 2016
     end_year = now.year
     # print(end_year)
 
     year = random.randint(start_year, end_year)
+    # TODO: Change this back
     month = random.randint(1, 12)
     # Months have different days 
     if month == 2:
@@ -206,7 +207,7 @@ def load_data(fixture_file):
 
 # # Main Function
 # # Define number of users you want to generate
-generate_auth_user(10)
+generate_auth_user(100)
 load_data("fixtures/auth_users.json")
 
 generate_customer()
@@ -220,7 +221,7 @@ generate_account()
 load_data("fixtures/accounts.json")
 
 # Define number of transactions you want to generate
-generate_transaction(75)
+generate_transaction(200)
 load_data("fixtures/transactions.json")
 
 print("Customer schema is populated!")
