@@ -32,14 +32,16 @@ class CustomerRegistrationView(APIView):
     '''
     def post(self, request):        
         user_serializer = UserRegisterSerializer(data=request.data)
-        customer_serializer = CustomerSerializer(data=request.data)
 
         if user_serializer.is_valid():
+            user = user_serializer.save(type=User.user_type.CUSTOMER)
+            customer_serializer = CustomerSerializer(data=request.data, user=user)
             if customer_serializer.is_valid():
-                new_user = user_serializer.save(type=User.user_type.CUSTOMER)
-                customer_serializer.save(user=new_user)
+                customer_serializer.save(user=user)
                 return Response(status=status.HTTP_201_CREATED)
-            return Response(customer_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                user.delete()
+                return Response(customer_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

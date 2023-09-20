@@ -1,4 +1,5 @@
 import json
+from django.contrib.auth.password_validation import validate_password
 
 from django.core.serializers import serialize
 from django.utils import timezone
@@ -16,6 +17,14 @@ class StaffSerializer(serializers.ModelSerializer):
     class Meta:
         model = Staff
         fields = ("user", "first_name", "last_name", "title", "birth_date", "gender")
+    
+    def __init__(self, instance=None, data=..., user=user, **kwargs):
+        self.user = user
+        super().__init__(instance, data, **kwargs)
+
+    def validate(self, attrs):
+        validate_password(self.initial_data["password"], user=self.user)
+        return super().validate(attrs)
 
     def create(self, validated_data):
         return Staff.objects.create(**validated_data)

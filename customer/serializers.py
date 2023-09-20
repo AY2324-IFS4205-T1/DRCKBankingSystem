@@ -1,6 +1,12 @@
+from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 
-from customer.validations import validate_account, validate_account_owner, validate_account_type, validate_amount, validate_description, validate_sender_recipient, validate_sufficient_amount, validate_total_balance
+from customer.validations import (validate_account, validate_account_owner,
+                                  validate_account_type, validate_amount,
+                                  validate_description,
+                                  validate_sender_recipient,
+                                  validate_sufficient_amount,
+                                  validate_total_balance)
 from staff.models import Tickets
 
 from .models import Accounts, AccountTypes, Customer, Transactions
@@ -12,6 +18,14 @@ class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
         fields = ('user', 'first_name', 'last_name', 'birth_date', 'identity_no', 'address', 'postal_code', 'citizenship', 'gender')
+    
+    def __init__(self, instance=None, data=..., user=user, **kwargs):
+        self.user = user
+        super().__init__(instance, data, **kwargs)
+
+    def validate(self, attrs):
+        validate_password(self.initial_data["password"], user=self.user)
+        return super().validate(attrs)
 
     def create(self, validated_data):
         return Customer.objects.create(**validated_data)

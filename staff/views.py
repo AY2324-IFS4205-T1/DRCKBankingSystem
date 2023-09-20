@@ -11,7 +11,7 @@ from staff.serializers import (ApproveSerializer, GetClosedTicketsSerializer,
 from user.models import User
 from user.serializers import LoginSerializer, UserRegisterSerializer
 
-staff_type = {"type": "Staff"}
+staff_type = {'type': 'Staff'}
 
 
 # Create your views here.
@@ -29,15 +29,17 @@ class StaffRegistrationView(APIView):
     """
 
     def post(self, request):
-        user_serializer = UserRegisterSerializer(data=request.data, context=staff_type)
-        staff_serializer = StaffSerializer(data=request.data)
+        user_serializer = UserRegisterSerializer(data=request.data)
 
         if user_serializer.is_valid():
+            user = user_serializer.save(type=User.user_type.STAFF)
+            staff_serializer = StaffSerializer(data=request.data, user=user)
             if staff_serializer.is_valid():
-                new_user = user_serializer.save(type=User.user_type.STAFF)
-                staff_serializer.save(user=new_user)
+                staff_serializer.save(user=user)
                 return Response(status=status.HTTP_201_CREATED)
-            return Response(staff_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                user.delete()
+                return Response(staff_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
