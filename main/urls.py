@@ -25,7 +25,7 @@ from customer.views import (ApplyView, CustomerLoginView,
 from staff.views import (ApproveView, GetClosedTicketsView, GetOpenTicketsView, TicketDetailsView,
                          RejectView, StaffLoginView, StaffRegistrationView)
 
-from user.views import AuthenticationCheckView
+from user.views import AuthenticationTypeCheckView
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
@@ -53,5 +53,5 @@ urlpatterns = [
     #In logout, header key: Authorization, Value: Token 3510ff361b..
     path('logout', knox_views.LogoutView.as_view(), name='logout'),
 
-    path('auth_check', AuthenticationCheckView.as_view(), name='auth_check'),
+    path('auth_check', AuthenticationTypeCheckView.as_view(), name='auth_check'),
 ]
