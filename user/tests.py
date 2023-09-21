@@ -21,7 +21,7 @@ class TestRegistration(APITestCase):
             "citizenship": "Singaporean Citizen",
             "gender": "Male",
         }
-        bad_passwords = ["JohnSmith1@", "Gmail1#A", good_pass*6, "G0odP@5", "password", good_pass, good_pass, "GoodP@ssword", "G00dPa55word", ]
+        bad_passwords = ["JohnSmith1@", "Gmail1#A", good_pass*10, "G0odP@5", "password", "g00dp@55word", "G00DP@55WORD", "GoodP@ssword", "G00dPa55word", ]
         for password in bad_passwords:
             registration_details["password"] = password
             response = self.client.post(reverse("customerRegister"), registration_details)
