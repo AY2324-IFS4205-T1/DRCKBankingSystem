@@ -10,7 +10,7 @@ class MaximumLengthValidator:
     def __init__(self, max_length=64):
         self.max_length = max_length
 
-    def validate(self, password:str, user=None):
+    def validate(self, password:str, _):
         if len(password) > self.max_length:
             raise ValidationError(
                 ngettext(
@@ -38,7 +38,7 @@ class UppercaseValidator:
     def __init__(self, min_number=2):
         self.min_number = min_number
 
-    def validate(self, password:str, user=None):
+    def validate(self, password:str, _):
         number_of_upper = sum(1 for char in password if char.isupper())
         if number_of_upper < self.min_number:
             raise ValidationError(
@@ -67,7 +67,7 @@ class LowercaseValidator:
     def __init__(self, min_number=2):
         self.min_number = min_number
 
-    def validate(self, password:str, user=None):
+    def validate(self, password:str, _):
         number_of_lower = sum(1 for char in password if char.islower())
         if number_of_lower < self.min_number:
             raise ValidationError(
@@ -96,7 +96,7 @@ class NumericValidator:
     def __init__(self, min_number=2):
         self.min_number = min_number
 
-    def validate(self, password:str, user=None):
+    def validate(self, password:str, _):
         number_of_numeric = sum(1 for char in password if char.isnumeric())
         if number_of_numeric < self.min_number:
             raise ValidationError(
@@ -125,7 +125,7 @@ class SpecialCharacterValidator:
     def __init__(self, min_number=2):
         self.min_number = min_number
 
-    def validate(self, password:str, user=None):
+    def validate(self, password:str, _):
         special = " !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
         number_of_numeric = sum(1 for char in password if char in special)
         if number_of_numeric < self.min_number:
