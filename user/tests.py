@@ -3,6 +3,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from user.models import User
 
+good_pass = "G00dP@55word"
 
 # Create your tests here.
 class TestRegistration(APITestCase):
@@ -20,7 +21,7 @@ class TestRegistration(APITestCase):
             "citizenship": "Singaporean Citizen",
             "gender": "Male",
         }
-        bad_passwords = ["JohnSmith1@", "Gmail1#A", "G00dP@55word"*6, "G0odP@5", "password", "g00dp@55word", "G00DP@55WORD", "GoodP@ssword", "G00dPa55word", ]
+        bad_passwords = ["JohnSmith1@", "Gmail1#A", good_pass*6, "G0odP@5", "password", good_pass, good_pass, "GoodP@ssword", "G00dPa55word", ]
         for password in bad_passwords:
             registration_details["password"] = password
             response = self.client.post(reverse("customerRegister"), registration_details)
@@ -41,7 +42,7 @@ class TestRegistration(APITestCase):
             "citizenship": "Singaporean Citizen",
             "gender": "Male",
         }
-        registration_details["password"] = "G00dP@55word"
+        registration_details["password"] = good_pass
         response = self.client.post(reverse("customerRegister"), registration_details)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -72,15 +73,19 @@ class TestAuthentication(APITestCase):
         self.header = {"HTTP_AUTHORIZATION": f"Token {response.data['token']}"}
 
     def login_staff_3(self):
-        login = {"username": "staff3", "password": "G00dP@55word"}
+        login = {"username": "staff3", "password": good_pass}
         response = self.client.post(reverse("staffLogin"), login)
         self.header = {"HTTP_AUTHORIZATION": f"Token {response.data['token']}"}
 
     def login_staff_4(self):
-        login = {"username": "staff4", "password": "G00dP@55word"}
+        login = {"username": "staff4", "password": good_pass}
         response = self.client.post(reverse("staffLogin"), login)
         self.header = {"HTTP_AUTHORIZATION": f"Token {response.data['token']}"}
 
     def test_logins(self):
         self.login_customer_1()
+        self.login_customer_2()
         self.login_staff_1()
+        self.login_staff_2()
+        self.login_staff_3()
+        self.login_staff_4()
