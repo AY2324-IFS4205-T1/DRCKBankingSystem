@@ -1,5 +1,7 @@
+from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager,
+                                        PermissionsMixin)
 from django.db import models
-from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
+
 
 class UserManager(BaseUserManager):
     def create_user(self, username, email, phone_no, type, password=None):        
@@ -13,6 +15,7 @@ class UserManager(BaseUserManager):
         user.set_password(password)
         user.save(using=self._db)
         return user
+
 
 class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
@@ -37,3 +40,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = "username"
     EMAIL_FIELD = "email"
     REQUIRED_FIELDS = ["phone_no", "type", "date_joined", "last_login", "is_active"]
+
+
+class TwoFA(models.Model):
+    class Meta:
+        db_table = "two_fa"
+
+    user = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE)
+    key = models.CharField(max_length=1024)
