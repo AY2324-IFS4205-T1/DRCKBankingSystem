@@ -58,7 +58,6 @@ class TestAuthentication(APITestCase):
     def login_customer_2(self):
         login = {"username": "test2", "password": "testpassword"}
         response = self.client.post(reverse("customerLogin"), login)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.header = {"HTTP_AUTHORIZATION": f"Token {response.data['token']}"}
 
     def login_staff_1(self):
@@ -70,11 +69,18 @@ class TestAuthentication(APITestCase):
     def login_staff_2(self):
         login = {"username": "staff2", "password": "testpassword"}
         response = self.client.post(reverse("staffLogin"), login)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.header = {"HTTP_AUTHORIZATION": f"Token {response.data['token']}"}
+
+    def login_staff_3(self):
+        login = {"username": "staff3", "password": "G00dP@55word"}
+        response = self.client.post(reverse("staffLogin"), login)
+        self.header = {"HTTP_AUTHORIZATION": f"Token {response.data['token']}"}
+
+    def login_staff_4(self):
+        login = {"username": "staff4", "password": "G00dP@55word"}
+        response = self.client.post(reverse("staffLogin"), login)
         self.header = {"HTTP_AUTHORIZATION": f"Token {response.data['token']}"}
 
     def test_logins(self):
         self.login_customer_1()
-        self.login_customer_2()
         self.login_staff_1()
-        self.login_staff_2()

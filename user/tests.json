@@ -1,665 +1,5 @@
 [
     {
-        "model": "auth.permission",
-        "pk": 1,
-        "fields": {
-            "name": "Can add permission",
-            "content_type": 1,
-            "codename": "add_permission"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 2,
-        "fields": {
-            "name": "Can change permission",
-            "content_type": 1,
-            "codename": "change_permission"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 3,
-        "fields": {
-            "name": "Can delete permission",
-            "content_type": 1,
-            "codename": "delete_permission"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 4,
-        "fields": {
-            "name": "Can view permission",
-            "content_type": 1,
-            "codename": "view_permission"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 5,
-        "fields": {
-            "name": "Can add group",
-            "content_type": 2,
-            "codename": "add_group"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 6,
-        "fields": {
-            "name": "Can change group",
-            "content_type": 2,
-            "codename": "change_group"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 7,
-        "fields": {
-            "name": "Can delete group",
-            "content_type": 2,
-            "codename": "delete_group"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 8,
-        "fields": {
-            "name": "Can view group",
-            "content_type": 2,
-            "codename": "view_group"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 9,
-        "fields": {
-            "name": "Can add content type",
-            "content_type": 3,
-            "codename": "add_contenttype"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 10,
-        "fields": {
-            "name": "Can change content type",
-            "content_type": 3,
-            "codename": "change_contenttype"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 11,
-        "fields": {
-            "name": "Can delete content type",
-            "content_type": 3,
-            "codename": "delete_contenttype"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 12,
-        "fields": {
-            "name": "Can view content type",
-            "content_type": 3,
-            "codename": "view_contenttype"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 13,
-        "fields": {
-            "name": "Can add session",
-            "content_type": 4,
-            "codename": "add_session"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 14,
-        "fields": {
-            "name": "Can change session",
-            "content_type": 4,
-            "codename": "change_session"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 15,
-        "fields": {
-            "name": "Can delete session",
-            "content_type": 4,
-            "codename": "delete_session"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 16,
-        "fields": {
-            "name": "Can view session",
-            "content_type": 4,
-            "codename": "view_session"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 17,
-        "fields": {
-            "name": "Can add auth token",
-            "content_type": 5,
-            "codename": "add_authtoken"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 18,
-        "fields": {
-            "name": "Can change auth token",
-            "content_type": 5,
-            "codename": "change_authtoken"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 19,
-        "fields": {
-            "name": "Can delete auth token",
-            "content_type": 5,
-            "codename": "delete_authtoken"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 20,
-        "fields": {
-            "name": "Can view auth token",
-            "content_type": 5,
-            "codename": "view_authtoken"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 21,
-        "fields": {
-            "name": "Can add user",
-            "content_type": 6,
-            "codename": "add_user"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 22,
-        "fields": {
-            "name": "Can change user",
-            "content_type": 6,
-            "codename": "change_user"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 23,
-        "fields": {
-            "name": "Can delete user",
-            "content_type": 6,
-            "codename": "delete_user"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 24,
-        "fields": {
-            "name": "Can view user",
-            "content_type": 6,
-            "codename": "view_user"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 25,
-        "fields": {
-            "name": "Can add accounts",
-            "content_type": 7,
-            "codename": "add_accounts"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 26,
-        "fields": {
-            "name": "Can change accounts",
-            "content_type": 7,
-            "codename": "change_accounts"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 27,
-        "fields": {
-            "name": "Can delete accounts",
-            "content_type": 7,
-            "codename": "delete_accounts"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 28,
-        "fields": {
-            "name": "Can view accounts",
-            "content_type": 7,
-            "codename": "view_accounts"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 29,
-        "fields": {
-            "name": "Can add account types",
-            "content_type": 8,
-            "codename": "add_accounttypes"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 30,
-        "fields": {
-            "name": "Can change account types",
-            "content_type": 8,
-            "codename": "change_accounttypes"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 31,
-        "fields": {
-            "name": "Can delete account types",
-            "content_type": 8,
-            "codename": "delete_accounttypes"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 32,
-        "fields": {
-            "name": "Can view account types",
-            "content_type": 8,
-            "codename": "view_accounttypes"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 33,
-        "fields": {
-            "name": "Can add customer",
-            "content_type": 9,
-            "codename": "add_customer"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 34,
-        "fields": {
-            "name": "Can change customer",
-            "content_type": 9,
-            "codename": "change_customer"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 35,
-        "fields": {
-            "name": "Can delete customer",
-            "content_type": 9,
-            "codename": "delete_customer"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 36,
-        "fields": {
-            "name": "Can view customer",
-            "content_type": 9,
-            "codename": "view_customer"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 37,
-        "fields": {
-            "name": "Can add transactions",
-            "content_type": 10,
-            "codename": "add_transactions"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 38,
-        "fields": {
-            "name": "Can change transactions",
-            "content_type": 10,
-            "codename": "change_transactions"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 39,
-        "fields": {
-            "name": "Can delete transactions",
-            "content_type": 10,
-            "codename": "delete_transactions"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 40,
-        "fields": {
-            "name": "Can view transactions",
-            "content_type": 10,
-            "codename": "view_transactions"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 41,
-        "fields": {
-            "name": "Can add departments",
-            "content_type": 11,
-            "codename": "add_departments"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 42,
-        "fields": {
-            "name": "Can change departments",
-            "content_type": 11,
-            "codename": "change_departments"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 43,
-        "fields": {
-            "name": "Can delete departments",
-            "content_type": 11,
-            "codename": "delete_departments"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 44,
-        "fields": {
-            "name": "Can view departments",
-            "content_type": 11,
-            "codename": "view_departments"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 45,
-        "fields": {
-            "name": "Can add dept manager",
-            "content_type": 12,
-            "codename": "add_deptmanager"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 46,
-        "fields": {
-            "name": "Can change dept manager",
-            "content_type": 12,
-            "codename": "change_deptmanager"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 47,
-        "fields": {
-            "name": "Can delete dept manager",
-            "content_type": 12,
-            "codename": "delete_deptmanager"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 48,
-        "fields": {
-            "name": "Can view dept manager",
-            "content_type": 12,
-            "codename": "view_deptmanager"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 49,
-        "fields": {
-            "name": "Can add staff",
-            "content_type": 13,
-            "codename": "add_staff"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 50,
-        "fields": {
-            "name": "Can change staff",
-            "content_type": 13,
-            "codename": "change_staff"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 51,
-        "fields": {
-            "name": "Can delete staff",
-            "content_type": 13,
-            "codename": "delete_staff"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 52,
-        "fields": {
-            "name": "Can view staff",
-            "content_type": 13,
-            "codename": "view_staff"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 53,
-        "fields": {
-            "name": "Can add ticket types",
-            "content_type": 14,
-            "codename": "add_tickettypes"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 54,
-        "fields": {
-            "name": "Can change ticket types",
-            "content_type": 14,
-            "codename": "change_tickettypes"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 55,
-        "fields": {
-            "name": "Can delete ticket types",
-            "content_type": 14,
-            "codename": "delete_tickettypes"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 56,
-        "fields": {
-            "name": "Can view ticket types",
-            "content_type": 14,
-            "codename": "view_tickettypes"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 57,
-        "fields": {
-            "name": "Can add tickets",
-            "content_type": 15,
-            "codename": "add_tickets"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 58,
-        "fields": {
-            "name": "Can change tickets",
-            "content_type": 15,
-            "codename": "change_tickets"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 59,
-        "fields": {
-            "name": "Can delete tickets",
-            "content_type": 15,
-            "codename": "delete_tickets"
-        }
-    },
-    {
-        "model": "auth.permission",
-        "pk": 60,
-        "fields": {
-            "name": "Can view tickets",
-            "content_type": 15,
-            "codename": "view_tickets"
-        }
-    },
-    {
-        "model": "contenttypes.contenttype",
-        "pk": 1,
-        "fields": {
-            "app_label": "auth",
-            "model": "permission"
-        }
-    },
-    {
-        "model": "contenttypes.contenttype",
-        "pk": 2,
-        "fields": {
-            "app_label": "auth",
-            "model": "group"
-        }
-    },
-    {
-        "model": "contenttypes.contenttype",
-        "pk": 3,
-        "fields": {
-            "app_label": "contenttypes",
-            "model": "contenttype"
-        }
-    },
-    {
-        "model": "contenttypes.contenttype",
-        "pk": 4,
-        "fields": {
-            "app_label": "sessions",
-            "model": "session"
-        }
-    },
-    {
-        "model": "contenttypes.contenttype",
-        "pk": 5,
-        "fields": {
-            "app_label": "knox",
-            "model": "authtoken"
-        }
-    },
-    {
-        "model": "contenttypes.contenttype",
-        "pk": 6,
-        "fields": {
-            "app_label": "user",
-            "model": "user"
-        }
-    },
-    {
-        "model": "contenttypes.contenttype",
-        "pk": 7,
-        "fields": {
-            "app_label": "customer",
-            "model": "accounts"
-        }
-    },
-    {
-        "model": "contenttypes.contenttype",
-        "pk": 8,
-        "fields": {
-            "app_label": "customer",
-            "model": "accounttypes"
-        }
-    },
-    {
-        "model": "contenttypes.contenttype",
-        "pk": 9,
-        "fields": {
-            "app_label": "customer",
-            "model": "customer"
-        }
-    },
-    {
-        "model": "contenttypes.contenttype",
-        "pk": 10,
-        "fields": {
-            "app_label": "customer",
-            "model": "transactions"
-        }
-    },
-    {
-        "model": "contenttypes.contenttype",
-        "pk": 11,
-        "fields": {
-            "app_label": "staff",
-            "model": "departments"
-        }
-    },
-    {
-        "model": "contenttypes.contenttype",
-        "pk": 12,
-        "fields": {
-            "app_label": "staff",
-            "model": "deptmanager"
-        }
-    },
-    {
-        "model": "contenttypes.contenttype",
-        "pk": 13,
-        "fields": {
-            "app_label": "staff",
-            "model": "staff"
-        }
-    },
-    {
-        "model": "contenttypes.contenttype",
-        "pk": 14,
-        "fields": {
-            "app_label": "staff",
-            "model": "tickettypes"
-        }
-    },
-    {
-        "model": "contenttypes.contenttype",
-        "pk": 15,
-        "fields": {
-            "app_label": "staff",
-            "model": "tickets"
-        }
-    },
-    {
         "model": "user.user",
         "pk": 1,
         "fields": {
@@ -722,6 +62,40 @@
             "type": "Staff",
             "date_joined": "2023-09-17T18:33:59.206Z",
             "last_login": "2023-09-17T18:33:59.206Z",
+            "is_active": true,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "user.user",
+        "pk": 5,
+        "fields": {
+            "is_superuser": false,
+            "username": "staff3",
+            "password": "pbkdf2_sha256$600000$xQlMepW8hLTyc9vp6ah7LL$KgznpsZqe1E7ah+FbeZKT52/ong+Ujn685xcPXYd2X8=",
+            "email": "staff3@email.com",
+            "phone_no": "12345678",
+            "type": "Staff",
+            "date_joined": "2023-09-21T14:59:25.655Z",
+            "last_login": "2023-09-21T14:59:25.655Z",
+            "is_active": true,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "user.user",
+        "pk": 6,
+        "fields": {
+            "is_superuser": false,
+            "username": "staff4",
+            "password": "pbkdf2_sha256$600000$yFyPQtufY7HHyAvXs8w9A1$3UzoHUviLk9Two8l/3srGDAwHl+PsLQhS3ktFWyZwco=",
+            "email": "staff4@email.com",
+            "phone_no": "12345678",
+            "type": "Staff",
+            "date_joined": "2023-09-21T14:59:47.209Z",
+            "last_login": "2023-09-21T14:59:47.209Z",
             "is_active": true,
             "groups": [],
             "user_permissions": []
@@ -831,7 +205,30 @@
             "birth_date": "2023-01-01",
             "gender": "Male"
         }
-    },{
+    },
+    {
+        "model": "staff.staff",
+        "pk": 5,
+        "fields": {
+            "first_name": "first",
+            "last_name": "last",
+            "title": "Security Engineer",
+            "birth_date": "2023-01-01",
+            "gender": "Male"
+        }
+    },
+    {
+        "model": "staff.staff",
+        "pk": 6,
+        "fields": {
+            "first_name": "first",
+            "last_name": "last",
+            "title": "Researcher",
+            "birth_date": "2023-01-01",
+            "gender": "Male"
+        }
+    },
+    {
         "model": "staff.tickets",
         "pk": "073eb525-7eb8-4ac7-a372-0955465cfb80",
         "fields": {
