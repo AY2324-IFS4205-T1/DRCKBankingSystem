@@ -223,3 +223,6 @@ CORS_ALLOWED_ORIGINS = [
 
 # Clickjacking
 X_FRAME_OPTIONS = "DENY"
+
+# Race Conditions
+ATOMIC_REQUESTS = True
