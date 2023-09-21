@@ -3,6 +3,7 @@ from knox.auth import TokenAuthentication
 from knox.views import LoginView as KnoxLoginView
 from rest_framework import permissions, status
 from rest_framework.response import Response
+from rest_framework.throttling import AnonRateThrottle
 from rest_framework.views import APIView
 
 from staff.serializers import (ApproveSerializer, GetClosedTicketsSerializer,
@@ -27,6 +28,8 @@ class StaffRegistrationView(APIView):
     title: employee
     gender: M
     """
+    
+    throttle_classes = [AnonRateThrottle]
 
     def post(self, request):
         user_serializer = UserRegisterSerializer(data=request.data)
@@ -46,6 +49,7 @@ class StaffRegistrationView(APIView):
 class StaffLoginView(KnoxLoginView):
     serializer_class = LoginSerializer
     permission_classes = (permissions.AllowAny,)
+    throttle_classes = [AnonRateThrottle]
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data, context=staff_type)
@@ -65,6 +69,7 @@ class ApproveView(APIView):
 
     permission_classes = (permissions.IsAuthenticated,)
     authentication_classes = (TokenAuthentication,)
+    throttle_scope = "sensitive_request"
 
     def post(self, request):
         serializer = ApproveSerializer(request.user, request.data, data=request.data)
@@ -81,6 +86,7 @@ class RejectView(APIView):
 
     permission_classes = (permissions.IsAuthenticated,)
     authentication_classes = (TokenAuthentication,)
+    throttle_scope = "sensitive_request"
 
     def post(self, request):
         serializer = RejectSerializer(request.user, request.data, data=request.data)
@@ -93,6 +99,7 @@ class RejectView(APIView):
 class GetOpenTicketsView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
     authentication_classes = (TokenAuthentication,)
+    throttle_scope = "non_sensitive_request"
 
     def get(self, request):
         serializer = GetOpenTicketsSerializer().get_open_tickets_list()
@@ -102,6 +109,7 @@ class GetOpenTicketsView(APIView):
 class GetClosedTicketsView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
     authentication_classes = (TokenAuthentication,)
+    throttle_scope = "non_sensitive_request"
 
     def get(self, request):
         serializer = GetClosedTicketsSerializer(request.user).get_closed_tickets_list()
@@ -111,6 +119,7 @@ class GetClosedTicketsView(APIView):
 class TicketDetailsView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
     authentication_classes = (TokenAuthentication,)
+    throttle_scope = "non_sensitive_request"
 
     def post(self, request):
         serializer = TicketDetailsSerializer(request.user, request.data, data=request.data)
