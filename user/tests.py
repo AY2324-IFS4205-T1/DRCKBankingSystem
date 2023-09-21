@@ -6,7 +6,48 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 from user.models import TwoFA, User
+from user.models import User
 
+good_pass = "G00dP@55word"
+
+# Create your tests here.
+class TestRegistration(APITestCase):
+    def test_should_not_register(self):
+        registration_details = {
+            "username": "johnsmith",
+            "email": "jsmith@gmail.com",
+            "phone_no": "12345678",
+            "first_name": "first",
+            "last_name": "last",
+            "birth_date": "2023-01-01",
+            "identity_no": "F1234567B",
+            "address": "jurong",
+            "postal_code": "123456",
+            "citizenship": "Singaporean Citizen",
+            "gender": "Male",
+        }
+        registration_details["password"] = good_pass
+        response = self.client.post(reverse("customerRegister"), registration_details)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertRaises(User.DoesNotExist, User.objects.get, username="johnsmith")
+
+        registration_details["birth_date"] = "1999-01-01"
+        registration_details["identity_no"] = "T1234567B"
+        response = self.client.post(reverse("customerRegister"), registration_details)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertRaises(User.DoesNotExist, User.objects.get, username="johnsmith")
+
+        registration_details["birth_date"] = "2000-01-01"
+        registration_details["identity_no"] = "S1234567B"
+        response = self.client.post(reverse("customerRegister"), registration_details)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertRaises(User.DoesNotExist, User.objects.get, username="johnsmith")
+
+
+        registration_details["citizenship"] = "Non-Singaporean"
+        response = self.client.post(reverse("customerRegister"), registration_details)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertRaises(User.DoesNotExist, User.objects.get, username="johnsmith")
 
 # Create your tests here.
 class TestAuthentication(APITestCase):

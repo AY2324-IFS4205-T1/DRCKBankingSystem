@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from customer.validations import validate_account, validate_account_owner, validate_account_type, validate_amount, validate_description, validate_sender_recipient, validate_sufficient_amount, validate_total_balance
+from customer.validations import validate_nric_and_citizenship, validate_account, validate_account_owner, validate_account_type, validate_amount, validate_description, validate_sender_recipient, validate_sufficient_amount, validate_total_balance
 from staff.models import Tickets
 
 from .models import Accounts, AccountTypes, Customer, Transactions
@@ -13,7 +13,9 @@ class CustomerSerializer(serializers.ModelSerializer):
         model = Customer
         fields = ('user', 'first_name', 'last_name', 'birth_date', 'identity_no', 'address', 'postal_code', 'citizenship', 'gender')\
     
-    # TODO:
+    def validate(self, attrs):
+        validate_nric_and_citizenship(self.initial_data["identity_no"], self.initial_data["citizenship"], self.initial_data["birth_date"])
+        return super().validate(attrs)
 
     def create(self, validated_data):
         return Customer.objects.create(**validated_data)
