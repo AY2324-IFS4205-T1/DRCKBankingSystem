@@ -58,7 +58,8 @@ class TestVerifyTwoFA(TestAuthentication):
     def test_should_not_verify_two_fa(self):
         bad_field = {"otppp": "123"}
         bad_length = {"otp": "123"}
-        bad_type = {"otp": "12345678"}
+        bad_type = {"otp": "abcdefgh"}
+        wrong_otp = {"otp": "12345678"}
 
         response = self.client.post(reverse("verify_otp"), bad_field)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
@@ -75,6 +76,9 @@ class TestVerifyTwoFA(TestAuthentication):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         
         response = self.client.post(reverse("verify_otp"), bad_type, **self.header)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        
+        response = self.client.post(reverse("verify_otp"), wrong_otp, **self.header)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.json(), {'result': False})
         
