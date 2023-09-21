@@ -46,7 +46,7 @@ class GetTwoFASerializer(serializers.Serializer):
     
     def get_qr_code(self):
         twofa = TwoFA.objects.get_or_create(user=self.user)[0]
-        twofa.key = ''.join(choice(ascii_letters) for i in range(1024))
+        twofa.key = ''.join(choice(ascii_letters) for _ in range(1024))
         twofa.save()
         return generate_qr(twofa.key, self.user.username)
 
