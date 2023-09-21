@@ -8,6 +8,9 @@ from django.utils import timezone
 from django.db.models.functions import TruncMonth, ExtractMonth, ExtractYear
 
 
+MAXIMUM_K_VALUE = 10 # anyhow put
+
+
 def age_convert(birth_date):
     """
     Calculates age based on birthdate 
@@ -229,6 +232,7 @@ def user_inputs(k, query):
     Takes in user's input to perform anonymity using k-value and perform query on anonymised
     data. Performs query on both anonymised data and original data to calculate information loss
     """
+    return {"anonymised": "data"} ## placeholder for testing of API
     new_input = UserInputs(k, query)
     transaction_history = retrieve_all_transactions()
     anonymised_data = anonymise(transaction_history, k)

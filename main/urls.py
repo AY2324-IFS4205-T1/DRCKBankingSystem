@@ -22,7 +22,7 @@ from customer.views import (ApplyView, CustomerLoginView,
                             CustomerRegistrationView, DepositView,
                             GetAccountTypesView, GetBalanceView,
                             GetCustomerTicketsView, TransferView, WithdrawView)
-from staff.views import (ApproveView, GetClosedTicketsView, GetOpenTicketsView,
+from staff.views import (AnonymisationView, ApproveView, GetClosedTicketsView, GetOpenTicketsView,
                          RejectView, StaffLoginView, StaffRegistrationView,
                          TicketDetailsView)
 from user.views import (SetupTwoFactorAuthenticationView,
@@ -49,6 +49,7 @@ urlpatterns = [
     path("staff/get_open_tickets", GetOpenTicketsView.as_view(), name="getOpenTickets"),
     path("staff/get_closed_tickets", GetClosedTicketsView.as_view(), name="getClosedTickets"),
     path("staff/ticket_details", TicketDetailsView.as_view(), name="ticketDetails"),
+    path("staff/anonymisation", AnonymisationView.as_view(), name="anonymisation"),
     
     # 2 Factor Authentication
     path("setup_2FA", SetupTwoFactorAuthenticationView.as_view(), name="setup_2fa"),

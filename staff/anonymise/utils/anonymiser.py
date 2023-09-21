@@ -1,7 +1,7 @@
 import copy
 from staff.anonymise.utils.mondrian import mondrian
 from staff.anonymise.utils.read_my_data import read_data as read_test
-from staff.anonymise.utils.first_query_anon import read_first_query_data
+# from staff.anonymise.utils.first_query_anon import read_first_query_data
 import json
 
 # Read my test record
