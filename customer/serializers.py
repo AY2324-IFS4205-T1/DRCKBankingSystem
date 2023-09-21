@@ -3,7 +3,7 @@ from rest_framework import serializers
 
 from customer.validations import (validate_account, validate_account_owner,
                                   validate_account_type, validate_amount,
-                                  validate_description,
+                                  validate_description, validate_no_repeated_application,
                                   validate_sender_recipient,
                                   validate_sufficient_amount,
                                   validate_total_balance)
@@ -48,11 +48,12 @@ class ApplySerializer(serializers.Serializer):
     
     def validate(self, attrs):
         self.account_type = validate_account_type(self.json_dict)
+        self.customer = Customer.objects.get(user=self.user_id)
+        validate_no_repeated_application(self.customer, self.account_type)
         return super().validate(attrs)
 
     def create(self, validated_data):
-        customer = Customer.objects.get(user=self.user_id)
-        ticket = Tickets.objects.create(created_by=customer, account_type=self.account_type, status = Tickets.TicketStatus.OPEN)
+        ticket = Tickets.objects.create(created_by=self.customer, account_type=self.account_type, status = Tickets.TicketStatus.OPEN)
         return ticket
 
 
