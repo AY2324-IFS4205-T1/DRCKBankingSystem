@@ -82,17 +82,15 @@ def original_first_query():
     # For testing purposes, can remove after
     unfiltered_data = []
     for u in transactions:
-        # date_in_utc_plus_8 = u.date.astimezone(timezone.utc).replace(tzinfo=timezone.utc).astimezone(timezone.get_fixed_timezone(8 * 60))
+
         extract_year = ExtractYear(u.date)
         sender_age = age_convert(u.sender.user.birth_date)
-        recipient_age = age_convert(u.recipient.user.birth_date)
         unfiltered = [
             sender_age,
             u.sender.user.gender,
             u.sender.user.address,
             u.sender.user.nationality,
             u.amount,
-            # date_in_utc_plus_8.isoformat(),
             extract_year
         ]
         unfiltered_data.append(unfiltered)
@@ -236,7 +234,7 @@ def user_inputs(k, query):
     anonymised_data = anonymise(transaction_history, k)
 
     if new_input.query == "1":
-        og_query_data = original_first_query()
+        original_first_query()
         anon_query_data = anonymised_first_query(anonymised_data)
         write_first_anon_query(anon_query_data)
         

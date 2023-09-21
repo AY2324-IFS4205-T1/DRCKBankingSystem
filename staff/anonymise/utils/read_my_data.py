@@ -15,6 +15,24 @@ IS_CAT = [False, True, False, True, False, True, False, True]
 SA_INDEX = [4, 9, 10]
 __DEBUG = False
 
+def convert_to_categorical(qi_num, intuitive_dict, intuitive_number, intuitive_order, line):
+    line = line.replace(' ', '')
+    temp = line.split(',')
+    ltemp = []
+    for i in range(qi_num):
+        index = QI_INDEX[i]
+        if IS_CAT[i]:
+            try:
+                ltemp.append(intuitive_dict[i][temp[index]])
+            except KeyError:
+                intuitive_dict[i][temp[index]] = intuitive_number[i]
+                ltemp.append(intuitive_number[i])
+                intuitive_number[i] += 1
+                intuitive_order[i].append(temp[index])
+        else:
+            ltemp.append(int(temp[index]))
+    return ltemp, temp
+
 
 def read_data(transaction_data):
     """
@@ -32,21 +50,21 @@ def read_data(transaction_data):
         list of all the processed data 
     intuitive_order
         list of all categorical data headers
-    QI_num
+    qi_num
         int value of length of quasi-identifier list
-    SA_num
+    sa_num
         int value of length of sensitive attributes list
 
     """
-    QI_num = len(QI_INDEX)
-    SA_num = len(SA_INDEX)
+    qi_num = len(QI_INDEX)
+    sa_num = len(SA_INDEX)
     data = []
     # order categorical attributes in intuitive order
     # here, we use the appear number
     intuitive_dict = []
     intuitive_order = []
     intuitive_number = []
-    for i in range(QI_num):
+    for _ in range(qi_num):
         intuitive_dict.append(dict())
         intuitive_number.append(0)
         intuitive_order.append(list())
@@ -60,25 +78,11 @@ def read_data(transaction_data):
             continue
         
         # remove double spaces
-        line = line.replace(' ', '')
-        temp = line.split(',')
-        ltemp = []
-        for i in range(QI_num):
-            index = QI_INDEX[i]
-            if IS_CAT[i]:
-                try:
-                    ltemp.append(intuitive_dict[i][temp[index]])
-                except KeyError:
-                    intuitive_dict[i][temp[index]] = intuitive_number[i]
-                    ltemp.append(intuitive_number[i])
-                    intuitive_number[i] += 1
-                    intuitive_order[i].append(temp[index])
-            else:
-                ltemp.append(int(temp[index]))
+        ltemp, temp = convert_to_categorical(qi_num, intuitive_dict, intuitive_number, intuitive_order, line)
        
         # Append SA after processing of QI
-        for l in range(SA_num):
+        for l in range(sa_num):
             left = SA_INDEX[l]
             ltemp.append(temp[left])
         data.append(ltemp)
-    return data, intuitive_order, QI_num, SA_num
+    return data, intuitive_order, qi_num, sa_num

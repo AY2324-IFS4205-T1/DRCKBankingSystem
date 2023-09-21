@@ -49,9 +49,6 @@ class Partition(object):
     """
 
     def __init__(self, data, low, high):
-        """
-        split_tuple = (index, low, high)
-        """
         self.low = list(low)
         self.high = list(high)
         self.member = data[:]
@@ -157,6 +154,33 @@ def find_median(partition, dim):
         next_val = split_val
     return (split_val, next_val, value_list[0], value_list[-1])
 
+def split_partition(partition, dim):
+    (split_val, next_val, low, high) = find_median(partition, dim)
+        # Update parent low and high
+    if split_val == '' or split_val == next_val:
+        # cannot split
+        partition.allow[dim] = 0
+        return None
+    
+    if low != '':
+        partition.low[dim] = QI_DICT[dim][low]
+        partition.high[dim] = QI_DICT[dim][high]
+    
+    # split the group from median
+    mean = QI_DICT[dim][split_val]
+    lhs_high = partition.high[:]
+    rhs_low = partition.low[:]
+    lhs_high[dim] = mean
+    rhs_low[dim] = QI_DICT[dim][next_val]
+    lhs = Partition([], partition.low, lhs_high)
+    rhs = Partition([], rhs_low, partition.high)
+    for record in partition.member:
+        pos = QI_DICT[dim][record[dim]]
+        if pos <= mean:
+            lhs.add_record(record, dim)
+        else:
+            rhs.add_record(record, dim)
+    return lhs, rhs
 
 def anonymize_strict(partition):
     """
@@ -167,37 +191,17 @@ def anonymize_strict(partition):
     if allow_count == 0:
         RESULT.append(partition)
         return
-    for index in range(allow_count):
+    for _ in range(allow_count):
         # choose attrubite from domain
         dim = choose_dimension(partition)
         if dim == -1:
             print("Error: dim=-1")
             pdb.set_trace()
-        (split_val, next_val, low, high) = find_median(partition, dim)
-        # Update parent low and high
-        if low != '':
-            partition.low[dim] = QI_DICT[dim][low]
-            partition.high[dim] = QI_DICT[dim][high]
-        if split_val == '' or split_val == next_val:
-            # cannot split
+        split_result = split_partition(partition, dim)
+        if split_result is None:
             partition.allow[dim] = 0
             continue
-        # split the group from median
-        mean = QI_DICT[dim][split_val]
-        lhs_high = partition.high[:]
-        rhs_low = partition.low[:]
-        lhs_high[dim] = mean
-        rhs_low[dim] = QI_DICT[dim][next_val]
-        lhs = Partition([], partition.low, lhs_high)
-        rhs = Partition([], rhs_low, partition.high)
-        for record in partition.member:
-            pos = QI_DICT[dim][record[dim]]
-            if pos <= mean:
-                # lhs = [low, mean]
-                lhs.add_record(record, dim)
-            else:
-                # rhs = (mean, high]
-                rhs.add_record(record, dim)
+        lhs, rhs = split_result
         # check is lhs and rhs satisfy k-anonymity
         if len(lhs) < GL_K or len(rhs) < GL_K:
             partition.allow[dim] = 0
@@ -258,7 +262,7 @@ def anonymize_relaxed(partition):
     # between lhs and rhs, such that
     # |lhs| = |rhs| (+1 if total size is odd)
     half_size = len(partition) // 2
-    for i in range(half_size - len(lhs)):
+    for _ in range(half_size - len(lhs)):
         record = mid_set.pop()
         lhs.add_record(record, dim)
     if len(mid_set) > 0:
@@ -272,15 +276,15 @@ def anonymize_relaxed(partition):
     anonymize_relaxed(rhs)
 
 
-def init(data, k, QI_num=-1):
+def init(data, k, qi_num=-1):
     """
     reset global variables
     """
     global GL_K, RESULT, QI_LEN, QI_DICT, QI_RANGE, QI_ORDER
-    if QI_num <= 0:
+    if qi_num <= 0:
         QI_LEN = len(data[0]) - 1
     else:
-        QI_LEN = QI_num
+        QI_LEN = qi_num
     GL_K = k
     RESULT = []
     # static values
@@ -303,19 +307,19 @@ def init(data, k, QI_num=-1):
             QI_DICT[i][qi_value] = index
 
 
-def mondrian(data, k, relax=False, QI_num=-1):
+def mondrian(data, k, relax=False, qi_num=-1):
     """
     Main function of mondrian, return result in tuple (result, (ncp, rtime)).
     data: dataset in 2-dimensional array.
     k: k parameter for k-anonymity
-    QI_num: Default -1, which exclude the last column. Othewise, [0, 1,..., QI_num - 1]
-            will be anonymized, [QI_num,...] will be excluded.
+    qi_num: Default -1, which exclude the last column. Othewise, [0, 1,..., qi_num - 1]
+            will be anonymized, [qi_num,...] will be excluded.
     relax: determine use strict or relaxed mondrian,
     Both mondrians split partition with binary split.
     In strict mondrian, lhs and rhs have not intersection.
     But in relaxed mondrian, lhs may be have intersection with rhs.
     """
-    init(data, k, QI_num)
+    init(data, k, qi_num)
     result = []
     data_size = len(data)
     low = [0] * QI_LEN
@@ -352,8 +356,6 @@ def mondrian(data, k, relax=False, QI_num=-1):
     ncp /= data_size
     ncp *= 100
     if __DEBUG:
-        from decimal import Decimal
-        print("Discernability Penalty=%.2E" % Decimal(str(dp)))
         print("size of partitions=%d" % len(RESULT))
         print("K=%d" % k)
         print("NCP = %.2f %%" % ncp)

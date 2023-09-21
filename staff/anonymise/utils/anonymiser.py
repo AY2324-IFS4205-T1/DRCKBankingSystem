@@ -9,7 +9,23 @@ DATA_SELECT = 'a'
 RELAX = False
 k = 3
 
-def covert_to_raw(result, intuitive_order, SA_num, QI_num, connect_str='~'):
+def convert_intuitive_order(intuitive_order, record, i, connect_str='~'):
+    """
+    Takes in the integer of categorical data and converts it back into its original form
+    """
+    vtemp = ''
+    if connect_str in record[i]:
+        temp = record[i].split(connect_str)
+        raw_list = []
+        for j in range(int(temp[0]), int(temp[1]) + 1):
+            raw_list.append(intuitive_order[i][j])
+        vtemp = connect_str.join(raw_list)
+    else:
+        vtemp = intuitive_order[i][int(record[i])]
+    
+    return vtemp
+
+def covert_to_raw(result, intuitive_order, sa_num, qi_num):
     """
     Converts the results back into its intuitive order and appends SA back into list
     """
@@ -20,25 +36,15 @@ def covert_to_raw(result, intuitive_order, SA_num, QI_num, connect_str='~'):
         covert_record = []
         for i in range(qi_len):
             if len(intuitive_order[i]) > 0:
-                vtemp = ''
-                if connect_str in record[i]:
-                    temp = record[i].split(connect_str)
-                    raw_list = []
-                    for j in range(int(temp[0]), int(temp[1]) + 1):
-                        raw_list.append(intuitive_order[i][j])
-                    vtemp = connect_str.join(raw_list)
-                else:
-                    vtemp = intuitive_order[i][int(record[i])]
-                covert_record.append(vtemp)
+                temp = convert_intuitive_order(intuitive_order, record, i)
+                covert_record.append(temp)
             else:
                 covert_record.append(record[i])
-        if isinstance(record[-1], str): # Checks if the last record is a string (not anonymised)
+        if sa_num > 0: # Checks if there are sensitive attributes
             temp = covert_record
-            for i in range(SA_num):
-                temp += [record[QI_num+i]]
+            for i in range(sa_num):
+                temp += [record[qi_num+i]]
             covert_result.append(temp)
-        else:
-            covert_result.append(covert_record + [connect_str.join(record[-1])])
     return covert_result
 
 
@@ -90,15 +96,15 @@ def prepare_output(result):
     return data_dict
 
 
-def get_result_one(data, intuitive_order, QI_num, SA_num, k=10):
+def get_result_one(data, intuitive_order, qi_num, sa_num, k=10):
     """
     Run Mondrian Algorithm one time, with k=10 as default. Returns anonymised data
     """
-    result, eval_result = mondrian(data, k, RELAX, QI_num)
+    result, _ = mondrian(data, k, RELAX, qi_num)
 
     # Convert numerical values back to categorical values if necessary
     if DATA_SELECT == 'a':
-        result = covert_to_raw(result, intuitive_order, SA_num, QI_num)
+        result = covert_to_raw(result, intuitive_order, sa_num, qi_num)
     else:
         for r in result:
             r[-1] = ','.join(r[-1])
@@ -114,14 +120,9 @@ def anonymise(transaction_data, k_value):
     """
     Reads input value of k from user and anonymises all transaction history data
     """
-    MODEL = 's' # Choose strict mondrian
-    DATA_SELECT = 'a'
-    INPUT_K = k_value
-    RELAX = False
-    
     # Read in Transaction History data
-    DATA, intuitive_order, QI_num, SA_num = read_test(transaction_data)
+    DATA, intuitive_order, qi_num, sa_num = read_test(transaction_data)
 
-    result = get_result_one(DATA, intuitive_order, QI_num, SA_num, k_value)
+    result = get_result_one(DATA, intuitive_order, qi_num, sa_num, k_value)
     output = prepare_output(result)
     return output

@@ -38,11 +38,10 @@ def value(x):
         return float(x)
     elif isinstance(x, datetime):
         return time.mktime(x.timetuple())
-        # return x.timestamp() # not supported by python 2.7
     else:
         try:
             return float(x)
-        except Exception as e:
+        except Exception:
             return x
 
 

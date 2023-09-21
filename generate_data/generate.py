@@ -49,13 +49,13 @@ def get_random_nationality():
 
 def get_random_datetime():
     now = datetime.utcnow()
-    # TODO: Change this back
-    start_year = 2016
+
+    start_year = 1990
     end_year = now.year
     # print(end_year)
 
     year = random.randint(start_year, end_year)
-    # TODO: Change this back
+
     month = random.randint(1, 12)
     # Months have different days 
     if month == 2:
@@ -174,7 +174,7 @@ def generate_account():
         json.dump(data, json_file, indent=4)
 
 def generate_transaction(num_transactions):
-    user_ids = get_userids()
+    
     data = []
 
     for i in range(1, num_transactions + 1):
