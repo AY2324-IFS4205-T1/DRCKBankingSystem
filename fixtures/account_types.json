@@ -1,0 +1,20 @@
+[
+    {
+        "model": "customer.AccountTypes",
+        "fields": {
+            "name": "savings"
+        }
+    },
+    {
+        "model": "customer.AccountTypes",
+        "fields": {
+            "name": "credit card"
+        }
+    },
+    {
+        "model": "customer.AccountTypes",
+        "fields": {
+            "name": "investments"
+        }
+    }
+]
