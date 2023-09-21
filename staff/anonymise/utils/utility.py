@@ -68,35 +68,3 @@ def merge_qi_value(x_left, x_right, connect_str='~'):
     return result
 
 
-def covert_to_raw(result, intuitive_order, delimiter='~'):
-    """
-    During preprocessing, categorical attrbutes are covert to
-    numeric attrbute using intutive order. This function will covert
-    these values back to they raw values. For example, Female and Male
-    may be coverted to 0 and 1 during anonymizaiton. Then we need to transform
-    them back to original values after anonymization.
-    """
-    covert_result = []
-    qi_len = len(intuitive_order)
-    for record in result:
-        covert_record = []
-        for i in range(qi_len):
-            if len(intuitive_order[i]) > 0:
-                vtemp = ''
-                if delimiter in record[i]:
-                    temp = record[i].split(delimiter)
-                    raw_list = []
-                    for j in range(int(temp[0]), int(temp[1]) + 1):
-                        raw_list.append(intuitive_order[i][j])
-                    vtemp = delimiter.join(raw_list)
-                else:
-                    vtemp = intuitive_order[i][int(record[i])]
-                covert_record.append(vtemp)
-            else:
-                covert_record.append(record[i])
-        if isinstance(record[-1], str):
-            covert_result.append(covert_record + [record[-1]])
-        else:
-            covert_result.append(covert_record + [delimiter.join(record[-1])])
-    return covert_result
-
