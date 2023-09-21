@@ -68,7 +68,7 @@ class TestVerifyTwoFA(TestAuthentication):
         response = self.client.post(reverse("verify_2fa"), wrong_otp, **self.header)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         
-        self.client.get(reverse("2faQrCode"), **self.header)
+        self.client.get(reverse("setup_2fa"), **self.header)
         response = self.client.post(reverse("verify_2fa"), bad_field, **self.header)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         
