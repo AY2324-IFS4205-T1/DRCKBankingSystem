@@ -1,5 +1,5 @@
-from decimal import Decimal
 import uuid
+from decimal import Decimal
 
 from django.core.validators import RegexValidator
 from django.db import models

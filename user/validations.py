@@ -1,9 +1,10 @@
-from django.utils.translation import ngettext
+from django.core.exceptions import ObjectDoesNotExist
 from django.forms import ValidationError as FormValidationError
+from django.utils.translation import ngettext
+from rest_framework.serializers import ValidationError
 
 from user.models import User
-from django.core.exceptions import ObjectDoesNotExist
-from rest_framework.serializers import ValidationError
+
 
 class MaximumLengthValidator:
     """

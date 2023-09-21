@@ -1,6 +1,6 @@
 from rest_framework.permissions import BasePermission
-from staff.models import Staff
 
+from staff.models import Staff
 from user.models import User
 
 

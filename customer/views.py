@@ -6,13 +6,14 @@ from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle
 from rest_framework.views import APIView
 
+from customer.permissions import IsCustomer
 from customer.serializers import (ApplySerializer, CustomerSerializer,
                                   DepositSerializer, GetAccountTypesSerializer,
-                                  GetBalanceSerializer, GetCustomerTicketsSerializer, TransferSerializer,
-                                  WithdrawSerializer)
+                                  GetBalanceSerializer,
+                                  GetCustomerTicketsSerializer,
+                                  TransferSerializer, WithdrawSerializer)
 from user.models import User
 from user.serializers import LoginSerializer, UserRegisterSerializer
-from customer.permissions import IsCustomer
 
 
 class CustomerRegistrationView(APIView):

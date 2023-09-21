@@ -3,7 +3,8 @@ from rest_framework import serializers
 
 from customer.validations import (validate_account, validate_account_owner,
                                   validate_account_type, validate_amount,
-                                  validate_description, validate_no_repeated_application,
+                                  validate_description,
+                                  validate_no_repeated_application,
                                   validate_sender_recipient,
                                   validate_sufficient_amount,
                                   validate_total_balance)
