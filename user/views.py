@@ -8,7 +8,7 @@ from user.serializers import GetTwoFASerializer, VerifyTwoFASerializer
 
 
 # Create your views here.
-class CreateTwoFactorAuthenticationView(APIView):
+class SetupTwoFactorAuthenticationView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
     authentication_classes = (TokenAuthentication,)
 

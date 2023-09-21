@@ -45,12 +45,12 @@ class TestAuthentication(APITestCase):
 
 class TestCreateTwoFA(TestAuthentication):
     def test_should_not_create_two_fa(self):
-        response = self.client.get(reverse("2faQrCode"))
+        response = self.client.get(reverse("setup_2fa"))
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
     
     def test_should_create_two_fa(self):
         self.login_customer_1()
-        response = self.client.get(reverse("2faQrCode"), **self.header)
+        response = self.client.get(reverse("setup_2fa"), **self.header)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
@@ -61,36 +61,36 @@ class TestVerifyTwoFA(TestAuthentication):
         bad_type = {"otp": "abcdefgh"}
         wrong_otp = {"otp": "12345678"}
 
-        response = self.client.post(reverse("verify_otp"), bad_field)
+        response = self.client.post(reverse("verify_2fa"), bad_field)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
         self.login_customer_1()
-        response = self.client.post(reverse("verify_otp"), wrong_otp, **self.header)
+        response = self.client.post(reverse("verify_2fa"), wrong_otp, **self.header)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         
         self.client.get(reverse("2faQrCode"), **self.header)
-        response = self.client.post(reverse("verify_otp"), bad_field, **self.header)
+        response = self.client.post(reverse("verify_2fa"), bad_field, **self.header)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         
-        response = self.client.post(reverse("verify_otp"), bad_length, **self.header)
+        response = self.client.post(reverse("verify_2fa"), bad_length, **self.header)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         
-        response = self.client.post(reverse("verify_otp"), bad_type, **self.header)
+        response = self.client.post(reverse("verify_2fa"), bad_type, **self.header)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         
-        response = self.client.post(reverse("verify_otp"), wrong_otp, **self.header)
+        response = self.client.post(reverse("verify_2fa"), wrong_otp, **self.header)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.json(), {'result': False})
         
     
     def test_should_verify_two_fa(self):
         self.login_customer_1()
-        self.client.get(reverse("2faQrCode"), **self.header)
+        self.client.get(reverse("setup_2fa"), **self.header)
 
         user = User.objects.get(username="test1")
         two_fa = TwoFA.objects.get(user=user)
         otp = pyotp.totp.TOTP(two_fa.key, digest=sha512, digits=8).now()
         sample_otp = {"otp": otp}
 
-        response = self.client.post(reverse("verify_otp"), sample_otp, **self.header)
+        response = self.client.post(reverse("verify_2fa"), sample_otp, **self.header)
         self.assertEqual(response.status_code, status.HTTP_200_OK)

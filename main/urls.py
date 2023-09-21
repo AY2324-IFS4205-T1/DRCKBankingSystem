@@ -25,7 +25,7 @@ from customer.views import (ApplyView, CustomerLoginView,
 from staff.views import (ApproveView, GetClosedTicketsView, GetOpenTicketsView,
                          RejectView, StaffLoginView, StaffRegistrationView,
                          TicketDetailsView)
-from user.views import (CreateTwoFactorAuthenticationView,
+from user.views import (SetupTwoFactorAuthenticationView,
                         VerifyTwoFactorAuthenticationView)
 
 urlpatterns = [
@@ -51,8 +51,8 @@ urlpatterns = [
     path("staff/ticket_details", TicketDetailsView.as_view(), name="ticketDetails"),
     
     # 2 Factor Authentication
-    path("2fa_qr_code", CreateTwoFactorAuthenticationView.as_view(), name="2faQrCode"),
-    path("verify_otp", VerifyTwoFactorAuthenticationView.as_view(), name="verify_otp"),
+    path("setup_2FA", SetupTwoFactorAuthenticationView.as_view(), name="setup_2fa"),
+    path("verify_2FA", VerifyTwoFactorAuthenticationView.as_view(), name="verify_2fa"),
     
     # In logout, header key: Authorization, Value: Token 3510ff361b..
     path("logout", knox_views.LogoutView.as_view(), name="logout"),
