@@ -30,12 +30,6 @@ class StaffSerializer(serializers.ModelSerializer):
         return Staff.objects.create(**validated_data)
 
 
-class GetAccountTypesSerializer(serializers.Serializer):
-    def get_account_type_list(self):
-        all_account_types = AccountTypes.objects.all().values_list("name", flat=True)
-        return list(all_account_types)
-
-
 class ApproveSerializer(serializers.Serializer):
     def __init__(self, user_id, json_dict, **kwargs):
         self.user_id = user_id

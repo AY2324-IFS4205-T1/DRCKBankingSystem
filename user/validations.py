@@ -25,13 +25,6 @@ class MaximumLengthValidator:
                 params={"max_length": self.max_length},
             )
 
-    def get_help_text(self):
-        return ngettext(
-            "This password is too long. It must contain at most %(max_length)d character.",
-            "This password is too long. It must contain at most %(max_length)d characters.",
-            self.max_length,
-        ) % {"max_length": self.max_length}
-
 
 class UppercaseValidator:
     """
@@ -53,13 +46,6 @@ class UppercaseValidator:
                 code="insufficient_uppercase",
                 params={"min_number": self.min_number},
             )
-
-    def get_help_text(self):
-        return ngettext(
-            "Your password must contain at least %(min_number)d uppercase character.",
-            "Your password must contain at least %(min_number)d uppercase characters.",
-            self.min_number,
-        ) % {"min_number": self.min_number}
 
 
 class LowercaseValidator:
@@ -83,13 +69,6 @@ class LowercaseValidator:
                 params={"min_number": self.min_number},
             )
 
-    def get_help_text(self):
-        return ngettext(
-            "Your password must contain at least %(min_number)d lowercase character.",
-            "Your password must contain at least %(min_number)d lowercase characters.",
-            self.min_number,
-        ) % {"min_number": self.min_number}
-
 
 class NumericValidator:
     """
@@ -111,13 +90,6 @@ class NumericValidator:
                 code="insufficient_numeric",
                 params={"min_number": self.min_number},
             )
-
-    def get_help_text(self):
-        return ngettext(
-            "Your password must contain at least %(min_number)d numeric character.",
-            "Your password must contain at least %(min_number)d numeric characters.",
-            self.min_number,
-        ) % {"min_number": self.min_number}
     
 
 class SpecialCharacterValidator:
@@ -141,13 +113,6 @@ class SpecialCharacterValidator:
                 code="insufficient_special",
                 params={"min_number": self.min_number},
             )
-
-    def get_help_text(self):
-        return ngettext(
-            "Your password must contain at least %(min_number)d special character.",
-            "Your password must contain at least %(min_number)d special characters.",
-            self.min_number,
-        ) % {"min_number": self.min_number}
     
 
 def validate_new_user(username, user_type):

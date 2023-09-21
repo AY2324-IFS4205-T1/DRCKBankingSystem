@@ -5,7 +5,7 @@ from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle
 from rest_framework.views import APIView
-from staff.permissions import IsTicketReviewer
+from staff.permissions import IsStaff, IsTicketReviewer
 
 from staff.serializers import (ApproveSerializer, GetClosedTicketsSerializer,
                                GetOpenTicketsSerializer, RejectSerializer,
@@ -66,7 +66,7 @@ class ApproveView(APIView):
     ticket_id: d1fa1bcc-c558-4f45-86eb-fef2caff0ecb
     """
 
-    permission_classes = (permissions.IsAuthenticated, IsTicketReviewer,)
+    permission_classes = (permissions.IsAuthenticated, IsStaff, IsTicketReviewer,)
     authentication_classes = (TokenAuthentication,)
     throttle_scope = "sensitive_request"
 
@@ -83,7 +83,7 @@ class RejectView(APIView):
     ticket_id: b69eed6a-d494-48c1-84e7-6b53ed3ab5db
     """
 
-    permission_classes = (permissions.IsAuthenticated, IsTicketReviewer,)
+    permission_classes = (permissions.IsAuthenticated, IsStaff, IsTicketReviewer,)
     authentication_classes = (TokenAuthentication,)
     throttle_scope = "sensitive_request"
 
@@ -96,7 +96,7 @@ class RejectView(APIView):
 
 
 class GetOpenTicketsView(APIView):
-    permission_classes = (permissions.IsAuthenticated, IsTicketReviewer,)
+    permission_classes = (permissions.IsAuthenticated, IsStaff, IsTicketReviewer,)
     authentication_classes = (TokenAuthentication,)
     throttle_scope = "non_sensitive_request"
 
@@ -106,7 +106,7 @@ class GetOpenTicketsView(APIView):
 
 
 class GetClosedTicketsView(APIView):
-    permission_classes = (permissions.IsAuthenticated, IsTicketReviewer,)
+    permission_classes = (permissions.IsAuthenticated, IsStaff, IsTicketReviewer,)
     authentication_classes = (TokenAuthentication,)
     throttle_scope = "non_sensitive_request"
 
@@ -116,7 +116,7 @@ class GetClosedTicketsView(APIView):
 
 
 class TicketDetailsView(APIView):
-    permission_classes = (permissions.IsAuthenticated, IsTicketReviewer,)
+    permission_classes = (permissions.IsAuthenticated, IsStaff, IsTicketReviewer,)
     authentication_classes = (TokenAuthentication,)
     throttle_scope = "non_sensitive_request"
 
