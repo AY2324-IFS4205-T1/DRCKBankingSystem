@@ -16,10 +16,15 @@ class Staff(models.Model):
         MALE = "Male"
         OTHERS = "Others"
 
+    class Title(models.TextChoices):
+        REVIEWER = "Ticket Reviewer"
+        SECURITY = "Security Engineer"
+        RESEARCHER = "Researcher"
+
     user = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=17, choices=Title.choices)
     birth_date = models.DateField()
     gender = models.CharField(max_length=6, choices=Gender.choices)
 

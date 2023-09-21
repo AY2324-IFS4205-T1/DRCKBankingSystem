@@ -5,14 +5,13 @@ from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle
 from rest_framework.views import APIView
+from staff.permissions import IsTicketReviewer
 
 from staff.serializers import (ApproveSerializer, GetClosedTicketsSerializer,
                                GetOpenTicketsSerializer, RejectSerializer,
                                StaffSerializer, TicketDetailsSerializer)
 from user.models import User
 from user.serializers import LoginSerializer, UserRegisterSerializer
-
-staff_type = {'type': 'Staff'}
 
 
 # Create your views here.
@@ -21,18 +20,18 @@ class StaffRegistrationView(APIView):
     username: staff
     email: test@gmail.com
     phone_no: 12345678
-    password: testpassword
+    password: G00dP@55word
     first_name: first
     last_name: last
     birth_date: 2023-01-01
-    title: employee
-    gender: M
+    title: Ticket Reviewer
+    gender: Male
     """
     
     throttle_classes = [AnonRateThrottle]
 
     def post(self, request):
-        user_serializer = UserRegisterSerializer(data=request.data)
+        user_serializer = UserRegisterSerializer(User.user_type.STAFF, data=request.data)
 
         if user_serializer.is_valid():
             user = user_serializer.save(type=User.user_type.STAFF)
@@ -52,10 +51,10 @@ class StaffLoginView(KnoxLoginView):
     throttle_classes = [AnonRateThrottle]
 
     def post(self, request):
-        serializer = self.serializer_class(data=request.data, context=staff_type)
+        serializer = self.serializer_class(User.user_type.STAFF, data=request.data)
 
         if serializer.is_valid():
-            user = serializer.validated_data["user"]  # type: ignore
+            user = serializer.validated_data["user"]
             login(request, user)
             response = super().post(request, format=None)
             return Response(response.data, status=status.HTTP_200_OK)
@@ -67,7 +66,7 @@ class ApproveView(APIView):
     ticket_id: d1fa1bcc-c558-4f45-86eb-fef2caff0ecb
     """
 
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated, IsTicketReviewer,)
     authentication_classes = (TokenAuthentication,)
     throttle_scope = "sensitive_request"
 
@@ -84,7 +83,7 @@ class RejectView(APIView):
     ticket_id: b69eed6a-d494-48c1-84e7-6b53ed3ab5db
     """
 
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated, IsTicketReviewer,)
     authentication_classes = (TokenAuthentication,)
     throttle_scope = "sensitive_request"
 
@@ -97,7 +96,7 @@ class RejectView(APIView):
 
 
 class GetOpenTicketsView(APIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated, IsTicketReviewer,)
     authentication_classes = (TokenAuthentication,)
     throttle_scope = "non_sensitive_request"
 
@@ -107,7 +106,7 @@ class GetOpenTicketsView(APIView):
 
 
 class GetClosedTicketsView(APIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated, IsTicketReviewer,)
     authentication_classes = (TokenAuthentication,)
     throttle_scope = "non_sensitive_request"
 
@@ -117,7 +116,7 @@ class GetClosedTicketsView(APIView):
 
 
 class TicketDetailsView(APIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated, IsTicketReviewer,)
     authentication_classes = (TokenAuthentication,)
     throttle_scope = "non_sensitive_request"
 

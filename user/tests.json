@@ -816,7 +816,7 @@
         "fields": {
             "first_name": "first",
             "last_name": "last",
-            "title": "employee",
+            "title": "Ticket Reviewer",
             "birth_date": "2023-01-01",
             "gender": "Male"
         }
@@ -827,7 +827,7 @@
         "fields": {
             "first_name": "first",
             "last_name": "last",
-            "title": "employee",
+            "title": "Ticket Reviewer",
             "birth_date": "2023-01-01",
             "gender": "Male"
         }

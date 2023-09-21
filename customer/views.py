@@ -12,8 +12,7 @@ from customer.serializers import (ApplySerializer, CustomerSerializer,
                                   WithdrawSerializer)
 from user.models import User
 from user.serializers import LoginSerializer, UserRegisterSerializer
-
-customer_type = {'type': 'Customer'}
+from customer.permissions import IsCustomer
 
 
 class CustomerRegistrationView(APIView):
@@ -21,7 +20,7 @@ class CustomerRegistrationView(APIView):
     username: test
     email: test@gmail.com
     phone_no: 12345678
-    password: testpassword
+    password: G00dP@55word
     first_name: first
     last_name: last
     birth_date: 2023-01-01
@@ -35,7 +34,7 @@ class CustomerRegistrationView(APIView):
     throttle_classes = [AnonRateThrottle]
 
     def post(self, request):        
-        user_serializer = UserRegisterSerializer(data=request.data)
+        user_serializer = UserRegisterSerializer(User.user_type.CUSTOMER, data=request.data)
 
         if user_serializer.is_valid():
             user = user_serializer.save(type=User.user_type.CUSTOMER)
@@ -52,7 +51,7 @@ class CustomerRegistrationView(APIView):
 class CustomerLoginView(KnoxLoginView):
     '''
     username: test
-    password: testpassword
+    password: G00dP@55word
     Please keep the token for logout
     '''
     serializer_class = LoginSerializer
@@ -60,7 +59,7 @@ class CustomerLoginView(KnoxLoginView):
     throttle_classes = [AnonRateThrottle]
     
     def post(self, request):
-        serializer = self.serializer_class(data=request.data, context=customer_type)
+        serializer = self.serializer_class(User.user_type.CUSTOMER, data=request.data)
         
         if serializer.is_valid():
             user = serializer.validated_data['user'] # type: ignore
@@ -71,7 +70,7 @@ class CustomerLoginView(KnoxLoginView):
     
 
 class GetAccountTypesView(APIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated, IsCustomer,)
     authentication_classes = (TokenAuthentication,)
     throttle_scope = "non_sensitive_request"
     
@@ -84,7 +83,7 @@ class ApplyView(APIView):
     '''
     account_type: Savings / Credit Card / Investments
     '''
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated, IsCustomer,)
     authentication_classes = (TokenAuthentication,)
     throttle_scope = "non_sensitive_request"
     
@@ -97,7 +96,7 @@ class ApplyView(APIView):
 
 
 class GetCustomerTicketsView(APIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated, IsCustomer,)
     authentication_classes = (TokenAuthentication,)
     throttle_scope = "non_sensitive_request"
     
@@ -107,7 +106,7 @@ class GetCustomerTicketsView(APIView):
 
 
 class GetBalanceView(APIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated, IsCustomer,)
     authentication_classes = (TokenAuthentication,)
     throttle_scope = "non_sensitive_request"
     
@@ -122,7 +121,7 @@ class DepositView(APIView):
     amount: 50
     description: string
     '''
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated, IsCustomer,)
     authentication_classes = (TokenAuthentication,)
     throttle_scope = "sensitive_request"
     
@@ -140,7 +139,7 @@ class WithdrawView(APIView):
     amount: 50
     description: string
     '''
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated, IsCustomer,)
     authentication_classes = (TokenAuthentication,)
     throttle_scope = "sensitive_request"
     
@@ -159,7 +158,7 @@ class TransferView(APIView):
     amount: 50
     description: string
     '''
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated, IsCustomer,)
     authentication_classes = (TokenAuthentication,)
     throttle_scope = "sensitive_request"
     

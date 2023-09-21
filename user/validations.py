@@ -1,6 +1,9 @@
 from django.utils.translation import ngettext
-from django.forms import ValidationError
+from django.forms import ValidationError as FormValidationError
 
+from user.models import User
+from django.core.exceptions import ObjectDoesNotExist
+from rest_framework.serializers import ValidationError
 
 class MaximumLengthValidator:
     """
@@ -12,7 +15,7 @@ class MaximumLengthValidator:
 
     def validate(self, password:str, _):
         if len(password) > self.max_length:
-            raise ValidationError(
+            raise FormValidationError(
                 ngettext(
                     "This password is too long. It must contain at most %(max_length)d character.",
                     "This password is too long. It must contain at most %(max_length)d characters.",
@@ -41,7 +44,7 @@ class UppercaseValidator:
     def validate(self, password:str, _):
         number_of_upper = sum(1 for char in password if char.isupper())
         if number_of_upper < self.min_number:
-            raise ValidationError(
+            raise FormValidationError(
                 ngettext(
                     "This password must contain at least %(min_number)d uppercase character.",
                     "This password must contain at least %(min_number)d uppercase characters.",
@@ -70,7 +73,7 @@ class LowercaseValidator:
     def validate(self, password:str, _):
         number_of_lower = sum(1 for char in password if char.islower())
         if number_of_lower < self.min_number:
-            raise ValidationError(
+            raise FormValidationError(
                 ngettext(
                     "This password must contain at least %(min_number)d lowercase character.",
                     "This password must contain at least %(min_number)d lowercase characters.",
@@ -99,7 +102,7 @@ class NumericValidator:
     def validate(self, password:str, _):
         number_of_numeric = sum(1 for char in password if char.isnumeric())
         if number_of_numeric < self.min_number:
-            raise ValidationError(
+            raise FormValidationError(
                 ngettext(
                     "This password must contain at least %(min_number)d numeric character.",
                     "This password must contain at least %(min_number)d numeric characters.",
@@ -129,7 +132,7 @@ class SpecialCharacterValidator:
         special = " !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
         number_of_numeric = sum(1 for char in password if char in special)
         if number_of_numeric < self.min_number:
-            raise ValidationError(
+            raise FormValidationError(
                 ngettext(
                     "This password must contain at least %(min_number)d special character.",
                     "This password must contain at least %(min_number)d special characters.",
@@ -146,3 +149,10 @@ class SpecialCharacterValidator:
             self.min_number,
         ) % {"min_number": self.min_number}
     
+
+def validate_new_user(username, user_type):
+    try:
+        User.objects.get(username=username, type=user_type)
+    except ObjectDoesNotExist:
+        return True
+    raise ValidationError("This user of this user type already exists.")
