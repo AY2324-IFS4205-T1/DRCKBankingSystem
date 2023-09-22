@@ -3,7 +3,7 @@ from django.forms import ValidationError as FormValidationError
 from django.utils.translation import ngettext
 from rest_framework.serializers import ValidationError
 
-from user.models import User
+from user.models import TwoFA, User
 
 
 class MaximumLengthValidator:
@@ -122,12 +122,6 @@ def validate_new_user(username, user_type):
     except ObjectDoesNotExist:
         return True
     raise ValidationError("This user of this user type already exists.")
-=======
-from django.core import exceptions
-from django.forms import ValidationError
-
-from .models import TwoFA
-
 
 def validate_otp(json_dict):
     try:
@@ -145,6 +139,6 @@ def validate_otp(json_dict):
 def validate_user_2fa(user):
     try:
         two_fa = TwoFA.objects.get(user=user)
-    except exceptions.ObjectDoesNotExist:
+    except ObjectDoesNotExist:
         raise ValidationError("User does not have 2FA set up.")
     return two_fa
