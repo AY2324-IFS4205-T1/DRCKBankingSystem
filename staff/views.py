@@ -9,6 +9,7 @@ from staff.serializers import (ApproveSerializer, GetClosedTicketsSerializer,
                                GetOpenTicketsSerializer, RejectSerializer,
                                StaffSerializer, TicketDetailsSerializer)
 from user.models import User
+from user.permissions import IsTwoFactorAuthenticated
 from user.serializers import LoginSerializer, UserRegisterSerializer
 
 staff_type = {"type": "Staff"}
@@ -61,7 +62,7 @@ class ApproveView(APIView):
     ticket_id: d1fa1bcc-c558-4f45-86eb-fef2caff0ecb
     """
 
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated, IsTwoFactorAuthenticated,)
     authentication_classes = (TokenAuthentication,)
 
     def post(self, request):
@@ -77,7 +78,7 @@ class RejectView(APIView):
     ticket_id: b69eed6a-d494-48c1-84e7-6b53ed3ab5db
     """
 
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated, IsTwoFactorAuthenticated,)
     authentication_classes = (TokenAuthentication,)
 
     def post(self, request):

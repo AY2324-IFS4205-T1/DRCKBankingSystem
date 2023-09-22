@@ -7,9 +7,11 @@ from rest_framework.views import APIView
 
 from customer.serializers import (ApplySerializer, CustomerSerializer,
                                   DepositSerializer, GetAccountTypesSerializer,
-                                  GetBalanceSerializer, GetCustomerTicketsSerializer, TransferSerializer,
-                                  WithdrawSerializer)
+                                  GetBalanceSerializer,
+                                  GetCustomerTicketsSerializer,
+                                  TransferSerializer, WithdrawSerializer)
 from user.models import User
+from user.permissions import IsTwoFactorAuthenticated
 from user.serializers import LoginSerializer, UserRegisterSerializer
 
 customer_type = {'type': 'Customer'}
@@ -111,7 +113,7 @@ class DepositView(APIView):
     amount: 50
     description: string
     '''
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated, IsTwoFactorAuthenticated,)
     authentication_classes = (TokenAuthentication,)
     
     def post(self, request):
@@ -128,7 +130,7 @@ class WithdrawView(APIView):
     amount: 50
     description: string
     '''
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated, IsTwoFactorAuthenticated,)
     authentication_classes = (TokenAuthentication,)
     
     def post(self, request):
@@ -146,7 +148,7 @@ class TransferView(APIView):
     amount: 50
     description: string
     '''
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated, IsTwoFactorAuthenticated,)
     authentication_classes = (TokenAuthentication,)
     
     def post(self, request):

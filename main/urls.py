@@ -16,7 +16,6 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from knox import views as knox_views
 
 from customer.views import (ApplyView, CustomerLoginView,
                             CustomerRegistrationView, DepositView,
@@ -25,7 +24,7 @@ from customer.views import (ApplyView, CustomerLoginView,
 from staff.views import (ApproveView, GetClosedTicketsView, GetOpenTicketsView,
                          RejectView, StaffLoginView, StaffRegistrationView,
                          TicketDetailsView)
-from user.views import (SetupTwoFactorAuthenticationView,
+from user.views import (LogoutView, SetupTwoFactorAuthenticationView,
                         VerifyTwoFactorAuthenticationView)
 
 urlpatterns = [
@@ -55,5 +54,5 @@ urlpatterns = [
     path("verify_2FA", VerifyTwoFactorAuthenticationView.as_view(), name="verify_2fa"),
     
     # In logout, header key: Authorization, Value: Token 3510ff361b..
-    path("logout", knox_views.LogoutView.as_view(), name="logout"),
+    path("logout", LogoutView.as_view(), name="logout"),
 ]

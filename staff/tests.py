@@ -3,7 +3,7 @@ import json
 from django.urls import reverse
 from rest_framework import status
 
-from user.tests import TestAuthentication
+from user.tests import TestAuthentication, TestLogout
 
 approved_ticket_id = "0d9cd690-5141-4e99-8fd0-992ca2ecfa9c"
 rejected_ticket_id = "ce77f63a-063b-43d0-b7f3-85972b8f81c4"
@@ -43,7 +43,7 @@ class TestGetClosedTickets(TestAuthentication): # staff action
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
-class TestApprove(TestAuthentication): # staff action
+class TestApprove(TestLogout): # staff action
     def test_should_not_approve(self):
         bad_field = {"tiiiiicket_id": ""}
         bad_type = {"ticket_id": ""}
@@ -54,6 +54,10 @@ class TestApprove(TestAuthentication): # staff action
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
         self.login_staff_1()
+        response = self.client.post(reverse("approve"), bad_field)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        self.two_fa_staff1()
         response = self.client.post(reverse("approve"), bad_field, **self.header)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -66,14 +70,18 @@ class TestApprove(TestAuthentication): # staff action
         response = self.client.post(reverse("approve"), already_rejected, **self.header)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+        self.logout_staff1()
+        response = self.client.post(reverse("approve"), bad_field)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
     def test_should_approve(self):
-        self.login_staff_1()
+        self.two_fa_staff1()
         sample_approve = {"ticket_id": open_ticket_id}
         response = self.client.post(reverse("approve"), sample_approve, **self.header)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
-class TestReject(TestAuthentication): # staff action
+class TestReject(TestLogout): # staff action TODO: fail authentication, pass authentication
     def test_should_not_reject(self):
         bad_field = {"tiiiiicket_id": ""}
         bad_type = {"ticket_id": ""}
@@ -84,6 +92,10 @@ class TestReject(TestAuthentication): # staff action
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
         self.login_staff_1()
+        response = self.client.post(reverse("reject"), bad_field)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        self.two_fa_staff1()
         response = self.client.post(reverse("reject"), bad_field, **self.header)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -96,8 +108,12 @@ class TestReject(TestAuthentication): # staff action
         response = self.client.post(reverse("reject"), already_rejected, **self.header)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+        self.logout_staff1()
+        response = self.client.post(reverse("reject"), bad_field)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
     def test_should_reject(self):
-        self.login_staff_1()
+        self.two_fa_staff1()
         sample_reject = {"ticket_id": open_ticket_id}
         response = self.client.post(reverse("reject"), sample_reject, **self.header)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
