@@ -11,7 +11,7 @@ class CustomerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Customer
-        fields = ('user', 'first_name', 'last_name', 'birth_date', 'identity_no', 'address', 'postal_code', 'citizenship', 'gender')\
+        fields = ('user', 'first_name', 'last_name', 'birth_date', 'identity_no', 'address', 'postal_code', 'citizenship', 'gender')
     
     def validate(self, attrs):
         validate_nric_and_citizenship(self.initial_data["identity_no"], self.initial_data["citizenship"], self.initial_data["birth_date"])
