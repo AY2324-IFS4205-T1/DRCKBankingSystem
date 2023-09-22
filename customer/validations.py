@@ -18,8 +18,7 @@ def validate_nric_and_citizenship(nric, citizenship, birth_date):
             raise ValidationError(error_message)
         if datetime.strptime(birth_date, "%Y-%m-%d") >= datetime(2000, 1, 1) and nric[0] != "T":
             raise ValidationError(error_message)
-        
-    if citizenship == Customer.Citizenship.NON_SINGAPOREAN:
+    else:
         if nric[0] not in ["F", "G", "M"]:
             raise ValidationError(error_message)
 

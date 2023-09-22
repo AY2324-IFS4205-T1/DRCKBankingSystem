@@ -30,6 +30,18 @@ class TestRegistration(APITestCase):
         response = self.client.post(reverse("customerRegister"), registration_details)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertRaises(User.DoesNotExist, User.objects.get, username="johnsmith")
+        
+        registration_details["identity_no"] = "S12345B"
+        response = self.client.post(reverse("customerRegister"), registration_details)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        
+        registration_details["identity_no"] = "A1234567B"
+        response = self.client.post(reverse("customerRegister"), registration_details)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        
+        registration_details["identity_no"] = "S12345678"
+        response = self.client.post(reverse("customerRegister"), registration_details)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
         registration_details["birth_date"] = "1999-01-01"
         registration_details["identity_no"] = "T1234567B"
