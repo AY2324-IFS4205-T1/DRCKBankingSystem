@@ -92,7 +92,7 @@ class TestRegistration(APITestCase):
             "phone_no": "12345678",
             "first_name": "first",
             "last_name": "last",
-            "birth_date": "2023-01-01",
+            "birth_date": "1999-01-01",
             "identity_no": "S1234567B",
             "address": "jurong",
             "postal_code": "123456",
