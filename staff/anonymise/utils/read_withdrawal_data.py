@@ -7,12 +7,11 @@ Read transaction history data set
 
 
 
-ATT_NAME = ['sender_age', 'sender_gender', 'sender_address', 'sender_citizenship', 
-            'amount', 'recipient_age', 'recipient_gender', 'recipient_postal_code', 'recipient_citizenship',
-            'month', 'year']
-QI_INDEX = [0, 1, 2, 3, 5, 6, 7, 8]
-IS_CAT = [False, True, False, True, False, True, False, True]
-SA_INDEX = [4, 9, 10]
+ATT_NAME = ['sender_age', 'sender_gender', 'sender_postal_code', 'sender_citizenship', 
+            'amount', 'month', 'year']
+QI_INDEX = [0, 1, 2, 3]
+IS_CAT = [False, True, False, True]
+SA_INDEX = [4, 5, 6]
 __DEBUG = False
 
 def convert_to_categorical(qi_num, intuitive_dict, intuitive_number, intuitive_order, line):

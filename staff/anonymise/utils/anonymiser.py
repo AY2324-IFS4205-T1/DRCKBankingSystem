@@ -1,13 +1,23 @@
 import copy
 from staff.anonymise.utils.mondrian import mondrian
 from staff.anonymise.utils.read_my_data import read_data as read_test
-from staff.anonymise.utils.first_query_anon import read_first_query_data
+from staff.anonymise.utils.read_withdrawal_data import read_data as read_withdrawal
 import json
 
 # Read my test record
 DATA_SELECT = 'a'
 RELAX = False
 k = 3
+
+WITHDRAWAL_COLUMNS = ['sender_age', 'sender_gender', 'sender_postal_code', 'sender_citizenship',
+                    'transaction_amount', 'month', 'year']
+
+DEPOSIT_COLUMNS = ['recipient_age', 'recipient_gender', 'recipient_postal_code', 'recipient_citizenship',
+                    'transaction_amount', 'month', 'year']
+
+TRANSFER_COLUMNS = ['sender_age', 'sender_gender', 'sender_postal_code', 'sender_citizenship',
+                    'recipient_age', 'recipient_gender', 'recipient_postal_code', 'recipient_citizenship',
+                    'transaction_amount', 'month', 'year']
 
 def convert_intuitive_order(intuitive_order, record, i, connect_str='~'):
     """
@@ -47,7 +57,7 @@ def covert_to_raw(result, intuitive_order, sa_num, qi_num):
             covert_result.append(temp)
     return covert_result
 
-
+# TODO: Rewrite this to reflect changes
 def write_first_anon(result):
     """
     Writes the anonymised data into json format file
@@ -64,29 +74,33 @@ def write_first_anon(result):
             "year": r[5],
             "amount": r[6]
         }
-        # output.write(';'.join(r) + '\n')
         anonymised_data.append(user_data)
     with open("staff/anonymise/data/anonymised.json", "w") as json_file:
         json.dump(anonymised_data, json_file, indent=4)
 
-
-def write_to_file(result):
+# TODO: Remove this function if not called (duplicated)
+def write_to_file(result, file_name):
     """
-    TESTING PURPOSES: Write the anonymized transaction data to bf_query_anonymized.data 
+    TESTING PURPOSES: Write the anonymized transaction data to anonymized.data 
     for testing
     """
-    with open("staff/anonymise/data/bf_query_anonymised.data", "w") as output:
+    file_path = "staff/anonymise/data/" + file_name
+    with open(file_path, "w") as output:
         for r in result:
             output.write(';'.join(r) + '\n')
-    print("Anonymised data written to bf_query_anonymised.data")
+    print(f"Anonymised data written to {file_name}")
 
-def prepare_output(result):
+
+def prepare_output(result, type):
     """
     Stores results into a dictionary for to prepare for query 
     """
-    column_names = ['sender_age', 'sender_gender', 'sender_address', 'sender_nationality', 
-                    'recipient_age', 'recipient_gender', 'recipient_address', 'recipient_nationality',
-                    'transaction_amount', 'month', 'year']
+    if type == 'Deposit':
+        column_names = DEPOSIT_COLUMNS 
+    elif type == 'Withdrawal':
+        column_names = WITHDRAWAL_COLUMNS 
+    else: # Type is 'Transfer'
+        column_names = TRANSFER_COLUMNS
     data_dict = []
     for row in result:
         row_dict = {}
@@ -108,21 +122,23 @@ def get_result_one(data, intuitive_order, qi_num, sa_num, k=10):
     else:
         for r in result:
             r[-1] = ','.join(r[-1])
-    
-    # TESTING PURPOSES: Prints the result to file
-    write_to_file(result)
+
     return result
 
 
 
 
-def anonymise(transaction_data, k_value):
+def anonymise(transaction_data, k_value, transaction_type):
     """
-    Reads input value of k from user and anonymises all transaction history data
+    Main function for calling anonymising based on the different transaction types of data.
+    Reads input value of k from user and anonymises transaction data that is parsed in.
     """
     # Read in Transaction History data
-    DATA, intuitive_order, qi_num, sa_num = read_test(transaction_data)
+    if transaction_type == 'Withdrawal':
+        DATA, intuitive_order, qi_num, sa_num = read_withdrawal(transaction_data)
+        file_name = "anon_withdrawal.data"
 
     result = get_result_one(DATA, intuitive_order, qi_num, sa_num, k_value)
-    output = prepare_output(result)
+    write_to_file(result, file_name)
+    output = prepare_output(result, transaction_type)
     return output
