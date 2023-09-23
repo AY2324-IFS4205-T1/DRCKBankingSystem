@@ -10,6 +10,9 @@ import json
 from decimal import Decimal
 
 
+MAXIMUM_K_VALUE = 10 # anyhow put
+
+
 def age_convert(birth_date):
     """
     Calculates age based on birthdate 
@@ -344,6 +347,7 @@ def user_inputs(k, query):
     anonymised data. Performs query on both anonymised data and original data to calculate information 
     loss
     """
+    return {"anonymised": "data"} ## placeholder for testing of API
     new_input = UserInputs(k, query)
 
     if new_input.query == "1": # Average withdrawal amount of Singaporeans for the past 5 years
