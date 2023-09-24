@@ -18,9 +18,9 @@ from django.contrib import admin
 from django.urls import path
 from knox import views as knox_views
 
-from customer.views import (ApplyView, CustomerLoginView,
+from customer.views import (ApplyView, CustomerLoginView, CustomerWelcomeView, TransactionsView,
                             CustomerRegistrationView, DepositView,
-                            GetAccountTypesView, GetBalanceView, GetCustomerTicketsView, TransferView,
+                            AccountTypesView, AccountsView, GetCustomerTicketsView, TransferView,
                             WithdrawView)
 from staff.views import (ApproveView, GetClosedTicketsView, GetOpenTicketsView, TicketDetailsView,
                          RejectView, StaffLoginView, StaffRegistrationView)
@@ -33,10 +33,12 @@ urlpatterns = [
     # Customer
     path("customer/register", CustomerRegistrationView.as_view(), name="customerRegister"),
     path("customer/login", CustomerLoginView.as_view(), name="customerLogin"),
-    path("customer/get_account_types", GetAccountTypesView.as_view(),name="customerGetAccountTypes",),
+    path("customer/welcome", CustomerWelcomeView.as_view(), name="customerWelcome"),
+    path("customer/account_types", AccountTypesView.as_view(), name="customerAccountTypes",),
+    path("customer/account/<acct_id>", TransactionsView.as_view(), name="customerAccount"),
     path("customer/apply", ApplyView.as_view(), name="apply"),
     path("customer/get_tickets", GetCustomerTicketsView.as_view(), name="getCustomerTickets"),
-    path("customer/balance", GetBalanceView.as_view(), name="balance"),
+    path("customer/accounts", AccountsView.as_view(), name="customerAccounts"),
     path("customer/deposit", DepositView.as_view(), name="deposit"),
     path("customer/withdraw", WithdrawView.as_view(), name="withdraw"),
     path("customer/transfer", TransferView.as_view(), name="transfer"),
