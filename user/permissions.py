@@ -12,8 +12,14 @@ class IsTwoFactorAuthenticated(permissions.BasePermission):
         """
         Return `True` if permission is granted, `False` otherwise.
         """
-        two_fa = TwoFA.objects.get(user=request.user)
-        if not two_fa.last_authenticated:
+        try:
+            two_fa = TwoFA.objects.get(user=request.user)
+        except Exception:
+            self.message = "User does not have 2FA set up."
+            return False
+    
+        self.message = "User is not 2FA authenticated."
+        if two_fa.last_authenticated == None:
             return False
 
         difference = timezone.now() - two_fa.last_authenticated
