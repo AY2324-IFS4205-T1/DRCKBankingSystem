@@ -90,9 +90,9 @@ DATABASES = {
         'OPTIONS': {
             'options': '-c search_path=django',
             'sslmode': 'verify-ca',
-            'sslcert': os.environ["BACKEND_CERT"],
-            'sslkey': os.environ["BACKEND_KEY"],
-            'sslrootcert': os.environ["BACKEND_ROOT_CERT"],    
+            'sslcert': os.environ["CLIENT_CERT"],
+            'sslkey': os.environ["CLIENT_KEY"],
+            'sslrootcert': os.environ["CA_CERT"],    
         },
         'NAME': os.environ["POSTGRES_DBNAME_AUTH"],
         'USER': os.environ["POSTGRES_USER_AUTH"],
