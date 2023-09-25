@@ -1,5 +1,4 @@
 from django.contrib.auth import login
-from knox.auth import TokenAuthentication
 from knox.views import LoginView as KnoxLoginView
 from rest_framework import permissions, status
 from rest_framework.response import Response
@@ -91,7 +90,7 @@ class RejectView(APIView):
 
 class GetOpenTicketsView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
 
     def get(self, request):
         serializer = GetOpenTicketsSerializer().get_open_tickets_list()
@@ -100,7 +99,7 @@ class GetOpenTicketsView(APIView):
 
 class GetClosedTicketsView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
 
     def get(self, request):
         serializer = GetClosedTicketsSerializer(request.user).get_closed_tickets_list()
@@ -109,7 +108,7 @@ class GetClosedTicketsView(APIView):
 
 class TicketDetailsView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
 
     def post(self, request):
         serializer = TicketDetailsSerializer(request.user, request.data, data=request.data)
