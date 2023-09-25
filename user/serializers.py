@@ -83,5 +83,6 @@ class RemoveTwoFASerializer(serializers.Serializer):
         self.user = user
         two_fa = TwoFA.objects.get(user=self.user)
         two_fa.last_authenticated = None
+        two_fa.knox_token = ""
         two_fa.save()
         super().__init__(**kwargs)

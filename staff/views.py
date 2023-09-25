@@ -100,7 +100,7 @@ class GetOpenTicketsView(APIView):
 
 class GetClosedTicketsView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
-    authentication_classes = (TokenAndTwoFactorAuthentication,)
+    authentication_classes = (TokenAuthentication,)
 
     def get(self, request):
         serializer = GetClosedTicketsSerializer(request.user).get_closed_tickets_list()
@@ -109,7 +109,7 @@ class GetClosedTicketsView(APIView):
 
 class TicketDetailsView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
-    authentication_classes = (TokenAndTwoFactorAuthentication,)
+    authentication_classes = (TokenAuthentication,)
 
     def post(self, request):
         serializer = TicketDetailsSerializer(request.user, request.data, data=request.data)

@@ -35,17 +35,18 @@ class TokenAndTwoFactorAuthentication(TokenAuthentication):
         if token_authenticated == None:
             return None
         
-        user, token = token_authenticated
+        user = token_authenticated[0]
+        token = request.headers.get("Authorization")[6:]
         try:
             two_fa = TwoFA.objects.get(user=user)
         except Exception:
             raise AuthenticationFailed("User does not have 2FA set up.")
 
         if token != two_fa.knox_token:
-            raise AuthenticationFailed("Invalid session.")
+            raise AuthenticationFailed("The session has changed, 2FA needs to be verified again.")
 
         if two_fa.last_authenticated == None:
-            return None
+            raise AuthenticationFailed("2FA has not been verified.")
 
         difference = timezone.now() - two_fa.last_authenticated
         is_two_fa_authenticated = difference < timedelta(minutes=15)
@@ -57,4 +58,4 @@ class TokenAndTwoFactorAuthentication(TokenAuthentication):
         else:
             two_fa.last_authenticated = None
             two_fa.save()
-            return None
+            raise AuthenticationFailed("2FA timeout, 2FA needs to be verified again.")

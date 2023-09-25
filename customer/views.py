@@ -1,4 +1,5 @@
 from django.contrib.auth import login
+from knox.auth import TokenAuthentication
 from knox.views import LoginView as KnoxLoginView
 from rest_framework import permissions, status
 from rest_framework.response import Response
@@ -70,7 +71,7 @@ class CustomerLoginView(KnoxLoginView):
 
 class GetAccountTypesView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
-    authentication_classes = (TokenAndTwoFactorAuthentication,)
+    authentication_classes = (TokenAuthentication,)
 
     def get(self, request):
         serializer = GetAccountTypesSerializer(request.user).get_account_type_list()
@@ -83,7 +84,7 @@ class ApplyView(APIView):
     """
 
     permission_classes = (permissions.IsAuthenticated,)
-    authentication_classes = (TokenAndTwoFactorAuthentication,)
+    authentication_classes = (TokenAuthentication,)
 
     def post(self, request):
         serializer = ApplySerializer(request.user, request.data, data=request.data)
@@ -95,7 +96,7 @@ class ApplyView(APIView):
 
 class GetCustomerTicketsView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
-    authentication_classes = (TokenAndTwoFactorAuthentication,)
+    authentication_classes = (TokenAuthentication,)
 
     def get(self, request):
         serializer = GetCustomerTicketsSerializer(request.user).get_customer_tickets()
@@ -104,7 +105,7 @@ class GetCustomerTicketsView(APIView):
 
 class GetBalanceView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
-    authentication_classes = (TokenAndTwoFactorAuthentication,)
+    authentication_classes = (TokenAuthentication,)
 
     def get(self, request):
         serializer = GetBalanceSerializer(request.user).get_balance()

@@ -81,7 +81,7 @@ class TestApprove(TestLogout): # staff action
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
-class TestReject(TestLogout): # staff action TODO: fail authentication, pass authentication
+class TestReject(TestLogout): # staff action
     def test_should_not_reject(self):
         bad_field = {"tiiiiicket_id": ""}
         bad_type = {"ticket_id": ""}
