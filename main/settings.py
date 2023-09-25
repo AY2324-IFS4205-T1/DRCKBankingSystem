@@ -88,7 +88,11 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'OPTIONS': {
-            'options': '-c search_path=django'
+            'options': '-c search_path=django',
+            'sslmode': 'verify-ca',
+            'sslcert': os.environ["BACKEND_CERT"],
+            'sslkey': os.environ["BACKEND_KEY"],
+            'sslrootcert': os.environ["BACKEND_ROOT_CERT"],    
         },
         'NAME': os.environ["POSTGRES_DBNAME_AUTH"],
         'USER': os.environ["POSTGRES_USER_AUTH"],
