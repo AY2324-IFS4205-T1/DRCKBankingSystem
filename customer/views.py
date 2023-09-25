@@ -5,11 +5,12 @@ from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from customer.serializers import (ApplySerializer, CustomerSerializer,
+from customer.serializers import (CreateTicketSerializer, CustomerSerializer,
                                   DepositSerializer,
-                                  GetCustomerTicketsSerializer, TransferSerializer,
+                                  GetTicketsSerializer, TransferSerializer,
                                   WithdrawSerializer)
 from user.models import User
+from staff.models import Tickets, RequestOpenAccount, RequestCloseAccount
 from user.serializers import LoginSerializer, UserRegisterSerializer
 from customer.models import AccountTypes, Accounts, Transactions
 
@@ -87,7 +88,7 @@ class AccountTypesView(APIView):
     authentication_classes = (TokenAuthentication,)
 
     def get(self, request):
-        account_types = AccountTypes.objects.values_list('name')
+        account_types = AccountTypes.objects.values()
         return Response({'account_types': account_types}, status=status.HTTP_200_OK)
 
 class AccountsView(APIView):
@@ -111,28 +112,51 @@ class TransactionsView(APIView):
             transactions = Transactions.objects.filter(Q(sender_id=acct_id)|Q(recipient_id=acct_id)).values()
             return Response({'transactions': transactions}, status=status.HTTP_200_OK)
 
-class ApplyView(APIView):
-    '''
-    account_type: Savings / Credit Card / Investments
-    '''
+# class ApplyView(APIView):
+#     '''
+#     account_type: Savings / Credit Card / Investments
+#     '''
+#     permission_classes = (permissions.IsAuthenticated,)
+#     authentication_classes = (TokenAuthentication,)
+    
+#     def post(self, request):
+#         serializer = ApplySerializer(request.user, request.data, data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(status=status.HTTP_200_OK)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CustomerTicketsView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
     authentication_classes = (TokenAuthentication,)
     
+    def get(self, request):
+        serializer = GetTicketsSerializer(request.user).get_customer_tickets()
+        return Response({'tickets': serializer}, status=status.HTTP_200_OK)
+    
     def post(self, request):
-        serializer = ApplySerializer(request.user, request.data, data=request.data)
+        serializer = CreateTicketSerializer(request.user, request.data, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
-class GetCustomerTicketsView(APIView):
+class CustomerTicketView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
     authentication_classes = (TokenAuthentication,)
-    
-    def get(self, request):
-        serializer = GetCustomerTicketsSerializer(request.user).get_customer_tickets()
-        return Response({'tickets': serializer}, status=status.HTTP_200_OK)
+
+    # Get ticket of a customer
+    def get(self, request, ticket_id):
+        ticket = Tickets.objects.filter(ticket=ticket_id, created_by=request.user.id).values()[0]
+        if ticket['ticket_type'] == Tickets.TicketType.OPEN_ACCOUNT:
+            value = RequestOpenAccount.objects.filter(ticket_id=ticket_id).values('account_type_id__name')[0]['account_type_id__name']
+            ticket['value'] = value
+        elif ticket['ticket_type'] == Tickets.TicketType.CLOSE_ACCOUNT:
+            value = RequestCloseAccount.objects.get(ticket_id=ticket_id).account_id.account
+            ticket['value'] = value
+        return Response({'ticket': ticket}, status=status.HTTP_200_OK)
+        
 
 class DepositView(APIView):
     '''
@@ -151,7 +175,6 @@ class DepositView(APIView):
             serializer.save()
             # serialize.instance returns the defined new_balance set in serializer
             return Response(serializer.instance, status=status.HTTP_200_OK)
-        print(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

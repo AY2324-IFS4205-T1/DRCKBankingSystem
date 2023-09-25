@@ -1,10 +1,9 @@
 from rest_framework import serializers
 
 from customer.validations import validate_account, validate_account_owner, validate_account_type, validate_amount, validate_description, validate_sender_recipient, validate_sufficient_amount, validate_total_balance
-from staff.models import Tickets
+from staff.models import Tickets, RequestCloseAccount, RequestOpenAccount
 
 from .models import Accounts, AccountTypes, Customer, Transactions
-
 
 class CustomerSerializer(serializers.ModelSerializer):
     user = serializers.Field(required=False)
@@ -16,30 +15,41 @@ class CustomerSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         return Customer.objects.create(**validated_data)
     
-class ApplySerializer(serializers.Serializer):
-    def __init__(self, user_id, json_dict, **kwargs):
-        self.user_id = user_id
+class CreateTicketSerializer(serializers.Serializer):
+    ticket_type = serializers.CharField()
+    value = serializers.CharField()
+    
+    def __init__(self, user, json_dict, **kwargs):
+        self.user = user
         self.json_dict = json_dict
         super().__init__(**kwargs)
-    
-    def validate(self, attrs):
-        self.account_type = validate_account_type(self.json_dict)
-        return super().validate(attrs)
 
     def create(self, validated_data):
-        customer = Customer.objects.get(user=self.user_id)
-        ticket = Tickets.objects.create(created_by=customer, account_type=self.account_type, status = Tickets.TicketStatus.OPEN)
-        return ticket
+        ticket_type = validated_data['ticket_type']
+        value = validated_data['value']
+        customer = Customer.objects.get(user=self.user)
 
+        if ticket_type == Tickets.TicketType.OPEN_ACCOUNT:
+            account_type = AccountTypes.objects.get(type=value)
+            ticket = Tickets.objects.create(created_by=customer, status=Tickets.TicketStatus.OPEN, ticket_type=ticket_type)
+            RequestOpenAccount.objects.create(ticket=ticket, account_type=account_type)
+            return ticket
+        elif ticket_type == Tickets.TicketType.CLOSE_ACCOUNT:
+            closing_account = Accounts.objects.get(user=customer, account=value)
+            ticket = Tickets.objects.create(created_by=customer, status=Tickets.TicketStatus.OPEN, ticket_type=ticket_type)
+            RequestCloseAccount.objects.create(ticket=ticket, account_id=closing_account)
+            return ticket
+        else:
+            raise TypeError()
 
-class GetCustomerTicketsSerializer(serializers.Serializer):
+class GetTicketsSerializer(serializers.Serializer):
     
     def __init__(self, user_id):
         self.user_id = user_id
 
     def get_customer_tickets(self):
         user_id = Customer.objects.get(user = self.user_id)
-        tickets = Tickets.objects.filter(created_by=user_id).values("ticket", "ticket_type", "account_type", "status", "created_date", "closed_date")
+        tickets = Tickets.objects.filter(created_by=user_id).values("ticket", "ticket_type", "status", "created_date", "closed_date")
         return list(tickets)
 
 

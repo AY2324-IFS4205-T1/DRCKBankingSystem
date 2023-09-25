@@ -57,6 +57,21 @@ class StaffLoginView(KnoxLoginView):
 
             return Response(response.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class StaffWelcomeView(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
+
+    # Displays the user's first name, last name, last login in Dashboard
+    def get(self, request):
+        data = {
+            'last_login': request.user.last_login,
+            'first_name': request.user.staff.first_name,
+            'last_name': request.user.staff.last_name
+        }
+
+        return Response(data, status=status.HTTP_200_OK)
 
 
 class ApproveView(APIView):
