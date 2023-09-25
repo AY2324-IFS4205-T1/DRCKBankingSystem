@@ -53,9 +53,12 @@ class GetTwoFASerializer(serializers.Serializer):
 
 
 class VerifyTwoFASerializer(serializers.Serializer):
-    def __init__(self, user, json_dict, **kwargs):
+    def __init__(self, user, json_dict, authorisation_header, **kwargs):
         self.user = user
         self.json_dict = json_dict
+        self.authorisation_header = ""
+        if authorisation_header[:6] == "Token ":
+            self.authorisation_header = authorisation_header[6:]
         super().__init__(**kwargs)
         
     def validate(self, attrs):
@@ -67,8 +70,10 @@ class VerifyTwoFASerializer(serializers.Serializer):
         result = verify_otp(self.two_fa.key, self.otp)
         if result:
             self.two_fa.last_authenticated = timezone.now()
+            self.two_fa.knox_token = self.authorisation_header
         else:
             self.two_fa.last_authenticated = None
+            self.two_fa.knox_token = ""
         self.two_fa.save()
         return {"result": result, "last_authenticated": self.two_fa.last_authenticated}
 

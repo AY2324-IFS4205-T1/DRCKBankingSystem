@@ -31,7 +31,7 @@ class VerifyTwoFactorAuthenticationView(APIView):
 
     def post(self, request):
         serializer = VerifyTwoFASerializer(
-            request.user, request.data, data=request.data
+            request.user, request.data, request.headers.get('Authorization'), data=request.data
         )
         if serializer.is_valid():
             json_result = serializer.verify()

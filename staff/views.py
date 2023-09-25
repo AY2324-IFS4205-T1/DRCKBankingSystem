@@ -8,8 +8,8 @@ from rest_framework.views import APIView
 from staff.serializers import (ApproveSerializer, GetClosedTicketsSerializer,
                                GetOpenTicketsSerializer, RejectSerializer,
                                StaffSerializer, TicketDetailsSerializer)
+from user.authentication import TokenAndTwoFactorAuthentication
 from user.models import User
-from user.permissions import IsTwoFactorAuthenticated
 from user.serializers import LoginSerializer, UserRegisterSerializer
 
 staff_type = {"type": "Staff"}
@@ -62,8 +62,8 @@ class ApproveView(APIView):
     ticket_id: d1fa1bcc-c558-4f45-86eb-fef2caff0ecb
     """
 
-    permission_classes = (permissions.IsAuthenticated, IsTwoFactorAuthenticated,)
-    authentication_classes = (TokenAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
 
     def post(self, request):
         serializer = ApproveSerializer(request.user, request.data, data=request.data)
@@ -78,8 +78,8 @@ class RejectView(APIView):
     ticket_id: b69eed6a-d494-48c1-84e7-6b53ed3ab5db
     """
 
-    permission_classes = (permissions.IsAuthenticated, IsTwoFactorAuthenticated,)
-    authentication_classes = (TokenAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
 
     def post(self, request):
         serializer = RejectSerializer(request.user, request.data, data=request.data)
@@ -100,7 +100,7 @@ class GetOpenTicketsView(APIView):
 
 class GetClosedTicketsView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
 
     def get(self, request):
         serializer = GetClosedTicketsSerializer(request.user).get_closed_tickets_list()
@@ -109,7 +109,7 @@ class GetClosedTicketsView(APIView):
 
 class TicketDetailsView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
 
     def post(self, request):
         serializer = TicketDetailsSerializer(request.user, request.data, data=request.data)

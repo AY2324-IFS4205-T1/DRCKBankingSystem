@@ -17,6 +17,7 @@ def validate_otp(json_dict):
         raise ValidationError("OTP does not have 8 digits.")
     return str(otp)
 
+
 def validate_user_2fa(user):
     try:
         two_fa = TwoFA.objects.get(user=user)

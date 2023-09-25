@@ -1,7 +1,14 @@
-from django.contrib.auth.backends import ModelBackend
+from datetime import timedelta
+
 from django.contrib.auth import get_user_model
+from django.utils import timezone
+from knox.auth import TokenAuthentication
+from rest_framework.exceptions import AuthenticationFailed
+
+from user.models import TwoFA
 
 # https://reintech.io/blog/writing-custom-authentication-backend-django
+
 
 class UserAuth:
     def authenticate(self, _, username=None, password=None, type=None):
@@ -13,11 +20,41 @@ class UserAuth:
         else:
             if user.check_password(password):
                 return user
-            
+
     def get_user(self, user_id):
         user_model = get_user_model()
         try:
             return user_model.objects.get(pk=user_id)
         except user_model.DoesNotExist:
             return None
-            
+
+
+class TokenAndTwoFactorAuthentication(TokenAuthentication):
+    def authenticate(self, request):
+        token_authenticated = super().authenticate(request)
+        if token_authenticated == None:
+            return None
+        
+        user, token = token_authenticated
+        try:
+            two_fa = TwoFA.objects.get(user=user)
+        except Exception:
+            raise AuthenticationFailed("User does not have 2FA set up.")
+
+        if token != two_fa.knox_token:
+            raise AuthenticationFailed("Invalid session.")
+
+        if two_fa.last_authenticated == None:
+            return None
+
+        difference = timezone.now() - two_fa.last_authenticated
+        is_two_fa_authenticated = difference < timedelta(minutes=15)
+
+        if is_two_fa_authenticated:
+            two_fa.last_authenticated = timezone.now()
+            two_fa.save()
+            return token_authenticated
+        else:
+            two_fa.last_authenticated = None
+            two_fa.save()
+            return None
