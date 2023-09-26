@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'knox',
     'corsheaders',
-    'django_extensions',
     'user',
     'customer',
     'staff'
