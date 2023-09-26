@@ -22,7 +22,7 @@ from customer.views import (CustomerLoginView, CustomerWelcomeView, Transactions
                             CustomerRegistrationView, DepositView,
                             AccountTypesView, AccountsView, CustomerTicketsView, TransferView,
                             WithdrawView, CustomerTicketView)
-from staff.views import (ApproveView, GetClosedTicketsView, GetOpenTicketsView, TicketDetailsView,
+from staff.views import (ApproveView, GetClosedTicketsView, GetOpenTicketsView, StaffTicketView,
                          RejectView, StaffLoginView, StaffRegistrationView, StaffWelcomeView)
 
 from user.views import AuthenticationTypeCheckView, SetupTwoFactorAuthenticationView, VerifyTwoFactorAuthenticationView
@@ -46,11 +46,11 @@ urlpatterns = [
     path("staff/register", StaffRegistrationView.as_view(), name="staffRegister"),
     path("staff/login", StaffLoginView.as_view(), name="staffLogin"),
     path("staff/welcome", StaffWelcomeView.as_view(), name="staffWelcome"),
-    path("staff/approve", ApproveView.as_view(), name="approve"),
-    path("staff/reject", RejectView.as_view(), name="reject"),
     path("staff/get_open_tickets", GetOpenTicketsView.as_view(), name="getOpenTickets"),
     path("staff/get_closed_tickets", GetClosedTicketsView.as_view(), name="getClosedTickets"),
-    path("staff/ticket_details", TicketDetailsView.as_view(), name="ticketDetails"),
+    path("staff/ticket/<ticket_id>", StaffTicketView.as_view(), name="ticketDetails"),
+    path("staff/ticket/<ticket_id>/approve", ApproveView.as_view(), name="ticketApprove"),
+    path("staff/ticket/<ticket_id>/reject", RejectView.as_view(), name="ticketReject"),
 
     #In logout, header key: Authorization, Value: Token 3510ff361b..
     path('logout', knox_views.LogoutView.as_view(), name='logout'),

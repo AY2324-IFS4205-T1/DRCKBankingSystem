@@ -7,7 +7,7 @@ from rest_framework import serializers
 from customer.models import Accounts, AccountTypes
 from staff.validations import validate_open_ticket, validate_ticket_id
 
-from .models import Staff, Tickets
+from .models import Staff, Tickets, RequestOpenAccount, RequestCloseAccount
 
 
 class StaffSerializer(serializers.ModelSerializer):
@@ -28,9 +28,12 @@ class GetAccountTypesSerializer(serializers.Serializer):
 
 
 class ApproveSerializer(serializers.Serializer):
-    def __init__(self, user_id, json_dict, **kwargs):
+    def __init__(self, user_id, json_dict, ticket_id, **kwargs):
+        print(user_id)
+        print(json_dict)
         self.user_id = user_id
         self.json_dict = json_dict
+        self.json_dict['ticket_id'] = ticket_id
         super().__init__(**kwargs)
 
     def validate(self, attrs):
@@ -43,19 +46,34 @@ class ApproveSerializer(serializers.Serializer):
         self.ticket.status = Tickets.TicketStatus.APPROVED
         self.ticket.closed_by = staff
         self.ticket.closed_date = timezone.now()
-        self.make_account()
+        if self.ticket.ticket_type == Tickets.TicketType.OPEN_ACCOUNT:
+            self.create_account()
+        elif self.ticket.ticket_type == Tickets.TicketType.CLOSE_ACCOUNT:
+            self.close_account()
         self.ticket.save()
         return self.ticket
 
-    def make_account(self):
+    def create_account(self):
+        open_account_request = RequestOpenAccount.objects.get(ticket=self.ticket)
+
         account = Accounts.objects.create(
             user=self.ticket.created_by,
-            type=self.ticket.account_type,
+            type=open_account_request.account_type,
             status=Accounts.AccountStatus.ACTIVE,
         )
         account.save()
         return account
+    
+    def close_account(self):
+        close_account_request = RequestCloseAccount.objects.get(ticket=self.ticket)
+        print(close_account_request)
+        print(close_account_request.account_id)
 
+        close_account_request.account_id.status = Accounts.AccountStatus.CLOSED
+        # account = Accounts.objects.get(account=close_account_request.account_id)
+        # account.status = Accounts.AccountStatus.CLOSED
+        close_account_request.account_id.save()
+        return close_account_request.account_id
 
 class RejectSerializer(serializers.Serializer):
     def __init__(self, user_id, json_dict, **kwargs):

@@ -8,6 +8,8 @@ from rest_framework.views import APIView
 from staff.serializers import (ApproveSerializer, GetClosedTicketsSerializer,
                                GetOpenTicketsSerializer, RejectSerializer,
                                StaffSerializer, TicketDetailsSerializer)
+from staff.models import Tickets, RequestCloseAccount, RequestOpenAccount
+from customer.models import Customer
 from user.models import User
 from user.serializers import LoginSerializer, UserRegisterSerializer
 
@@ -73,7 +75,65 @@ class StaffWelcomeView(APIView):
 
         return Response(data, status=status.HTTP_200_OK)
 
+class GetOpenTicketsView(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
 
+    def get(self, request):
+        serializer = GetOpenTicketsSerializer().get_open_tickets_list()
+        return Response({"tickets": serializer}, status=status.HTTP_200_OK)
+
+
+class GetClosedTicketsView(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
+
+    def get(self, request):
+        serializer = GetClosedTicketsSerializer(request.user).get_closed_tickets_list()
+        return Response({"tickets": serializer}, status=status.HTTP_200_OK)
+
+# class TicketDetailsView(APIView):
+#     permission_classes = (permissions.IsAuthenticated,)
+#     authentication_classes = (TokenAuthentication,)
+
+#     def post(self, request):
+#         serializer = TicketDetailsSerializer(request.user, request.data, data=request.data)
+#         if serializer.is_valid():
+#             serializer = serializer.get_ticket_details()
+#             return Response(serializer, status=status.HTTP_200_OK)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class StaffTicketView(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
+
+    # Get ticket of a customer
+    def get(self, request, ticket_id):
+        # Retrieve ticket info
+        ticket = Tickets.objects.filter(ticket=ticket_id).values()[0]
+        value = None
+        if ticket['ticket_type'] == Tickets.TicketType.OPEN_ACCOUNT:
+            value = RequestOpenAccount.objects.filter(ticket_id=ticket_id).values('account_type_id__name')[0]['account_type_id__name']
+            ticket['value'] = value
+        elif ticket['ticket_type'] == Tickets.TicketType.CLOSE_ACCOUNT:
+            value = RequestCloseAccount.objects.get(ticket_id=ticket_id).account_id.account
+            ticket['value'] = value
+
+        # Retrieve cust info
+        customer = Customer.objects.filter(user_id=ticket['created_by_id']).values()[0]
+
+        # Retrieve email and phone number of user
+        user = User.objects.get(pk=ticket['created_by_id'])
+
+        customer['email']=user.email
+        customer['phone_no']=user.phone_no
+
+        del customer['identity_no']
+        del customer['user_id']
+        del ticket['created_by_id']
+
+        return Response({'ticket': ticket, 'customer': customer}, status=status.HTTP_200_OK)
+    
 class ApproveView(APIView):
     """
     ticket_id: d1fa1bcc-c558-4f45-86eb-fef2caff0ecb
@@ -82,8 +142,8 @@ class ApproveView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
     authentication_classes = (TokenAuthentication,)
 
-    def post(self, request):
-        serializer = ApproveSerializer(request.user, request.data, data=request.data)
+    def post(self, request, ticket_id):
+        serializer = ApproveSerializer(request.user, request.data, ticket_id, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(status=status.HTTP_200_OK)
@@ -98,39 +158,9 @@ class RejectView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
     authentication_classes = (TokenAuthentication,)
 
-    def post(self, request):
-        serializer = RejectSerializer(request.user, request.data, data=request.data)
+    def post(self, request, ticket_id):
+        serializer = RejectSerializer(request.user, request.data, ticket_id, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class GetOpenTicketsView(APIView):
-    permission_classes = (permissions.IsAuthenticated,)
-    authentication_classes = (TokenAuthentication,)
-
-    def get(self, request):
-        serializer = GetOpenTicketsSerializer().get_open_tickets_list()
-        return Response({"open_tickets": serializer}, status=status.HTTP_200_OK)
-
-
-class GetClosedTicketsView(APIView):
-    permission_classes = (permissions.IsAuthenticated,)
-    authentication_classes = (TokenAuthentication,)
-
-    def get(self, request):
-        serializer = GetClosedTicketsSerializer(request.user).get_closed_tickets_list()
-        return Response({"closed_tickets": serializer}, status=status.HTTP_200_OK)
-
-
-class TicketDetailsView(APIView):
-    permission_classes = (permissions.IsAuthenticated,)
-    authentication_classes = (TokenAuthentication,)
-
-    def post(self, request):
-        serializer = TicketDetailsSerializer(request.user, request.data, data=request.data)
-        if serializer.is_valid():
-            serializer = serializer.get_ticket_details()
-            return Response(serializer, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
