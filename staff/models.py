@@ -2,7 +2,7 @@ import uuid
 
 from django.db import models
 
-from customer.models import AccountTypes, Customer
+from customer.models import AccountTypes, Customer, Accounts
 from user.models import User
 
 
@@ -48,9 +48,23 @@ class Tickets(models.Model):
     
     ticket = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     ticket_type = models.CharField(max_length=15, choices=TicketType.choices)
-    account_type = models.ForeignKey(AccountTypes, on_delete=models.PROTECT)
+    # account_type = models.ForeignKey(AccountTypes, on_delete=models.PROTECT)
     status = models.CharField(max_length=8, choices=TicketStatus.choices)
     created_by = models.ForeignKey(Customer, related_name='created_tickets', on_delete=models.PROTECT)
     created_date = models.DateTimeField(auto_now_add=True)
     closed_by = models.ForeignKey(Staff, related_name='closed_tickets', on_delete=models.PROTECT, null=True)
     closed_date = models.DateTimeField(null=True)
+
+class RequestOpenAccount(models.Model):
+    class Meta:
+        db_table = 'staff"."request_open_account'
+
+    ticket = models.OneToOneField(Tickets, primary_key=True, on_delete=models.CASCADE)
+    account_type = models.ForeignKey(AccountTypes, on_delete=models.PROTECT, null=False)
+
+class RequestCloseAccount(models.Model):
+    class Meta:
+        db_table = 'staff"."request_close_account'
+
+    ticket = models.OneToOneField(Tickets, primary_key=True, on_delete=models.CASCADE)
+    account_id = models.ForeignKey(Accounts, related_name='closed_account', on_delete=models.PROTECT, null=False)

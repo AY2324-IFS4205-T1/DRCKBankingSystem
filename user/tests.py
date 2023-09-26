@@ -11,7 +11,6 @@ from user.models import User
 
 good_pass = "G00dP@55word"
 
-
 class TestRegistration(APITestCase):
     def test_should_not_register(self):
         registration_details = {
@@ -118,6 +117,11 @@ class TestAuthentication(APITestCase):
         response = self.client.post(reverse("customerLogin"), login)
         self.header = {"HTTP_AUTHORIZATION": f"Token {response.data['token']}"}
 
+    def auth_type_check_cust(self):
+        self.header["HTTP_TYPE"] = "Customer"
+        response = self.client.get(reverse("auth_check"), **self.header)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
     def login_staff_1(self):
         login = {"username": "staff1", "password": "testpassword"}
         response = self.client.post(reverse("staffLogin"), login)
@@ -138,9 +142,15 @@ class TestAuthentication(APITestCase):
         response = self.client.post(reverse("staffLogin"), login)
         self.header = {"HTTP_AUTHORIZATION": f"Token {response.data['token']}"}
 
+    def auth_type_check_staff(self):
+        self.header["HTTP_TYPE"] = "Staff"
+        response = self.client.get(reverse("auth_check"), **self.header)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
     def test_logins(self):
         self.login_customer_1()
         self.login_customer_2()
+        self.auth_type_check_cust()
         self.login_staff_1()
         self.login_staff_2()
         self.login_staff_3()
