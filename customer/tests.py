@@ -11,6 +11,10 @@ class TestGetAccountTypes(TestAuthentication): # customer action
     def test_should_not_access_get_account_types(self):
         response = self.client.get(reverse("customerAccountTypes"))
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        self.login_staff_1()
+        response = self.client.get(reverse("customerAccountTypes"))
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
     
     def test_access_get_account_types(self):
         self.login_customer_1()
@@ -27,22 +31,34 @@ class TestCustomerCreateTicket(TestAuthentication): # customer action
         response = self.client.post(reverse("customerTickets"), bad_field)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+        # self.login_staff_1()
+        # response = self.client.post(reverse("customerTickets"), bad_field, **self.header)
+        # self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
         # self.login_customer_1()
         # response = self.client.post(reverse("customerTickets"), bad_field, **self.header)
         # self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    #     response = self.client.post(reverse("customerTickets"), bad_type, **self.header)
-    #     self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    # def test_should_apply(self):
-    #     sample_apply = {"account_type": "Savings"}
-    #     self.login_customer_1()
-    #     response = self.client.post(reverse("customerTickets"), sample_apply, **self.header)
-    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # def test_should_apply(self):
+        #     sample_apply = {"account_type": "Savings"}
+        #     self.login_customer_1()
+        #     response = self.client.post(reverse("customerTickets"), sample_apply, **self.header)
+        #     self.assertEqual(response.status_code, status.HTTP_200_OK)
+            
+        # def test_should_not_repeat_apply(self):
+        #     sample_apply = {"account_type": "Savings"}
+        #     self.login_customer_1()
+        #     self.client.post(reverse("customerTickets"), sample_apply, **self.header)
+        #     response = self.client.post(reverse("customerTickets"), sample_apply, **self.header)
+        #     self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 
 class TestCustomerTickets(TestAuthentication): # customer action
     def test_should_not_get_tickets(self):
+        response = self.client.get(reverse("customerTickets"))
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        self.login_staff_1()
         response = self.client.get(reverse("customerTickets"))
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
@@ -54,6 +70,10 @@ class TestCustomerTickets(TestAuthentication): # customer action
 
 class TestAccounts(TestAuthentication): # customer action
     def test_should_not_get_accounts(self):
+        response = self.client.get(reverse("customerAccounts"))
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        self.login_staff_1()
         response = self.client.get(reverse("customerAccounts"))
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
@@ -74,6 +94,10 @@ class TestDeposit(TestAuthentication): # customer action
         bad_type_amount_0 = {"account_id": test1_account_id, "amount": 0}
 
         response = self.client.post(reverse("deposit"), bad_field_account_id)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        self.login_staff_1()
+        response = self.client.get(reverse("deposit"), bad_field_account_id)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
         requests = [bad_field_account_id, bad_field_amount, bad_type_account_id, bad_type_not_my_account_id, bad_type_amount_str, bad_type_amount_2dp, bad_type_amount_0]
@@ -101,6 +125,10 @@ class TestWithdraw(TestAuthentication): # customer action
         bad_type_amount_too_much = {"account_id": test1_account_id, "amount": 1000}
 
         response = self.client.post(reverse("withdraw"), bad_field_account_id)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        self.login_staff_1()
+        response = self.client.get(reverse("withdraw"), bad_field_account_id)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
         requests = [bad_field_account_id, bad_field_amount, bad_type_account_id, bad_type_not_my_account_id, bad_type_amount_str, bad_type_amount_2dp, bad_type_amount_0, bad_type_amount_too_much]
@@ -133,6 +161,10 @@ class TestTransfer(TestAuthentication): # customer action
         bad_type_description_long = {"sender_id": test1_account_id, "recipient_id": test2_account_id, "amount": 50, "description": "a"*256}
 
         response = self.client.post(reverse("transfer"), bad_field_sender_id)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        self.login_staff_1()
+        response = self.client.get(reverse("transfer"), bad_field_sender_id)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
         requests = [bad_field_sender_id, bad_field_recipient_id, bad_field_amount, bad_field_description, bad_type_sender_id, bad_type_recipient_id, bad_type_not_my_account_id, bad_type_same_accounts, bad_type_amount_str, bad_type_amount_2dp, bad_type_amount_0, bad_type_amount_too_much, bad_type_description_long]

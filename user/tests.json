@@ -68,6 +68,40 @@
         }
     },
     {
+        "model": "user.user",
+        "pk": 5,
+        "fields": {
+            "is_superuser": false,
+            "username": "staff3",
+            "password": "pbkdf2_sha256$600000$xQlMepW8hLTyc9vp6ah7LL$KgznpsZqe1E7ah+FbeZKT52/ong+Ujn685xcPXYd2X8=",
+            "email": "staff3@email.com",
+            "phone_no": "12345678",
+            "type": "Staff",
+            "date_joined": "2023-09-21T14:59:25.655Z",
+            "last_login": "2023-09-21T14:59:25.655Z",
+            "is_active": true,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "user.user",
+        "pk": 6,
+        "fields": {
+            "is_superuser": false,
+            "username": "staff4",
+            "password": "pbkdf2_sha256$600000$yFyPQtufY7HHyAvXs8w9A1$3UzoHUviLk9Two8l/3srGDAwHl+PsLQhS3ktFWyZwco=",
+            "email": "staff4@email.com",
+            "phone_no": "12345678",
+            "type": "Staff",
+            "date_joined": "2023-09-21T14:59:47.209Z",
+            "last_login": "2023-09-21T14:59:47.209Z",
+            "is_active": true,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
         "model": "customer.customer",
         "pk": 1,
         "fields": {
@@ -156,7 +190,7 @@
         "fields": {
             "first_name": "first",
             "last_name": "last",
-            "title": "employee",
+            "title": "Ticket Reviewer",
             "birth_date": "2023-01-01",
             "gender": "Male"
         }
@@ -167,11 +201,34 @@
         "fields": {
             "first_name": "first",
             "last_name": "last",
-            "title": "employee",
+            "title": "Ticket Reviewer",
             "birth_date": "2023-01-01",
             "gender": "Male"
         }
-    },{
+    },
+    {
+        "model": "staff.staff",
+        "pk": 5,
+        "fields": {
+            "first_name": "first",
+            "last_name": "last",
+            "title": "Security Engineer",
+            "birth_date": "2023-01-01",
+            "gender": "Male"
+        }
+    },
+    {
+        "model": "staff.staff",
+        "pk": 6,
+        "fields": {
+            "first_name": "first",
+            "last_name": "last",
+            "title": "Researcher",
+            "birth_date": "2023-01-01",
+            "gender": "Male"
+        }
+    },
+    {
         "model": "staff.tickets",
         "pk": "073eb525-7eb8-4ac7-a372-0955465cfb80",
         "fields": {

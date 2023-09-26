@@ -1,10 +1,11 @@
 import json
+from django.contrib.auth.password_validation import validate_password
 
 from django.core.serializers import serialize
 from django.utils import timezone
 from rest_framework import serializers
 
-from customer.models import Accounts, AccountTypes
+from customer.models import Accounts
 from staff.validations import validate_open_ticket, validate_ticket_id
 
 from .models import Staff, Tickets, RequestOpenAccount, RequestCloseAccount
@@ -16,15 +17,17 @@ class StaffSerializer(serializers.ModelSerializer):
     class Meta:
         model = Staff
         fields = ("user", "first_name", "last_name", "title", "birth_date", "gender")
+    
+    def __init__(self, instance=None, data=..., user=user, **kwargs):
+        self.user = user
+        super().__init__(instance, data, **kwargs)
+
+    def validate(self, attrs):
+        validate_password(self.initial_data["password"], user=self.user)
+        return super().validate(attrs)
 
     def create(self, validated_data):
         return Staff.objects.create(**validated_data)
-
-
-class GetAccountTypesSerializer(serializers.Serializer):
-    def get_account_type_list(self):
-        all_account_types = AccountTypes.objects.all().values_list("name", flat=True)
-        return list(all_account_types)
 
 
 class ApproveSerializer(serializers.Serializer):

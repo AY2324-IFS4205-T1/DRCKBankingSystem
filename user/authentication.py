@@ -1,4 +1,3 @@
-from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth import get_user_model
 
 # https://reintech.io/blog/writing-custom-authentication-backend-django

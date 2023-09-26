@@ -3,8 +3,10 @@ from knox.auth import TokenAuthentication
 from knox.views import LoginView as KnoxLoginView
 from rest_framework import permissions, status
 from rest_framework.response import Response
+from rest_framework.throttling import AnonRateThrottle
 from rest_framework.views import APIView
 
+from customer.permissions import IsCustomer
 from customer.serializers import (CreateTicketSerializer, CustomerSerializer,
                                   DepositSerializer,
                                   GetTicketsSerializer, TransferSerializer,
@@ -16,15 +18,13 @@ from customer.models import AccountTypes, Accounts, Transactions
 
 from django.db.models import F, Q
 
-customer_type = {'type': 'Customer'}
-
 
 class CustomerRegistrationView(APIView):
     '''
     username: test
     email: test@gmail.com
     phone_no: 12345678
-    password: testpassword
+    password: G00dP@55word
     first_name: first
     last_name: last
     birth_date: 2023-01-01
@@ -34,44 +34,50 @@ class CustomerRegistrationView(APIView):
     citizenship: Singaporean Citizen
     gender: M
     '''
+
+    throttle_classes = [AnonRateThrottle]
+
     def post(self, request):        
-        user_serializer = UserRegisterSerializer(data=request.data)
-        customer_serializer = CustomerSerializer(data=request.data)
+        user_serializer = UserRegisterSerializer(User.user_type.CUSTOMER, data=request.data)
 
         if user_serializer.is_valid():
+            user = user_serializer.save(type=User.user_type.CUSTOMER)
+            customer_serializer = CustomerSerializer(data=request.data, user=user)
             if customer_serializer.is_valid():
-                new_user = user_serializer.save(type=User.user_type.CUSTOMER)
-                customer_serializer.save(user=new_user)
+                customer_serializer.save(user=user)
                 return Response(status=status.HTTP_201_CREATED)
-            return Response(customer_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                user.delete()
+                return Response(customer_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CustomerLoginView(KnoxLoginView):
     '''
     username: test
-    password: testpassword
+    password: G00dP@55word
     Please keep the token for logout
     '''
     serializer_class = LoginSerializer
     permission_classes = (permissions.AllowAny,)
+    throttle_classes = [AnonRateThrottle]
     
     def post(self, request):
-        serializer = self.serializer_class(data=request.data, context=customer_type)
+        serializer = self.serializer_class(User.user_type.CUSTOMER, data=request.data)
         
         if serializer.is_valid():
             user = serializer.validated_data['user'] # type: ignore
             login(request, user)
             response = super().post(request, format=None)
-            
-            response.data["type"] = customer_type["type"] 
+
+            response.data["type"] = User.user_type.CUSTOMER
             
             return Response(response.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class CustomerWelcomeView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (TokenAuthentication, IsCustomer,)
 
     # Displays the user's first name, last name, last login in Dashboard
     def get(self, request):
@@ -84,16 +90,18 @@ class CustomerWelcomeView(APIView):
         return Response(data, status=status.HTTP_200_OK)
 
 class AccountTypesView(APIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated, IsCustomer,)
     authentication_classes = (TokenAuthentication,)
+    throttle_scope = "non_sensitive_request"
 
     def get(self, request):
         account_types = AccountTypes.objects.values()
         return Response({'account_types': account_types}, status=status.HTTP_200_OK)
 
 class AccountsView(APIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated, IsCustomer,)
     authentication_classes = (TokenAuthentication,)
+    throttle_scope = "non_sensitive_request"
     
     # Get all accounts of the user
     def get(self, request):
@@ -101,7 +109,7 @@ class AccountsView(APIView):
         return Response({'accounts': accounts}, status=status.HTTP_200_OK)
     
 class TransactionsView(APIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated, IsCustomer,)
     authentication_classes = (TokenAuthentication,)
 
     # Get all transactions of an account
@@ -126,14 +134,17 @@ class TransactionsView(APIView):
 #             return Response(status=status.HTTP_200_OK)
 #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
 class CustomerTicketsView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
     authentication_classes = (TokenAuthentication,)
+    throttle_scope = "non_sensitive_request"
     
     def get(self, request):
-        serializer = GetTicketsSerializer(request.user).get_customer_tickets()
-        return Response({'tickets': serializer}, status=status.HTTP_200_OK)
+        try:
+            serializer = GetTicketsSerializer(request.user).get_customer_tickets()
+            return Response({'tickets': serializer}, status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
     
     def post(self, request):
         serializer = CreateTicketSerializer(request.user, request.data, data=request.data)
@@ -145,6 +156,7 @@ class CustomerTicketsView(APIView):
 class CustomerTicketView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
     authentication_classes = (TokenAuthentication,)
+    throttle_scope = "non_sensitive_request"
 
     # Get ticket of a customer
     def get(self, request, ticket_id):
@@ -163,8 +175,9 @@ class DepositView(APIView):
     account_id: 89c46857-d9f7-4f5d-b221-0936b78e8b7b
     amount: 50
     '''
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated, IsCustomer,)
     authentication_classes = (TokenAuthentication,)
+    throttle_scope = "sensitive_request"
     
     def post(self, request):
         # Added description to ATM Deposit
@@ -183,8 +196,9 @@ class WithdrawView(APIView):
     account_id: 89c46857-d9f7-4f5d-b221-0936b78e8b7b
     amount: 50
     '''
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated, IsCustomer,)
     authentication_classes = (TokenAuthentication,)
+    throttle_scope = "sensitive_request"
     
     def post(self, request):
         # Added description to ATM Withdraw
@@ -203,8 +217,9 @@ class TransferView(APIView):
     amount: 50
     description: string
     '''
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated, IsCustomer,)
     authentication_classes = (TokenAuthentication,)
+    throttle_scope = "sensitive_request"
     
     def post(self, request):
         serializer = TransferSerializer(request.user, request.data, data=request.data)

@@ -1,6 +1,14 @@
+from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 
-from customer.validations import validate_account, validate_account_owner, validate_nric_and_citizenship, validate_account_type, validate_amount, validate_description, validate_sender_recipient, validate_sufficient_amount, validate_total_balance
+from customer.validations import (validate_account, validate_account_owner,
+                                  validate_account_type, validate_amount,
+                                  validate_description,
+                                  validate_no_repeated_application,
+                                  validate_nric_and_citizenship,
+                                  validate_sender_recipient,
+                                  validate_sufficient_amount,
+                                  validate_total_balance)
 from staff.models import Tickets, RequestCloseAccount, RequestOpenAccount
 
 from .models import Accounts, AccountTypes, Customer, Transactions
@@ -12,7 +20,12 @@ class CustomerSerializer(serializers.ModelSerializer):
         model = Customer
         fields = ('user', 'first_name', 'last_name', 'birth_date', 'identity_no', 'address', 'postal_code', 'citizenship', 'gender')
     
+    def __init__(self, instance=None, data=..., user=user, **kwargs):
+        self.user = user
+        super().__init__(instance, data, **kwargs)
+
     def validate(self, attrs):
+        validate_password(self.initial_data["password"], user=self.user)
         validate_nric_and_citizenship(self.initial_data["identity_no"], self.initial_data["citizenship"], self.initial_data["birth_date"])
         return super().validate(attrs)
 
@@ -27,6 +40,12 @@ class CreateTicketSerializer(serializers.Serializer):
         self.user = user
         self.json_dict = json_dict
         super().__init__(**kwargs)
+    
+    # def validate(self, attrs):
+    #     self.account_type = validate_account_type(self.json_dict)
+    #     self.customer = Customer.objects.get(user=self.user_id)
+    #     validate_no_repeated_application(self.customer, self.account_type)
+    #     return super().validate(attrs)
 
     def create(self, validated_data):
         ticket_type = validated_data['ticket_type']
