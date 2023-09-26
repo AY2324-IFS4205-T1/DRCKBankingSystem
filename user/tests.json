@@ -176,7 +176,6 @@
         "pk": "073eb525-7eb8-4ac7-a372-0955465cfb80",
         "fields": {
             "ticket_type": "Opening Account",
-            "account_type": 3,
             "status": "Open",
             "created_by": 1,
             "created_date": "2023-09-17T18:35:50.234Z",
@@ -189,7 +188,6 @@
         "pk": "0d9cd690-5141-4e99-8fd0-992ca2ecfa9c",
         "fields": {
             "ticket_type": "Opening Account",
-            "account_type": 1,
             "status": "Approved",
             "created_by": 1,
             "created_date": "2023-09-17T18:35:36.857Z",
@@ -202,7 +200,6 @@
         "pk": "4581a8c1-93b1-4a86-b882-eba9191d36ab",
         "fields": {
             "ticket_type": "Opening Account",
-            "account_type": 1,
             "status": "Approved",
             "created_by": 2,
             "created_date": "2023-09-17T18:36:19.700Z",
@@ -215,7 +212,6 @@
         "pk": "ce77f63a-063b-43d0-b7f3-85972b8f81c4",
         "fields": {
             "ticket_type": "Opening Account",
-            "account_type": 2,
             "status": "Rejected",
             "created_by": 1,
             "created_date": "2023-09-17T18:35:43.138Z",
