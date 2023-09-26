@@ -25,11 +25,10 @@ from customer.views import (CustomerLoginView, CustomerWelcomeView, Transactions
 from staff.views import (ApproveView, GetClosedTicketsView, GetOpenTicketsView, TicketDetailsView,
                          RejectView, StaffLoginView, StaffRegistrationView, StaffWelcomeView)
 
-from user.views import AuthenticationTypeCheckView
+from user.views import AuthenticationTypeCheckView, SetupTwoFactorAuthenticationView, VerifyTwoFactorAuthenticationView
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
-  
     # Customer
     path("customer/register", CustomerRegistrationView.as_view(), name="customerRegister"),
     path("customer/login", CustomerLoginView.as_view(), name="customerLogin"),
@@ -44,7 +43,7 @@ urlpatterns = [
     path("customer/ticket/<ticket_id>", CustomerTicketView.as_view(), name="customerTicket"),
 
     # Staff
-    path('staff/register', StaffRegistrationView.as_view(), name='staffRegister'),
+    path("staff/register", StaffRegistrationView.as_view(), name="staffRegister"),
     path("staff/login", StaffLoginView.as_view(), name="staffLogin"),
     path("staff/welcome", StaffWelcomeView.as_view(), name="staffWelcome"),
     path("staff/approve", ApproveView.as_view(), name="approve"),
@@ -57,4 +56,8 @@ urlpatterns = [
     path('logout', knox_views.LogoutView.as_view(), name='logout'),
 
     path('auth_check', AuthenticationTypeCheckView.as_view(), name='auth_check'),
+    
+    # 2 Factor Authentication
+    path("setup_2FA", SetupTwoFactorAuthenticationView.as_view(), name="setup_2fa"),
+    path("verify_2FA", VerifyTwoFactorAuthenticationView.as_view(), name="verify_2fa"),
 ]
