@@ -109,31 +109,34 @@ class StaffTicketView(APIView):
 
     # Get ticket of a customer
     def get(self, request, ticket_id):
-        # Retrieve ticket info
-        ticket = Tickets.objects.filter(ticket=ticket_id).values()[0]
-        value = None
-        if ticket['ticket_type'] == Tickets.TicketType.OPEN_ACCOUNT:
-            value = RequestOpenAccount.objects.filter(ticket_id=ticket_id).values('account_type_id__name')[0]['account_type_id__name']
-            ticket['value'] = value
-        elif ticket['ticket_type'] == Tickets.TicketType.CLOSE_ACCOUNT:
-            value = RequestCloseAccount.objects.get(ticket_id=ticket_id).account_id.account
-            ticket['value'] = value
+        try:
+            # Retrieve ticket info
+            ticket = Tickets.objects.filter(ticket=ticket_id).values()[0]
+            value = None
+            if ticket['ticket_type'] == Tickets.TicketType.OPEN_ACCOUNT:
+                value = RequestOpenAccount.objects.filter(ticket_id=ticket_id).values('account_type_id__name')[0]['account_type_id__name']
+                ticket['value'] = value
+            elif ticket['ticket_type'] == Tickets.TicketType.CLOSE_ACCOUNT:
+                value = RequestCloseAccount.objects.get(ticket_id=ticket_id).account_id.account
+                ticket['value'] = value
 
-        # Retrieve cust info
-        customer = Customer.objects.filter(user_id=ticket['created_by_id']).values()[0]
+            # Retrieve cust info
+            customer = Customer.objects.filter(user_id=ticket['created_by_id']).values()[0]
 
-        # Retrieve email and phone number of user
-        user = User.objects.get(pk=ticket['created_by_id'])
+            # Retrieve email and phone number of user
+            user = User.objects.get(pk=ticket['created_by_id'])
 
-        customer['email']=user.email
-        customer['phone_no']=user.phone_no
+            customer['email']=user.email
+            customer['phone_no']=user.phone_no
 
-        del customer['identity_no']
-        del customer['user_id']
-        del ticket['created_by_id']
+            del customer['identity_no']
+            del customer['user_id']
+            del ticket['created_by_id']
 
-        return Response({'ticket': ticket, 'customer': customer}, status=status.HTTP_200_OK)
-    
+            return Response({'ticket': ticket, 'customer': customer}, status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
 class ApproveView(APIView):
     """
     ticket_id: d1fa1bcc-c558-4f45-86eb-fef2caff0ecb

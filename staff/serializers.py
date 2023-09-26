@@ -29,8 +29,6 @@ class GetAccountTypesSerializer(serializers.Serializer):
 
 class ApproveSerializer(serializers.Serializer):
     def __init__(self, user_id, json_dict, ticket_id, **kwargs):
-        print(user_id)
-        print(json_dict)
         self.user_id = user_id
         self.json_dict = json_dict
         self.json_dict['ticket_id'] = ticket_id
@@ -70,15 +68,14 @@ class ApproveSerializer(serializers.Serializer):
         print(close_account_request.account_id)
 
         close_account_request.account_id.status = Accounts.AccountStatus.CLOSED
-        # account = Accounts.objects.get(account=close_account_request.account_id)
-        # account.status = Accounts.AccountStatus.CLOSED
         close_account_request.account_id.save()
         return close_account_request.account_id
 
 class RejectSerializer(serializers.Serializer):
-    def __init__(self, user_id, json_dict, **kwargs):
+    def __init__(self, user_id, json_dict, ticket_id, **kwargs):
         self.user_id = user_id
         self.json_dict = json_dict
+        self.json_dict['ticket_id'] = ticket_id
         super().__init__(**kwargs)
 
     def validate(self, attrs):

@@ -10,7 +10,7 @@ from user.models import User
 
 good_pass = "G00dP@55word"
 
-# Create your tests here.
+# Crea  te your tests here.
 class TestRegistration(APITestCase):
     def test_should_not_register(self):
         registration_details = {
