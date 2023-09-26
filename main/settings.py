@@ -26,9 +26,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['ifs4205-23s1-1-1-i.comp.nus.edu.sg', '.localhost', '127.0.0.1', '[::1]']
 
 
 # Application definition
@@ -169,6 +169,5 @@ REST_KNOX = {
 
 # CORS header
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
+    "https://ifs4205-23s1-1-1-i.comp.nus.edu.sg:8080",
 ]
