@@ -110,8 +110,6 @@ def retrieve_all_transactions(type):
     
     TESTING PURPOSES: Prints results into file: og_transaction_history.data
     """
-    # all_transactions = list()
-    # testing = []
     query = Transactions.objects.select_related('sender__user', 'recipient__user').filter(
         Q(sender__account=F('sender__account')) | Q(recipient__account=F('recipient__account')),
         transaction_type=type).select_related('sender__user__user', 'recipient__user__user')
@@ -347,7 +345,6 @@ def user_inputs(k, query):
     anonymised data. Performs query on both anonymised data and original data to calculate information 
     loss
     """
-    return {"anonymised": "data"} ## placeholder for testing of API
     new_input = UserInputs(k, query)
 
     if new_input.query == "1": # Average withdrawal amount of Singaporeans for the past 5 years
@@ -364,13 +361,14 @@ def user_inputs(k, query):
 
         # TESTING PURPOSES: Write the first query result to file
         write_first_anon_query(anon_query_result)
-        unanon_query_data, unanon_json = unanonymised_first_query()
+        _, unanon_json = unanonymised_first_query()
         write_to_json_file(unanon_json, "unanon.json")
-        return anon_json, unanon_json
+        return {"anonymised": anon_json,
+                "unanonymised": unanon_json} ## placeholder for testing of API
         
         
 # TESTING PURPOSES: For API Calls
-user_inputs(4, "1")
+# user_inputs(4, "1")
 
 
 

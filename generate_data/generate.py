@@ -9,6 +9,7 @@ import subprocess
 from django.utils.timezone import make_aware
 from django.contrib.auth.hashers import make_password
 
+TRANSACTIONS_MODEL = "customer.Transactions"
 
 
 def get_userids():
@@ -78,7 +79,6 @@ def get_random_datetime():
     current_datetime = datetime.now()
     new = current_datetime.replace(year, month, day, hour, minute, second)
     choose_datetime = min(current_datetime, new)
-    utc_timezone = timezone.utc
     formatted_datetime = choose_datetime.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
     return formatted_datetime
 
@@ -225,7 +225,7 @@ def deposit_entry():
     recipient_account = get_random_account_id(0)
     balance = get_random_balance()
     user_data = {
-            "model": "customer.Transactions",
+            "model": TRANSACTIONS_MODEL,
             "fields": {
                 "transaction_type": "Deposit",
                 "recipient": str(recipient_account),
@@ -240,7 +240,7 @@ def withdrawal_entry():
     sender_account = get_random_account_id(0)
     balance = get_random_balance()
     user_data = {
-            "model": "customer.Transactions",
+            "model": TRANSACTIONS_MODEL,
             "fields": {
                 "transaction_type": "Withdrawal",
                 "sender": str(sender_account),
@@ -256,7 +256,7 @@ def transfer_entry():
     recipient_account = get_random_account_id(sender_account)
     balance = get_random_balance()
     user_data = {
-            "model": "customer.Transactions",
+            "model": TRANSACTIONS_MODEL,
             "fields": {
                 "transaction_type": "Transfer",
                 "sender": str(sender_account),

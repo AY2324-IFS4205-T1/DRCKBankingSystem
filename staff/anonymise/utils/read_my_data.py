@@ -1,5 +1,5 @@
 """
-Read transaction history data set
+Read transaction history data set. Should be able to get rid of this
 """
 
 # !/usr/bin/env python

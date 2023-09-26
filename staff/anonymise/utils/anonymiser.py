@@ -57,7 +57,7 @@ def covert_to_raw(result, intuitive_order, sa_num, qi_num):
             covert_result.append(temp)
     return covert_result
 
-# TODO: Rewrite this to reflect changes
+
 def write_first_anon(result):
     """
     Writes the anonymised data into json format file
@@ -78,7 +78,7 @@ def write_first_anon(result):
     with open("staff/anonymise/data/anonymised.json", "w") as json_file:
         json.dump(anonymised_data, json_file, indent=4)
 
-# TODO: Remove this function if not called (duplicated)
+
 def write_to_file(result, file_name):
     """
     TESTING PURPOSES: Write the anonymized transaction data to anonymized.data 
