@@ -1,5 +1,4 @@
 from django.contrib.auth import login
-from knox.auth import TokenAuthentication
 from knox.views import LoginView as KnoxLoginView
 from rest_framework import permissions, status
 from rest_framework.response import Response
@@ -11,6 +10,7 @@ from customer.serializers import (CreateTicketSerializer, CustomerSerializer,
                                   DepositSerializer,
                                   GetTicketsSerializer, TransferSerializer,
                                   WithdrawSerializer)
+from user.authentication import TokenAndTwoFactorAuthentication
 from user.models import User
 from staff.models import Tickets, RequestOpenAccount, RequestCloseAccount
 from user.serializers import LoginSerializer, UserRegisterSerializer
@@ -77,7 +77,7 @@ class CustomerLoginView(KnoxLoginView):
     
 class CustomerWelcomeView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
-    authentication_classes = (TokenAuthentication, IsCustomer,)
+    authentication_classes = (TokenAndTwoFactorAuthentication, IsCustomer,)
 
     # Displays the user's first name, last name, last login in Dashboard
     def get(self, request):
@@ -91,7 +91,7 @@ class CustomerWelcomeView(APIView):
 
 class AccountTypesView(APIView):
     permission_classes = (permissions.IsAuthenticated, IsCustomer,)
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "non_sensitive_request"
 
     def get(self, request):
@@ -100,7 +100,7 @@ class AccountTypesView(APIView):
 
 class AccountsView(APIView):
     permission_classes = (permissions.IsAuthenticated, IsCustomer,)
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "non_sensitive_request"
     
     # Get all accounts of the user
@@ -110,7 +110,7 @@ class AccountsView(APIView):
     
 class TransactionsView(APIView):
     permission_classes = (permissions.IsAuthenticated, IsCustomer,)
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
 
     # Get all transactions of an account
     def get(self, request, acct_id):
@@ -125,7 +125,7 @@ class TransactionsView(APIView):
 #     account_type: Savings / Credit Card / Investments
 #     '''
 #     permission_classes = (permissions.IsAuthenticated,)
-#     authentication_classes = (TokenAuthentication,)
+#     authentication_classes = (TokenAndTwoFactorAuthentication,)
     
 #     def post(self, request):
 #         serializer = ApplySerializer(request.user, request.data, data=request.data)
@@ -136,7 +136,7 @@ class TransactionsView(APIView):
 
 class CustomerTicketsView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "non_sensitive_request"
     
     def get(self, request):
@@ -155,7 +155,7 @@ class CustomerTicketsView(APIView):
 
 class CustomerTicketView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "non_sensitive_request"
 
     # Get ticket of a customer
@@ -176,7 +176,7 @@ class DepositView(APIView):
     amount: 50
     '''
     permission_classes = (permissions.IsAuthenticated, IsCustomer,)
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "sensitive_request"
     
     def post(self, request):
@@ -197,7 +197,7 @@ class WithdrawView(APIView):
     amount: 50
     '''
     permission_classes = (permissions.IsAuthenticated, IsCustomer,)
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "sensitive_request"
     
     def post(self, request):
@@ -218,7 +218,7 @@ class TransferView(APIView):
     description: string
     '''
     permission_classes = (permissions.IsAuthenticated, IsCustomer,)
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "sensitive_request"
     
     def post(self, request):

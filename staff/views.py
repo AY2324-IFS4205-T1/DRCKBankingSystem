@@ -1,5 +1,4 @@
 from django.contrib.auth import login
-from knox.auth import TokenAuthentication
 from knox.views import LoginView as KnoxLoginView
 from rest_framework import permissions, status
 from rest_framework.response import Response
@@ -7,6 +6,7 @@ from rest_framework.throttling import AnonRateThrottle
 from rest_framework.views import APIView
 
 from staff.permissions import IsStaff, IsTicketReviewer
+from user.authentication import TokenAndTwoFactorAuthentication
 from staff.serializers import (ApproveSerializer, GetClosedTicketsSerializer,
                                GetOpenTicketsSerializer, RejectSerializer,
                                StaffSerializer, TicketDetailsSerializer)
@@ -68,7 +68,7 @@ class StaffLoginView(KnoxLoginView):
 
 class StaffWelcomeView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
 
     # Displays the user's first name, last name, last login in Dashboard
     def get(self, request):
@@ -82,7 +82,7 @@ class StaffWelcomeView(APIView):
 
 class GetOpenTicketsView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
 
     def get(self, request):
         serializer = GetOpenTicketsSerializer().get_open_tickets_list()
@@ -91,7 +91,7 @@ class GetOpenTicketsView(APIView):
 
 class GetClosedTicketsView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
 
     def get(self, request):
         serializer = GetClosedTicketsSerializer(request.user).get_closed_tickets_list()
@@ -99,7 +99,7 @@ class GetClosedTicketsView(APIView):
 
 # class TicketDetailsView(APIView):
 #     permission_classes = (permissions.IsAuthenticated,)
-#     authentication_classes = (TokenAuthentication,)
+#     authentication_classes = (TokenAndTwoFactorAuthentication,)
 
 #     def post(self, request):
 #         serializer = TicketDetailsSerializer(request.user, request.data, data=request.data)
@@ -110,7 +110,7 @@ class GetClosedTicketsView(APIView):
 
 class StaffTicketView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
 
     # Get ticket of a customer
     def get(self, request, ticket_id):
@@ -148,7 +148,7 @@ class ApproveView(APIView):
     """
 
     permission_classes = (permissions.IsAuthenticated, IsStaff, IsTicketReviewer,)
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "sensitive_request"
 
     def post(self, request, ticket_id):
@@ -165,7 +165,7 @@ class RejectView(APIView):
     """
 
     permission_classes = (permissions.IsAuthenticated, IsStaff, IsTicketReviewer,)
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "sensitive_request"
 
     def post(self, request, ticket_id):
@@ -177,7 +177,7 @@ class RejectView(APIView):
 
 class GetOpenTicketsView(APIView):
     permission_classes = (permissions.IsAuthenticated, IsStaff, IsTicketReviewer,)
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "non_sensitive_request"
 
     def get(self, request):
@@ -187,7 +187,7 @@ class GetOpenTicketsView(APIView):
 
 class GetClosedTicketsView(APIView):
     permission_classes = (permissions.IsAuthenticated, IsStaff, IsTicketReviewer,)
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "non_sensitive_request"
 
     def get(self, request):
@@ -197,7 +197,7 @@ class GetClosedTicketsView(APIView):
 
 class TicketDetailsView(APIView):
     permission_classes = (permissions.IsAuthenticated, IsStaff, IsTicketReviewer,)
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "non_sensitive_request"
 
     def post(self, request):

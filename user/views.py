@@ -6,10 +6,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from knox.auth import TokenAuthentication
+from knox.views import LogoutView as KnoxLogoutView
 
-from user.serializers import GetTwoFASerializer, VerifyTwoFASerializer
+from user.serializers import GetTwoFASerializer, RemoveTwoFASerializer, VerifyTwoFASerializer
 
-# Create your views here.
 class AuthenticationTypeCheckView(APIView):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
@@ -23,7 +23,11 @@ class AuthenticationTypeCheckView(APIView):
         
         return Response(status=status.HTTP_200_OK)
     
-# Create your views here.
+class LogoutView(KnoxLogoutView):
+    def post(self, request, format=None):
+        RemoveTwoFASerializer(request.user)
+        return super().post(request, format)
+
 class SetupTwoFactorAuthenticationView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
     authentication_classes = (TokenAuthentication,)
@@ -39,9 +43,9 @@ class VerifyTwoFactorAuthenticationView(APIView):
 
     def post(self, request):
         serializer = VerifyTwoFASerializer(
-            request.user, request.data, data=request.data
+            request.user, request.data, request.headers.get('Authorization'), data=request.data
         )
         if serializer.is_valid():
-            result = {"result": serializer.verify()}
-            return Response(result, status=status.HTTP_200_OK)
+            json_result = serializer.verify()
+            return Response(json_result, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
