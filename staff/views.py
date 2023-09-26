@@ -60,6 +60,8 @@ class StaffLoginView(KnoxLoginView):
             login(request, user)
             response = super().post(request, format=None)
 
+            response.data["type"] = User.user_type.STAFF
+            
             return Response(response.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
