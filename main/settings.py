@@ -37,7 +37,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 # ]
 
 
-ALLOWED_HOSTS = ['ifs4205-23s1-1-1-i.comp.nus.edu.sg', '.localhost', '127.0.0.1', '[::1]', '192.168.37.140'] #need to put django own ip for some reason??
+ALLOWED_HOSTS = ['ifs4205-23s1-1-2-i.comp.nus.edu.sg', '.localhost', '127.0.0.1', '[::1]', '192.168.37.140'] #need to put django own ip for some reason??
 
 
 # Application definition
