@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate
 from rest_framework import serializers
 
 from user.twofa import generate_qr, verify_otp
-from user.validations import validate_otp, validate_user_2fa
+from user.validations import validate_new_user, validate_otp, validate_user_2fa
 
 from .models import TwoFA, User
 
@@ -16,8 +16,17 @@ class UserRegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('username', 'email', 'phone_no', 'password')
+    
+    def __init__(self, user_type, instance=None, data=..., **kwargs):
+        self.user_type = user_type
+        super().__init__(instance, data, **kwargs)
 
-    def create(self, validated_data):        
+    def validate(self, attrs):
+        username = attrs['username']
+        validate_new_user(username, self.user_type)
+        return super().validate(attrs)
+    
+    def create(self, validated_data):
         return User.objects.create_user(**validated_data)
 
 
@@ -26,12 +35,14 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField()
     user_type = serializers.SerializerMethodField()
 
+    def __init__(self, user_type, instance=None, data=..., **kwargs):
+        self.user_type = user_type
+        super().__init__(instance, data, **kwargs)
+
     def validate(self, data):
         username = data['username']
         password = data['password']
-        user_type = self.context['type']
-        user = authenticate(request=self.context.get('request'), username=username, password=password, type=user_type)
-
+        user = authenticate(request=self.context.get('request'), username=username, password=password, type=self.user_type)
         if not user:
             raise serializers.ValidationError()
         

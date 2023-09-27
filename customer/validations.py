@@ -5,6 +5,7 @@ from django.core import exceptions
 from rest_framework.serializers import ValidationError
 
 from customer.models import Accounts, AccountTypes, Customer
+from staff.models import Tickets
 
 
 def validate_nric_and_citizenship(nric, citizenship, birth_date):
@@ -35,6 +36,12 @@ def validate_account_type(json_dict):
         raise ValidationError("Account type given does not exist.")
 
     return account_type
+
+
+def validate_no_repeated_application(customer, account_type):
+    open_tickets = Tickets.objects.filter(created_by=customer, account_type=account_type, status=Tickets.TicketStatus.OPEN)
+    if len(open_tickets) != 0:
+        raise ValidationError("Customer has already applied for this account type.")
 
 
 def validate_account(json_dict, id_type="account_id"):

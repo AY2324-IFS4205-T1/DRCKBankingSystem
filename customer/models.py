@@ -1,5 +1,5 @@
-from decimal import Decimal
 import uuid
+from decimal import Decimal
 
 from django.core.validators import RegexValidator
 from django.db import models
@@ -38,7 +38,7 @@ class AccountTypes(models.Model):
         db_table = 'customer"."account_types'
 
     type = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, unique=True)
 
 
 class Accounts(models.Model):
