@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
-import os
+import os, sys
 from pathlib import Path
 from datetime import timedelta
 import sys
@@ -29,11 +29,18 @@ SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# CORS header
+CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOWED_ORIGINS = [
+#     "https://ifs4205-23s1-1-1-i.comp.nus.edu.sg:8080",
+#     "http://192.168.37.141:8080"
+# ]
+
+
+ALLOWED_HOSTS = ['ifs4205-23s1-1-1-i.comp.nus.edu.sg', '.localhost', '127.0.0.1', '[::1]', '192.168.37.141']
 
 
 # Application definition
-
 INSTALLED_APPS = [
     #'django.contrib.admin',
     'django.contrib.auth',
@@ -52,12 +59,12 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
 ]
 
@@ -84,24 +91,50 @@ WSGI_APPLICATION = 'main.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'OPTIONS': {
-            'options': '-c search_path=django'
+if 'migrate' in sys.argv or 'makemigrations' in sys.argv:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'OPTIONS': {
+                'options': '-c search_path=django',
+                'sslmode': 'verify-ca',
+                'sslcert': os.environ["CLIENT_CERT"],
+                'sslkey': os.environ["CLIENT_KEY"],
+                'sslrootcert': os.environ["CA_CERT"],    
+            },
+            'NAME': os.environ["POSTGRES_DBNAME_AUTH"],
+            'USER': os.environ["POSTGRES_USERMIGRATE_AUTH"],
+            'PASSWORD': os.environ["POSTGRES_USERMIGRATE_PASSWORD_AUTH"],
+            'HOST': os.environ["POSTGRES_HOST_AUTH"],
+            'PORT': os.environ["POSTGRES_PORT_AUTH"],
+            'TEST': {
+                'NAME': 'test_drck_banking',
+            }
         },
-        'NAME': os.environ["POSTGRES_DBNAME_AUTH"],
-        'USER': os.environ["POSTGRES_USER_AUTH"],
-        'PASSWORD': os.environ["POSTGRES_PASSWORD_AUTH"],
-        'HOST': os.environ["POSTGRES_HOST_AUTH"],
-        'PORT': os.environ["POSTGRES_PORT_AUTH"],
-        'TEST': {
-            'NAME': 'test_drck_banking',
-        }
-    },
-}
-
+    }
+    print("Using database config for migrations")
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'OPTIONS': {
+                'options': '-c search_path=django',
+                'sslmode': 'verify-ca',
+                'sslcert': os.environ["CLIENT_CERT"],
+                'sslkey': os.environ["CLIENT_KEY"],
+                'sslrootcert': os.environ["CA_CERT"],    
+            },
+            'NAME': os.environ["POSTGRES_DBNAME_AUTH"],
+            'USER': os.environ["POSTGRES_USER_AUTH"],
+            'PASSWORD': os.environ["POSTGRES_PASSWORD_AUTH"],
+            'HOST': os.environ["POSTGRES_HOST_AUTH"],
+            'PORT': os.environ["POSTGRES_PORT_AUTH"],
+            'TEST': {
+                'NAME': 'test_drck_banking',
+            }
+        },
+    }
+    print("Using database config for application")    
 
 
 # Password validation
@@ -215,14 +248,9 @@ REST_KNOX = {
     'EXPIRY_DATETIME_FORMAT': api_settings.DATETIME_FORMAT,
 }
 
-# CORS header
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-]
-
 # Clickjacking
 X_FRAME_OPTIONS = "DENY"
 
 # Race Conditions
 ATOMIC_REQUESTS = True
+
