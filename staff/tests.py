@@ -126,6 +126,7 @@ class TestTicketDetails(TestAuthentication): # staff action
 
 
 class TestAnonymisation(TestAuthentication): # staff action
+    fixtures = ["generate_data/fixtures/massive_json.json"]
     def test_should_not_anonymise(self):
         bad_k_value_field = {"kkkk_value": "", "query": ""}
         bad_query_field = {"k_value": "", "qqqquery": ""}

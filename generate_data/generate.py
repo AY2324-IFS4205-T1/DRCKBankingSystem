@@ -8,6 +8,7 @@ from django.utils import timezone
 import subprocess
 from django.utils.timezone import make_aware
 from django.contrib.auth.hashers import make_password
+import os
 
 TRANSACTIONS_MODEL = "customer.Transactions"
 
@@ -160,7 +161,8 @@ def generate_auth_user(num_users):
         username = f"test{i}"
         hash_password = make_password(generate_random_password())
         user_data = {
-            "model": "user.User",
+            "pk": i,
+            "model": "user.user",
             "fields": {
                 "username": username,
                 "password": hash_password,
@@ -183,6 +185,7 @@ def generate_customer():
 
     for i, user_id in enumerate(user_ids):
         user_data = {
+            "pk": user_id, 
             "model": "customer.Customer",
             "fields": {
                 "user": str(user_id),
@@ -297,8 +300,10 @@ def load_data(fixture_file):
         print(f"Command failed with error: {e}")
 
 
+
 # Main Function
 # Define number of users you want to generate
+# os.system("python manage.py flush --no-input")
 generate_auth_user(30)
 load_data("generate_data/fixtures/auth_users.json")
 
@@ -316,3 +321,6 @@ generate_transaction(300)
 load_data("generate_data/fixtures/transactions.json")
 
 print("Customer schema is populated!")
+
+# os.system("python manage.py dumpdata > generate_data/fixtures/massive_json.json")
+print("Exported JSON!")
