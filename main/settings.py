@@ -28,6 +28,14 @@ SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
+# CORS header
+CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOWED_ORIGINS = [
+#     "https://ifs4205-23s1-1-1-i.comp.nus.edu.sg:8080",
+#     "http://192.168.37.141:8080"
+# ]
+
+
 ALLOWED_HOSTS = ['ifs4205-23s1-1-1-i.comp.nus.edu.sg', '.localhost', '127.0.0.1', '[::1]', '192.168.37.141']
 
 
@@ -189,9 +197,3 @@ REST_KNOX = {
     'EXPIRY_DATETIME_FORMAT': api_settings.DATETIME_FORMAT,
 }
 
-# CORS header
-CORS_ALLOW_ALL_ORIGINS = True
-# CORS_ALLOWED_ORIGINS = [
-#     "https://ifs4205-23s1-1-1-i.comp.nus.edu.sg:8080",
-#     "http://192.168.37.141:8080"
-# ]
