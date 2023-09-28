@@ -303,7 +303,6 @@ def load_data(fixture_file):
 
 # Main Function
 # Define number of users you want to generate
-# os.system("python manage.py flush --no-input")
 generate_auth_user(30)
 load_data("generate_data/fixtures/auth_users.json")
 
@@ -322,5 +321,4 @@ load_data("generate_data/fixtures/transactions.json")
 
 print("Customer schema is populated!")
 
-# os.system("python manage.py dumpdata > generate_data/fixtures/massive_json.json")
 print("Exported JSON!")
