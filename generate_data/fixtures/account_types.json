@@ -2,19 +2,19 @@
     {
         "model": "customer.AccountTypes",
         "fields": {
-            "name": "savings"
+            "name": "Savings"
         }
     },
     {
         "model": "customer.AccountTypes",
         "fields": {
-            "name": "credit card"
+            "name": "Credit card"
         }
     },
     {
         "model": "customer.AccountTypes",
         "fields": {
-            "name": "investments"
+            "name": "Investments"
         }
     }
 ]

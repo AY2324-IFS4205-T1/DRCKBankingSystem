@@ -22,7 +22,7 @@ from customer.views import (CustomerLoginView, CustomerWelcomeView, Transactions
                             CustomerRegistrationView, DepositView,
                             AccountTypesView, AccountsView, CustomerTicketsView, TransferView,
                             WithdrawView, CustomerTicketView)
-from staff.views import (ApproveView, GetClosedTicketsView, GetOpenTicketsView, StaffTicketView,
+from staff.views import (AnonymisationView, ApproveView, GetClosedTicketsView, GetOpenTicketsView, StaffTicketView,
                          RejectView, StaffLoginView, StaffRegistrationView, StaffWelcomeView)
 
 from user.views import AuthenticationTypeCheckView, SetupTwoFactorAuthenticationView, VerifyTwoFactorAuthenticationView
@@ -51,10 +51,10 @@ urlpatterns = [
     path("staff/ticket/<ticket_id>", StaffTicketView.as_view(), name="ticketDetails"),
     path("staff/ticket/<ticket_id>/approve", ApproveView.as_view(), name="ticketApprove"),
     path("staff/ticket/<ticket_id>/reject", RejectView.as_view(), name="ticketReject"),
+    path("staff/anonymisation", AnonymisationView.as_view(), name="anonymisation"),
 
     #In logout, header key: Authorization, Value: Token 3510ff361b..
     path('logout', knox_views.LogoutView.as_view(), name='logout'),
-
     path('auth_check', AuthenticationTypeCheckView.as_view(), name='auth_check'),
     
     # 2 Factor Authentication

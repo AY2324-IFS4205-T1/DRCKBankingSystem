@@ -7,7 +7,7 @@ from rest_framework.throttling import AnonRateThrottle
 from rest_framework.views import APIView
 
 from staff.permissions import IsStaff, IsTicketReviewer
-from staff.serializers import (ApproveSerializer, GetClosedTicketsSerializer,
+from staff.serializers import (AnonymisationSerializer, ApproveSerializer, GetClosedTicketsSerializer,
                                GetOpenTicketsSerializer, RejectSerializer,
                                StaffSerializer, TicketDetailsSerializer)
 from staff.models import Tickets, RequestCloseAccount, RequestOpenAccount
@@ -204,5 +204,17 @@ class TicketDetailsView(APIView):
         serializer = TicketDetailsSerializer(request.user, request.data, data=request.data)
         if serializer.is_valid():
             serializer = serializer.get_ticket_details()
+            return Response(serializer, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class AnonymisationView(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
+
+    def post(self, request):
+        serializer = AnonymisationSerializer(request.user, request.data, data=request.data)
+        if serializer.is_valid():
+            serializer = serializer.get_anonymised_data()
             return Response(serializer, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
