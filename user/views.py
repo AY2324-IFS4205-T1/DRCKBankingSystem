@@ -13,20 +13,16 @@ from user.serializers import GetTwoFASerializer, RemoveTwoFASerializer, VerifyTw
 class AuthenticationTypeCheckView(APIView):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
-    
-    # Check if user is authenticated and see if the database user type and request user type matches
+
     def get(self, request):
-        # Retrieves the request user type
-        input_user_type = request.headers['Type']
-        if input_user_type != self.request.user.type:
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
-        
-        return Response(status=status.HTTP_200_OK)
-    
+        return Response({"user_type": request.user.type}, status=status.HTTP_200_OK)
+
+
 class LogoutView(KnoxLogoutView):
     def post(self, request, format=None):
         RemoveTwoFASerializer(request.user)
         return super().post(request, format)
+
 
 class SetupTwoFactorAuthenticationView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
@@ -38,6 +34,9 @@ class SetupTwoFactorAuthenticationView(APIView):
 
 
 class VerifyTwoFactorAuthenticationView(APIView):
+    '''
+    otp: 12345678
+    '''
     permission_classes = (permissions.IsAuthenticated,)
     authentication_classes = (TokenAuthentication,)
 

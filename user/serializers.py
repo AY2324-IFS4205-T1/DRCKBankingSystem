@@ -1,6 +1,6 @@
 from secrets import choice
 from string import ascii_letters
-
+from pyotp import random_base32
 from django.contrib.auth import authenticate
 from django.utils import timezone
 from rest_framework import serializers
@@ -58,7 +58,7 @@ class GetTwoFASerializer(serializers.Serializer):
     
     def get_qr_code(self):
         two_fa = TwoFA.objects.get_or_create(user=self.user)[0]
-        two_fa.key = ''.join(choice(ascii_letters) for _ in range(1024))
+        two_fa.key = random_base32()
         two_fa.save()
         return generate_qr(two_fa.key, self.user.username)
 
@@ -86,7 +86,7 @@ class VerifyTwoFASerializer(serializers.Serializer):
             self.two_fa.last_authenticated = None
             self.two_fa.knox_token = ""
         self.two_fa.save()
-        return {"result": result, "last_authenticated": self.two_fa.last_authenticated}
+        return {"2FA success": result, "last_authenticated": self.two_fa.last_authenticated}
 
 
 class RemoveTwoFASerializer(serializers.Serializer):

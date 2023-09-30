@@ -1,0 +1,1056 @@
+[
+    {
+        "model": "auth.permission",
+        "pk": 1,
+        "fields": {
+            "name": "Can add permission",
+            "content_type": 1,
+            "codename": "add_permission"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 2,
+        "fields": {
+            "name": "Can change permission",
+            "content_type": 1,
+            "codename": "change_permission"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 3,
+        "fields": {
+            "name": "Can delete permission",
+            "content_type": 1,
+            "codename": "delete_permission"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 4,
+        "fields": {
+            "name": "Can view permission",
+            "content_type": 1,
+            "codename": "view_permission"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 5,
+        "fields": {
+            "name": "Can add group",
+            "content_type": 2,
+            "codename": "add_group"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 6,
+        "fields": {
+            "name": "Can change group",
+            "content_type": 2,
+            "codename": "change_group"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 7,
+        "fields": {
+            "name": "Can delete group",
+            "content_type": 2,
+            "codename": "delete_group"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 8,
+        "fields": {
+            "name": "Can view group",
+            "content_type": 2,
+            "codename": "view_group"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 9,
+        "fields": {
+            "name": "Can add content type",
+            "content_type": 3,
+            "codename": "add_contenttype"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 10,
+        "fields": {
+            "name": "Can change content type",
+            "content_type": 3,
+            "codename": "change_contenttype"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 11,
+        "fields": {
+            "name": "Can delete content type",
+            "content_type": 3,
+            "codename": "delete_contenttype"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 12,
+        "fields": {
+            "name": "Can view content type",
+            "content_type": 3,
+            "codename": "view_contenttype"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 13,
+        "fields": {
+            "name": "Can add session",
+            "content_type": 4,
+            "codename": "add_session"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 14,
+        "fields": {
+            "name": "Can change session",
+            "content_type": 4,
+            "codename": "change_session"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 15,
+        "fields": {
+            "name": "Can delete session",
+            "content_type": 4,
+            "codename": "delete_session"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 16,
+        "fields": {
+            "name": "Can view session",
+            "content_type": 4,
+            "codename": "view_session"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 17,
+        "fields": {
+            "name": "Can add auth token",
+            "content_type": 5,
+            "codename": "add_authtoken"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 18,
+        "fields": {
+            "name": "Can change auth token",
+            "content_type": 5,
+            "codename": "change_authtoken"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 19,
+        "fields": {
+            "name": "Can delete auth token",
+            "content_type": 5,
+            "codename": "delete_authtoken"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 20,
+        "fields": {
+            "name": "Can view auth token",
+            "content_type": 5,
+            "codename": "view_authtoken"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 21,
+        "fields": {
+            "name": "Can add user",
+            "content_type": 6,
+            "codename": "add_user"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 22,
+        "fields": {
+            "name": "Can change user",
+            "content_type": 6,
+            "codename": "change_user"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 23,
+        "fields": {
+            "name": "Can delete user",
+            "content_type": 6,
+            "codename": "delete_user"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 24,
+        "fields": {
+            "name": "Can view user",
+            "content_type": 6,
+            "codename": "view_user"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 25,
+        "fields": {
+            "name": "Can add two fa",
+            "content_type": 7,
+            "codename": "add_twofa"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 26,
+        "fields": {
+            "name": "Can change two fa",
+            "content_type": 7,
+            "codename": "change_twofa"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 27,
+        "fields": {
+            "name": "Can delete two fa",
+            "content_type": 7,
+            "codename": "delete_twofa"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 28,
+        "fields": {
+            "name": "Can view two fa",
+            "content_type": 7,
+            "codename": "view_twofa"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 29,
+        "fields": {
+            "name": "Can add accounts",
+            "content_type": 8,
+            "codename": "add_accounts"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 30,
+        "fields": {
+            "name": "Can change accounts",
+            "content_type": 8,
+            "codename": "change_accounts"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 31,
+        "fields": {
+            "name": "Can delete accounts",
+            "content_type": 8,
+            "codename": "delete_accounts"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 32,
+        "fields": {
+            "name": "Can view accounts",
+            "content_type": 8,
+            "codename": "view_accounts"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 33,
+        "fields": {
+            "name": "Can add account types",
+            "content_type": 9,
+            "codename": "add_accounttypes"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 34,
+        "fields": {
+            "name": "Can change account types",
+            "content_type": 9,
+            "codename": "change_accounttypes"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 35,
+        "fields": {
+            "name": "Can delete account types",
+            "content_type": 9,
+            "codename": "delete_accounttypes"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 36,
+        "fields": {
+            "name": "Can view account types",
+            "content_type": 9,
+            "codename": "view_accounttypes"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 37,
+        "fields": {
+            "name": "Can add customer",
+            "content_type": 10,
+            "codename": "add_customer"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 38,
+        "fields": {
+            "name": "Can change customer",
+            "content_type": 10,
+            "codename": "change_customer"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 39,
+        "fields": {
+            "name": "Can delete customer",
+            "content_type": 10,
+            "codename": "delete_customer"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 40,
+        "fields": {
+            "name": "Can view customer",
+            "content_type": 10,
+            "codename": "view_customer"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 41,
+        "fields": {
+            "name": "Can add transactions",
+            "content_type": 11,
+            "codename": "add_transactions"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 42,
+        "fields": {
+            "name": "Can change transactions",
+            "content_type": 11,
+            "codename": "change_transactions"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 43,
+        "fields": {
+            "name": "Can delete transactions",
+            "content_type": 11,
+            "codename": "delete_transactions"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 44,
+        "fields": {
+            "name": "Can view transactions",
+            "content_type": 11,
+            "codename": "view_transactions"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 45,
+        "fields": {
+            "name": "Can add staff",
+            "content_type": 12,
+            "codename": "add_staff"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 46,
+        "fields": {
+            "name": "Can change staff",
+            "content_type": 12,
+            "codename": "change_staff"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 47,
+        "fields": {
+            "name": "Can delete staff",
+            "content_type": 12,
+            "codename": "delete_staff"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 48,
+        "fields": {
+            "name": "Can view staff",
+            "content_type": 12,
+            "codename": "view_staff"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 49,
+        "fields": {
+            "name": "Can add tickets",
+            "content_type": 13,
+            "codename": "add_tickets"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 50,
+        "fields": {
+            "name": "Can change tickets",
+            "content_type": 13,
+            "codename": "change_tickets"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 51,
+        "fields": {
+            "name": "Can delete tickets",
+            "content_type": 13,
+            "codename": "delete_tickets"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 52,
+        "fields": {
+            "name": "Can view tickets",
+            "content_type": 13,
+            "codename": "view_tickets"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 53,
+        "fields": {
+            "name": "Can add request close account",
+            "content_type": 14,
+            "codename": "add_requestcloseaccount"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 54,
+        "fields": {
+            "name": "Can change request close account",
+            "content_type": 14,
+            "codename": "change_requestcloseaccount"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 55,
+        "fields": {
+            "name": "Can delete request close account",
+            "content_type": 14,
+            "codename": "delete_requestcloseaccount"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 56,
+        "fields": {
+            "name": "Can view request close account",
+            "content_type": 14,
+            "codename": "view_requestcloseaccount"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 57,
+        "fields": {
+            "name": "Can add request open account",
+            "content_type": 15,
+            "codename": "add_requestopenaccount"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 58,
+        "fields": {
+            "name": "Can change request open account",
+            "content_type": 15,
+            "codename": "change_requestopenaccount"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 59,
+        "fields": {
+            "name": "Can delete request open account",
+            "content_type": 15,
+            "codename": "delete_requestopenaccount"
+        }
+    },
+    {
+        "model": "auth.permission",
+        "pk": 60,
+        "fields": {
+            "name": "Can view request open account",
+            "content_type": 15,
+            "codename": "view_requestopenaccount"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 1,
+        "fields": {
+            "app_label": "auth",
+            "model": "permission"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 2,
+        "fields": {
+            "app_label": "auth",
+            "model": "group"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 3,
+        "fields": {
+            "app_label": "contenttypes",
+            "model": "contenttype"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 4,
+        "fields": {
+            "app_label": "sessions",
+            "model": "session"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 5,
+        "fields": {
+            "app_label": "knox",
+            "model": "authtoken"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 6,
+        "fields": {
+            "app_label": "user",
+            "model": "user"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 7,
+        "fields": {
+            "app_label": "user",
+            "model": "twofa"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 8,
+        "fields": {
+            "app_label": "customer",
+            "model": "accounts"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 9,
+        "fields": {
+            "app_label": "customer",
+            "model": "accounttypes"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 10,
+        "fields": {
+            "app_label": "customer",
+            "model": "customer"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 11,
+        "fields": {
+            "app_label": "customer",
+            "model": "transactions"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 12,
+        "fields": {
+            "app_label": "staff",
+            "model": "staff"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 13,
+        "fields": {
+            "app_label": "staff",
+            "model": "tickets"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 14,
+        "fields": {
+            "app_label": "staff",
+            "model": "requestcloseaccount"
+        }
+    },
+    {
+        "model": "contenttypes.contenttype",
+        "pk": 15,
+        "fields": {
+            "app_label": "staff",
+            "model": "requestopenaccount"
+        }
+    },
+    {
+        "model": "sessions.session",
+        "pk": "aqq3cfqg2meb0vz40dietjtthsssis5q",
+        "fields": {
+            "session_data": ".eJxVi8sOwiAQAP-Fs2naXSrizY_wTJZ9BGKCiW1Pxn8XbnqcmczbJTr2ko5NX6mKuzpwp1-XiR_aRhg4jaBtr0x7fbbp3t2tq_-n0Fb6IObPGUNGM68yKxqxzkF9kCWaMi6CDBkuAKvGaCbgjeNqCJ6Cz-7zBSvfNIY:1qmXKj:2ARx-OF6CyKcC5sRr0j6gzOnrGsuhKbA8u19whBQOIs",
+            "expire_date": "2023-10-14T10:36:25.659Z"
+        }
+    },
+    {
+        "model": "knox.authtoken",
+        "pk": "7238747af07873b21a8e65aca1929c900a69698a11e1bb96e1e00d77f272200026dd261a8084258b3e0ef391cd1c6b2c569fa1515109fa2ce5d5a34a94f7430f",
+        "fields": {
+            "token_key": "ff0a79bd",
+            "user": 3,
+            "created": "2023-09-30T09:47:36.198Z",
+            "expiry": "2023-09-30T10:32:36.196Z"
+        }
+    },
+    {
+        "model": "knox.authtoken",
+        "pk": "84825b4675f408488037046495832044b5c0f2f0711647d01ec884980e9e0e416c5d464f8caa8f2a61b3f4e7c2376890b5a407e48575359ddd158809ffa7c835",
+        "fields": {
+            "token_key": "cf4ac104",
+            "user": 2,
+            "created": "2023-09-30T10:36:25.650Z",
+            "expiry": "2023-09-30T11:21:25.650Z"
+        }
+    },
+    {
+        "model": "knox.authtoken",
+        "pk": "cf733e4c2af2a26c00da0887a3a24ab7ac2288feb975d7ab248e1acab5ef589896823eb7ba7d1ad1264b532d7e52529c9ac66a180287a0e3990efba502330278",
+        "fields": {
+            "token_key": "2e6eafb3",
+            "user": 1,
+            "created": "2023-09-30T10:32:16.604Z",
+            "expiry": "2023-09-30T11:17:16.603Z"
+        }
+    },
+    {
+        "model": "user.user",
+        "pk": 1,
+        "fields": {
+            "is_superuser": false,
+            "username": "test1",
+            "password": "pbkdf2_sha256$600000$7dWNkOQWJaIEKl055sTmlS$+wUcsENxJpuWY0LXGz+vclSuflsjYzpP1f9XqBUEQdU=",
+            "email": "test1@gmail.com",
+            "phone_no": "12345678",
+            "type": "Customer",
+            "date_joined": "2023-09-30T07:56:50.887Z",
+            "last_login": "2023-09-30T10:32:16.607Z",
+            "is_active": true,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "user.user",
+        "pk": 2,
+        "fields": {
+            "is_superuser": false,
+            "username": "test2",
+            "password": "pbkdf2_sha256$600000$amCVcyr2nwrjGoN9wSH9DP$5KGpJmUcJ+IFk9KLCaPx3aSO/uTr85c3aqT7uUzE9Tw=",
+            "email": "test2@gmail.com",
+            "phone_no": "12345678",
+            "type": "Customer",
+            "date_joined": "2023-09-30T07:58:44.102Z",
+            "last_login": "2023-09-30T10:36:25.652Z",
+            "is_active": true,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "user.user",
+        "pk": 3,
+        "fields": {
+            "is_superuser": false,
+            "username": "staff1",
+            "password": "pbkdf2_sha256$600000$o1XlvuKlbn51cNgK04autd$wO9pQBfh2QllntII2fSQDaL0O3jbuPa+TU/8sgm9Ovo=",
+            "email": "staff1@gmail.com",
+            "phone_no": "12345678",
+            "type": "Staff",
+            "date_joined": "2023-09-30T09:02:16.196Z",
+            "last_login": "2023-09-30T09:47:36.205Z",
+            "is_active": true,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "user.user",
+        "pk": 4,
+        "fields": {
+            "is_superuser": false,
+            "username": "staff2",
+            "password": "pbkdf2_sha256$600000$E6o1zj51YsAgWf1hrn88MT$RVmQPA6NtNBZvPpjJ1jvn4cUaOtAp8eXlCz+hewJY7k=",
+            "email": "staff2@gmail.com",
+            "phone_no": "12345678",
+            "type": "Staff",
+            "date_joined": "2023-09-30T11:29:02.160Z",
+            "last_login": "2023-09-30T11:29:02.160Z",
+            "is_active": true,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "user.user",
+        "pk": 5,
+        "fields": {
+            "is_superuser": false,
+            "username": "staff3",
+            "password": "pbkdf2_sha256$600000$LpHNPsGa3Bo4fOSISBxHmp$nJrW6f+qAXxmg4kyZtcMTLsQ6hPeoL4+Nw4OLIlZLsM=",
+            "email": "staff3@gmail.com",
+            "phone_no": "12345678",
+            "type": "Staff",
+            "date_joined": "2023-09-30T11:30:05.096Z",
+            "last_login": "2023-09-30T11:30:05.096Z",
+            "is_active": true,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "user.user",
+        "pk": 6,
+        "fields": {
+            "is_superuser": false,
+            "username": "staff4",
+            "password": "pbkdf2_sha256$600000$WKrxJgcZGaGfpqE1qWw6RZ$lNLPVsfTYqv790811V+qzmeM7/U4RcITInsRPYCPmKs=",
+            "email": "staff4@gmail.com",
+            "phone_no": "12345678",
+            "type": "Staff",
+            "date_joined": "2023-09-30T11:30:37.638Z",
+            "last_login": "2023-09-30T11:30:37.638Z",
+            "is_active": true,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "user.twofa",
+        "pk": 1,
+        "fields": {
+            "key": "usTVpXoQcymukKyBfsNpdiZqqSiJzDIBgSXcSfKgQuyCd",
+            "last_authenticated": "2023-09-30T10:35:41.740Z",
+            "knox_token": "2e6eafb3e18114598ac87cc3105aa917132b7d8d0e136e9d592d301f61dbf2d5"
+        }
+    },
+    {
+        "model": "user.twofa",
+        "pk": 2,
+        "fields": {
+            "key": "dqEBsLJUpcTCKRFBLOMedOERqeWRtBNsfyqLVDxabPRmJ",
+            "last_authenticated": "2023-09-30T10:41:00.914Z",
+            "knox_token": "cf4ac104407847e7feeec8d5b072aace21a114263960d88cf102320d5996015c"
+        }
+    },
+    {
+        "model": "user.twofa",
+        "pk": 3,
+        "fields": {
+            "key": "BgomiaWybJbzEodvXqbPtfSmZzmXQSrTLiZTrCHLtGDLX",
+            "last_authenticated": "2023-09-30T10:31:48.190Z",
+            "knox_token": "ff0a79bdf464fa01ada64a5193113d183297cfc6c3449872506d4c81d6d07afa"
+        }
+    },
+    {
+        "model": "customer.customer",
+        "pk": 1,
+        "fields": {
+            "first_name": "first",
+            "last_name": "last",
+            "birth_date": "1999-01-01",
+            "identity_no": "S9934567B",
+            "address": "jurong",
+            "postal_code": "123456",
+            "citizenship": "Singaporean Citizen",
+            "gender": "Male"
+        }
+    },
+    {
+        "model": "customer.customer",
+        "pk": 2,
+        "fields": {
+            "first_name": "first",
+            "last_name": "last",
+            "birth_date": "1999-01-01",
+            "identity_no": "S9934567B",
+            "address": "jurong",
+            "postal_code": "123456",
+            "citizenship": "Singaporean Citizen",
+            "gender": "Male"
+        }
+    },
+    {
+        "model": "customer.accounttypes",
+        "pk": 1,
+        "fields": {
+            "name": "Savings"
+        }
+    },
+    {
+        "model": "customer.accounttypes",
+        "pk": 2,
+        "fields": {
+            "name": "Credit Card"
+        }
+    },
+    {
+        "model": "customer.accounttypes",
+        "pk": 3,
+        "fields": {
+            "name": "Investments"
+        }
+    },
+    {
+        "model": "customer.accounts",
+        "pk": "276a9050-445f-4396-80e6-76d096574634",
+        "fields": {
+            "user": 2,
+            "type": 1,
+            "balance": "15.00",
+            "status": "Active",
+            "date_created": "2023-09-30T10:23:24.838Z"
+        }
+    },
+    {
+        "model": "customer.accounts",
+        "pk": "ef5c716e-8448-4365-95eb-4f551f10d1c1",
+        "fields": {
+            "user": 1,
+            "type": 1,
+            "balance": "30.00",
+            "status": "Active",
+            "date_created": "2023-09-30T10:20:53.321Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "01e6242e-f76c-4579-a4be-8add53782e1e",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "276a9050-445f-4396-80e6-76d096574634",
+            "recipient": null,
+            "description": "Yummy dinner!",
+            "amount": "55.00",
+            "date": "2023-09-30T10:38:18.232Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "ee4cc085-dc85-46f6-9921-683232067890",
+        "fields": {
+            "transaction_type": "Deposit",
+            "sender": null,
+            "recipient": "ef5c716e-8448-4365-95eb-4f551f10d1c1",
+            "description": "Welcome reward!",
+            "amount": "100.00",
+            "date": "2023-09-30T10:34:21.294Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "f0c3a288-3332-4490-b30c-d6c749594f6a",
+        "fields": {
+            "transaction_type": "Transfer",
+            "sender": "ef5c716e-8448-4365-95eb-4f551f10d1c1",
+            "recipient": "276a9050-445f-4396-80e6-76d096574634",
+            "description": "Here is your allowance!",
+            "amount": "70.00",
+            "date": "2023-09-30T10:35:41.761Z"
+        }
+    },
+    {
+        "model": "staff.staff",
+        "pk": 3,
+        "fields": {
+            "first_name": "first",
+            "last_name": "last",
+            "title": "Ticket Reviewer",
+            "birth_date": "1990-01-01",
+            "gender": "Male"
+        }
+    },
+    {
+        "model": "staff.staff",
+        "pk": 4,
+        "fields": {
+            "first_name": "first2",
+            "last_name": "last2",
+            "title": "Ticket Reviewer",
+            "birth_date": "1990-01-01",
+            "gender": "Male"
+        }
+    },
+    {
+        "model": "staff.staff",
+        "pk": 5,
+        "fields": {
+            "first_name": "first3",
+            "last_name": "last3",
+            "title": "Security Engineer",
+            "birth_date": "1990-01-01",
+            "gender": "Male"
+        }
+    },
+    {
+        "model": "staff.staff",
+        "pk": 6,
+        "fields": {
+            "first_name": "first4",
+            "last_name": "last4",
+            "title": "Researcher",
+            "birth_date": "1990-01-01",
+            "gender": "Male"
+        }
+    },
+    {
+        "model": "staff.tickets",
+        "pk": "17afb844-09a9-4f15-ae97-3e9c4fdbe479",
+        "fields": {
+            "ticket_type": "Opening Account",
+            "status": "Rejected",
+            "created_by": 1,
+            "created_date": "2023-09-30T08:45:40.140Z",
+            "closed_by": 3,
+            "closed_date": "2023-09-30T10:23:02.300Z"
+        }
+    },
+    {
+        "model": "staff.tickets",
+        "pk": "73dd9830-b391-452c-86b9-389c6411ae56",
+        "fields": {
+            "ticket_type": "Opening Account",
+            "status": "Approved",
+            "created_by": 2,
+            "created_date": "2023-09-30T08:56:50.448Z",
+            "closed_by": 3,
+            "closed_date": "2023-09-30T10:23:24.834Z"
+        }
+    },
+    {
+        "model": "staff.tickets",
+        "pk": "df07d3fb-9338-446b-89a2-f3353d344273",
+        "fields": {
+            "ticket_type": "Opening Account",
+            "status": "Approved",
+            "created_by": 1,
+            "created_date": "2023-09-30T08:44:38.761Z",
+            "closed_by": 3,
+            "closed_date": "2023-09-30T10:20:53.316Z"
+        }
+    },
+    {
+        "model": "staff.tickets",
+        "pk": "f80804c7-8e72-4e81-a9aa-610b5eb79e92",
+        "fields": {
+            "ticket_type": "Opening Account",
+            "status": "Open",
+            "created_by": 1,
+            "created_date": "2023-09-30T08:45:54.284Z",
+            "closed_by": null,
+            "closed_date": null
+        }
+    },
+    {
+        "model": "staff.requestopenaccount",
+        "pk": "17afb844-09a9-4f15-ae97-3e9c4fdbe479",
+        "fields": {
+            "account_type": 2
+        }
+    },
+    {
+        "model": "staff.requestopenaccount",
+        "pk": "73dd9830-b391-452c-86b9-389c6411ae56",
+        "fields": {
+            "account_type": 1
+        }
+    },
+    {
+        "model": "staff.requestopenaccount",
+        "pk": "df07d3fb-9338-446b-89a2-f3353d344273",
+        "fields": {
+            "account_type": 1
+        }
+    },
+    {
+        "model": "staff.requestopenaccount",
+        "pk": "f80804c7-8e72-4e81-a9aa-610b5eb79e92",
+        "fields": {
+            "account_type": 3
+        }
+    }
+]
