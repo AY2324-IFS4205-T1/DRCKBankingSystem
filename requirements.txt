@@ -4,5 +4,5 @@ django-cors-headers==4.2.0 # django-cors-headers is a Django application for han
 django-rest-knox==4.2.0 # Django-rest-knox library provides models and views to handle token-based authentication in a more secure and extensible wa
 djangorestframework==3.14.0 # Web APIs for Django, made easy.
 psycopg2-binary==2.9.7 # psycopg2 - Python-PostgreSQL Database Adapter
-pyotp==1.3.0 # PyOTP is a Python library for generating and verifying one-time passwords.
+pyotp==2.8.0 # PyOTP is a Python library for generating and verifying one-time passwords.
 qrcode==7.4.2 # qrcode is a pure python QR Code generator
