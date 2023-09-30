@@ -21,7 +21,7 @@ from knox import views as knox_views
 from customer.views import (CustomerLoginView, CustomerWelcomeView, TransactionsView,
                             CustomerRegistrationView, DepositView,
                             AccountTypesView, AccountsView, CustomerTicketsView, TransferView,
-                            WithdrawView)
+                            WithdrawView, CustomerTicketView)
 from staff.views import (AnonymisationView, ApproveView, GetClosedTicketsView, GetOpenTicketsView, StaffTicketView,
                          RejectView, StaffLoginView, StaffRegistrationView, StaffWelcomeView)
 
