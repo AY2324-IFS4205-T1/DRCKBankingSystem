@@ -20,7 +20,7 @@ from customer.views import (AccountsView, AccountTypesView, CustomerLoginView,
                             CustomerRegistrationView, CustomerTicketsView,
                             CustomerWelcomeView, DepositView, TransactionsView,
                             TransferView, WithdrawView)
-from staff.views import (ApproveView, GetClosedTicketsView, GetOpenTicketsView,
+from staff.views import (AnonymisationView, ApproveView, GetClosedTicketsView, GetOpenTicketsView,
                          RejectView, StaffLoginView, StaffRegistrationView,
                          StaffTicketView, StaffWelcomeView)
 from user.views import (AuthenticationTypeCheckView, LogoutView,
@@ -50,10 +50,10 @@ urlpatterns = [
     path("staff/ticket_details", StaffTicketView.as_view(), name="ticketDetails"),
     path("staff/approve", ApproveView.as_view(), name="ticketApprove"),
     path("staff/reject", RejectView.as_view(), name="ticketReject"),
+    path("staff/anonymisation", AnonymisationView.as_view(), name="anonymisation"),
 
     #In logout, header key: Authorization, Value: Token 3510ff361b..
     path('logout', LogoutView.as_view(), name='logout'),
-
     path('auth_check', AuthenticationTypeCheckView.as_view(), name='auth_check'),
     
     # 2 Factor Authentication

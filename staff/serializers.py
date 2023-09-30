@@ -6,9 +6,10 @@ from django.utils import timezone
 from rest_framework import serializers
 
 from customer.models import Accounts, AccountTypes
-from staff.validations import validate_open_ticket, validate_ticket_id
+from staff.validations import validate_k_value, validate_open_ticket, validate_query, validate_ticket_id
 
 from .models import RequestCloseAccount, RequestOpenAccount, Staff, Tickets
+from .anonymise.overall import user_inputs
 
 
 class StaffSerializer(serializers.ModelSerializer):
@@ -110,7 +111,6 @@ class TicketDetailsSerializer(serializers.Serializer):
         return accounts_list
 
 
-
 class ApproveSerializer(serializers.Serializer):
     def __init__(self, user_id, json_dict, **kwargs):
         self.user_id = user_id
@@ -150,6 +150,7 @@ class ApproveSerializer(serializers.Serializer):
         close_account_request.account_id.save()
         return close_account_request.account_id
 
+      
 class RejectSerializer(serializers.Serializer):
     def __init__(self, user_id, json_dict, **kwargs):
         self.user_id = user_id
@@ -168,3 +169,19 @@ class RejectSerializer(serializers.Serializer):
         self.ticket.closed_date = timezone.now()
         self.ticket.save()
         return self.ticket
+
+      
+class AnonymisationSerializer(serializers.Serializer):
+    def __init__(self, user_id, json_dict, **kwargs):
+        self.user_id = user_id
+        self.json_dict = json_dict
+        super().__init__(**kwargs)
+
+    def validate(self, attrs):
+        self.k = validate_k_value(self.json_dict)
+        self.query = validate_query(self.json_dict)
+        return super().validate(attrs)
+
+    def get_anonymised_data(self):
+        data = user_inputs(self.k, self.query)
+        return {"data": data}
