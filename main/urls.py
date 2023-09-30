@@ -25,7 +25,7 @@ from customer.views import (CustomerLoginView, CustomerWelcomeView, Transactions
 from staff.views import (AnonymisationView, ApproveView, GetClosedTicketsView, GetOpenTicketsView, StaffTicketView,
                          RejectView, StaffLoginView, StaffRegistrationView, StaffWelcomeView)
 
-from user.views import AuthenticationTypeCheckView, SetupTwoFactorAuthenticationView, VerifyTwoFactorAuthenticationView, LogoutView
+from user.views import AuthenticationTypeCheckView, SetupTwoFactorAuthenticationView, VerifyTwoFactorAuthenticationView
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
