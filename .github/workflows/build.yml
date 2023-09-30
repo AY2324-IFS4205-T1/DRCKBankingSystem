@@ -16,6 +16,7 @@ env:
   
 jobs:
   build:
+    if: github.actor!= 'dependabot[bot]'
     name: DRCK Backend Workflow CI
     runs-on: ubuntu-latest
     container: python:3.11-slim

@@ -14,16 +14,4 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
-      
-  - package-ecosystem: "pip" # See documentation for possible values
-    directory: "/" # Location of package manifests
-    schedule:
-      interval: "daily"
-    target-branch: skeleton2
-    
-  - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/" # Location of package manifests
-    schedule:
-      interval: "daily"
-    target-branch: skeleton-frontend
 

@@ -10,9 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
-import os
+import os, sys
 from pathlib import Path
 from datetime import timedelta
+import sys
 from rest_framework.settings import api_settings
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -28,11 +29,18 @@ SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# CORS header
+CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOWED_ORIGINS = [
+#     "https://ifs4205-23s1-1-1-i.comp.nus.edu.sg:8080",
+#     "http://192.168.37.141:8080"
+# ]
+
+
+ALLOWED_HOSTS = ['ifs4205-23s1-1-1-i.comp.nus.edu.sg', '.localhost', '127.0.0.1', '[::1]', '192.168.37.141']
 
 
 # Application definition
-
 INSTALLED_APPS = [
     #'django.contrib.admin',
     'django.contrib.auth',
@@ -51,12 +59,12 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
 ]
 
@@ -83,24 +91,22 @@ WSGI_APPLICATION = 'main.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'OPTIONS': {
-            'options': '-c search_path=django'
-        },
-        'NAME': os.environ["POSTGRES_DBNAME_AUTH"],
-        'USER': os.environ["POSTGRES_USER_AUTH"],
-        'PASSWORD': os.environ["POSTGRES_PASSWORD_AUTH"],
-        'HOST': os.environ["POSTGRES_HOST_AUTH"],
-        'PORT': os.environ["POSTGRES_PORT_AUTH"],
-        'TEST': {
-            'NAME': 'test_drck_banking',
-        }
-    },
-}
-
+DATABASES = { 
+    'default': { 
+        'ENGINE': 'django.db.backends.postgresql_psycopg2', 
+        'OPTIONS': { 
+            'options': '-c search_path=django' 
+        }, 
+        'NAME': os.environ["POSTGRES_DBNAME_AUTH"], 
+        'USER': os.environ["POSTGRES_USER_AUTH"], 
+        'PASSWORD': os.environ["POSTGRES_PASSWORD_AUTH"], 
+        'HOST': os.environ["POSTGRES_HOST_AUTH"], 
+        'PORT': os.environ["POSTGRES_PORT_AUTH"], 
+        'TEST': { 
+            'NAME': 'test_drck_banking', 
+        } 
+    }, 
+}  
 
 
 # Password validation
@@ -109,15 +115,52 @@ DATABASES = {
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "OPTIONS": {
+            "max_similarity": 0.7,
+            "user_attributes": ["username", "email"]
+        }
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "OPTIONS": {
+            "min_length": 8,
+        }
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+    {
+        "NAME": "user.validations.MaximumLengthValidator",
+        "OPTIONS": {
+            "max_length": 64,
+        }
+    },
+    {
+        "NAME": "user.validations.UppercaseValidator",
+        "OPTIONS": {
+            "min_number": 2,
+        }
+    },
+    {
+        "NAME": "user.validations.LowercaseValidator",
+        "OPTIONS": {
+            "min_number": 2,
+        }
+    },
+    {
+        "NAME": "user.validations.NumericValidator",
+        "OPTIONS": {
+            "min_number": 1,
+        }
+    },
+    {
+        "NAME": "user.validations.SpecialCharacterValidator",
+        "OPTIONS": {
+            "min_number": 1,
+        }
     },
 ]
 
@@ -149,11 +192,24 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = "user.User"
 AUTHENTICATION_BACKENDS = ['user.authentication.UserAuth'] #'django.contrib.auth.backends.ModelBackend'
 
-# Knox Authentication Module
+# Throttling
+TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
+sensitive_request_throttle_rate = "10/minute" if not TESTING else "100000/second"
+non_sensitive_request_throttle_rate = "60/minute" if not TESTING else "100000/second"
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication', ),
+    "DEFAULT_THROTTLE_CLASSES": [
+        "rest_framework.throttling.AnonRateThrottle",
+        "rest_framework.throttling.ScopedRateThrottle",
+    ],
+    "DEFAULT_THROTTLE_RATES": {
+        "anon": sensitive_request_throttle_rate, # per IP address, for unauthenticated requests (all registration and login requests)
+        "sensitive_request": sensitive_request_throttle_rate, # per authenticated user, for deposit, withdraw, transfer, approve, reject
+        "non_sensitive_request": non_sensitive_request_throttle_rate, # per authenticated user, for get_account_types, apply, get_tickets, balance, get_open_tickets, get_closed_tickets, ticket_details 
+    },
 }
 
+# Knox Authentication Module
 REST_KNOX = {
     'SECURE_HASH_ALGORITHM':'cryptography.hazmat.primitives.hashes.SHA512',
     'AUTH_TOKEN_CHARACTER_LENGTH': 64, # By default, it is set to 64 characters (this shouldn't need changing).
@@ -164,8 +220,9 @@ REST_KNOX = {
     'EXPIRY_DATETIME_FORMAT': api_settings.DATETIME_FORMAT,
 }
 
-# CORS header
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-]
+# Clickjacking
+X_FRAME_OPTIONS = "DENY"
+
+# Race Conditions
+ATOMIC_REQUESTS = True
+
