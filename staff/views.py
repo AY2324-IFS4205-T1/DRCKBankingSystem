@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle
 from rest_framework.views import APIView
 
-from staff.serializers import (AnonymisationSerializer, ApproveSerializer, GetClosedTicketsSerializer,
+from staff.serializers import (AnonymisationSerializer, ApproveSerializer, GetClosedTicketsSerializer,)
 from staff.permissions import IsStaff, IsTicketReviewer
 from staff.serializers import (AnonymisationSerializer, ApproveSerializer, GetClosedTicketsSerializer,
                                GetOpenTicketsSerializer, RejectSerializer,
