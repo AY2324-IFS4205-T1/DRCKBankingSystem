@@ -91,50 +91,22 @@ WSGI_APPLICATION = 'main.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-if 'migrate' in sys.argv or 'makemigrations' in sys.argv:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'OPTIONS': {
-                'options': '-c search_path=django',
-                'sslmode': 'verify-ca',
-                'sslcert': os.environ["CLIENT_CERT"],
-                'sslkey': os.environ["CLIENT_KEY"],
-                'sslrootcert': os.environ["CA_CERT"],    
-            },
-            'NAME': os.environ["POSTGRES_DBNAME_AUTH"],
-            'USER': os.environ["POSTGRES_USERMIGRATE_AUTH"],
-            'PASSWORD': os.environ["POSTGRES_USERMIGRATE_PASSWORD_AUTH"],
-            'HOST': os.environ["POSTGRES_HOST_AUTH"],
-            'PORT': os.environ["POSTGRES_PORT_AUTH"],
-            'TEST': {
-                'NAME': 'test_drck_banking',
-            }
-        },
-    }
-    print("Using database config for migrations")
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'OPTIONS': {
-                'options': '-c search_path=django',
-                'sslmode': 'verify-ca',
-                'sslcert': os.environ["CLIENT_CERT"],
-                'sslkey': os.environ["CLIENT_KEY"],
-                'sslrootcert': os.environ["CA_CERT"],    
-            },
-            'NAME': os.environ["POSTGRES_DBNAME_AUTH"],
-            'USER': os.environ["POSTGRES_USER_AUTH"],
-            'PASSWORD': os.environ["POSTGRES_PASSWORD_AUTH"],
-            'HOST': os.environ["POSTGRES_HOST_AUTH"],
-            'PORT': os.environ["POSTGRES_PORT_AUTH"],
-            'TEST': {
-                'NAME': 'test_drck_banking',
-            }
-        },
-    }
-    print("Using database config for application")    
+DATABASES = { 
+    'default': { 
+        'ENGINE': 'django.db.backends.postgresql_psycopg2', 
+        'OPTIONS': { 
+            'options': '-c search_path=django' 
+        }, 
+        'NAME': os.environ["POSTGRES_DBNAME_AUTH"], 
+        'USER': os.environ["POSTGRES_USER_AUTH"], 
+        'PASSWORD': os.environ["POSTGRES_PASSWORD_AUTH"], 
+        'HOST': os.environ["POSTGRES_HOST_AUTH"], 
+        'PORT': os.environ["POSTGRES_PORT_AUTH"], 
+        'TEST': { 
+            'NAME': 'test_drck_banking', 
+        } 
+    }, 
+}  
 
 
 # Password validation
