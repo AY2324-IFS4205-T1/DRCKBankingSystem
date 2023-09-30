@@ -176,11 +176,6 @@ class TestTicketDetails(TestLogout): # staff action
         self.login_staff_1()
         response = self.client.post(reverse("ticketDetails"), bad_field, **self.header)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-    def test_should_ticket_details(self):
-        self.login_staff_1()
-        sample_ticket_details = {"ticket_id": open_ticket_id}
-        response = self.client.post(reverse("ticketDetails"), sample_ticket_details, **self.header)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         self.two_fa_staff1()
         response = self.client.post(reverse("ticketDetails"), bad_field, **self.header)
@@ -196,8 +191,7 @@ class TestTicketDetails(TestLogout): # staff action
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
-class TestAnonymisation(TestAuthentication): # staff action
-    fixtures = ["generate_data/fixtures/massive_json.json"]
+class TestAnonymisation(TestLogout): # staff action
     def test_should_not_anonymise(self):
         bad_k_value_field = {"kkkk_value": "", "query": ""}
         bad_query_field = {"k_value": "", "qqqquery": ""}
@@ -207,7 +201,15 @@ class TestAnonymisation(TestAuthentication): # staff action
         response = self.client.post(reverse("anonymisation"), bad_k_value_field)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-        self.login_staff_1()
+        self.two_fa_customer_1()
+        response = self.client.post(reverse("anonymisation"), bad_k_value_field, **self.header)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        self.two_fa_staff2()
+        response = self.client.post(reverse("anonymisation"), bad_k_value_field, **self.header)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        self.two_fa_staff4()
         response = self.client.post(reverse("anonymisation"), bad_k_value_field, **self.header)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         
@@ -221,7 +223,7 @@ class TestAnonymisation(TestAuthentication): # staff action
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         
     def test_should_anonymise(self):
-        self.login_staff_1()
+        self.two_fa_staff4()
         sample_anonymise = {"k_value": "1", "query": "1"}
         response = self.client.post(reverse("anonymisation"), sample_anonymise, **self.header)
         self.assertEqual(response.status_code, status.HTTP_200_OK)

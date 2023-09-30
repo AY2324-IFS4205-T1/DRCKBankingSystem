@@ -5,8 +5,9 @@ from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle
 from rest_framework.views import APIView
 
-from staff.permissions import IsStaff, IsTicketReviewer
-from staff.serializers import (AnonymisationSerializer, ApproveSerializer, GetClosedTicketsSerializer,
+from staff.permissions import IsResearcher, IsStaff, IsTicketReviewer
+from staff.serializers import (AnonymisationSerializer, ApproveSerializer,
+                               GetClosedTicketsSerializer,
                                GetOpenTicketsSerializer, RejectSerializer,
                                StaffSerializer, TicketDetailsSerializer)
 from user.authentication import TokenAndTwoFactorAuthentication
@@ -144,8 +145,8 @@ class RejectView(APIView):
 
       
 class AnonymisationView(APIView):
-    permission_classes = (permissions.IsAuthenticated,)
-    authentication_classes = (TokenAuthentication,)
+    permission_classes = (permissions.IsAuthenticated, IsStaff, IsResearcher)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
 
     def post(self, request):
         serializer = AnonymisationSerializer(request.user, request.data, data=request.data)
