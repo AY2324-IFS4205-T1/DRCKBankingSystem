@@ -1,14 +1,14 @@
 from django.http import FileResponse
-
-from rest_framework import permissions, status
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.views import APIView
-from rest_framework.response import Response
-
 from knox.auth import TokenAuthentication
 from knox.views import LogoutView as KnoxLogoutView
+from rest_framework import permissions, status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from user.serializers import GetTwoFASerializer, RemoveTwoFASerializer, VerifyTwoFASerializer
+from user.serializers import (GetTwoFASerializer, RemoveTwoFASerializer,
+                              VerifyTwoFASerializer)
+
 
 class AuthenticationTypeCheckView(APIView):
     authentication_classes = (TokenAuthentication,)

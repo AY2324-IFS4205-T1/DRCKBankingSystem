@@ -16,14 +16,16 @@ Including another URLconf
 """
 from django.urls import path
 
-from customer.views import (CustomerLoginView, CustomerWelcomeView, TransactionsView,
-                            CustomerRegistrationView, DepositView,
-                            AccountTypesView, AccountsView, CustomerTicketsView, TransferView,
-                            WithdrawView)
-from staff.views import (ApproveView, GetClosedTicketsView, GetOpenTicketsView, StaffTicketView,
-                         RejectView, StaffLoginView, StaffRegistrationView, StaffWelcomeView)
-
-from user.views import AuthenticationTypeCheckView, SetupTwoFactorAuthenticationView, VerifyTwoFactorAuthenticationView, LogoutView
+from customer.views import (AccountsView, AccountTypesView, CustomerLoginView,
+                            CustomerRegistrationView, CustomerTicketsView,
+                            CustomerWelcomeView, DepositView, TransactionsView,
+                            TransferView, WithdrawView)
+from staff.views import (ApproveView, GetClosedTicketsView, GetOpenTicketsView,
+                         RejectView, StaffLoginView, StaffRegistrationView,
+                         StaffTicketView, StaffWelcomeView)
+from user.views import (AuthenticationTypeCheckView, LogoutView,
+                        SetupTwoFactorAuthenticationView,
+                        VerifyTwoFactorAuthenticationView)
 
 urlpatterns = [
     # path('admin/', admin.site.urls),

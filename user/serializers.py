@@ -1,8 +1,6 @@
-from secrets import choice
-from string import ascii_letters
-from pyotp import random_base32
 from django.contrib.auth import authenticate
 from django.utils import timezone
+from pyotp import random_base32
 from rest_framework import serializers
 
 from user.twofa import generate_qr, verify_otp

@@ -1,21 +1,16 @@
 from django.contrib.auth.password_validation import validate_password
 from django.db.models import Q
 from rest_framework import serializers
-from rest_framework.fields import empty
 
-from customer.validations import (
-    validate_account,
-    validate_account_owner,
-    validate_account_type,
-    validate_amount,
-    validate_description,
-    validate_no_repeated_ticket,
-    validate_nric_and_citizenship,
-    validate_sender_recipient,
-    validate_sufficient_amount,
-    validate_ticket_input,
-    validate_total_balance,
-)
+from customer.validations import (validate_account, validate_account_owner,
+                                  validate_account_type, validate_amount,
+                                  validate_description,
+                                  validate_no_repeated_ticket,
+                                  validate_nric_and_citizenship,
+                                  validate_sender_recipient,
+                                  validate_sufficient_amount,
+                                  validate_ticket_input,
+                                  validate_total_balance)
 from staff.models import RequestCloseAccount, RequestOpenAccount, Tickets
 
 from .models import Customer, Transactions

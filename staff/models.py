@@ -2,7 +2,7 @@ import uuid
 
 from django.db import models
 
-from customer.models import AccountTypes, Customer, Accounts
+from customer.models import Accounts, AccountTypes, Customer
 from user.models import User
 
 

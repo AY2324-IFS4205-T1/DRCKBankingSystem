@@ -2,11 +2,10 @@ import json
 
 from django.contrib.auth.password_validation import validate_password
 from django.core.serializers import serialize
-from django.forms.models import model_to_dict
 from django.utils import timezone
 from rest_framework import serializers
 
-from customer.models import AccountTypes, Accounts
+from customer.models import Accounts, AccountTypes
 from staff.validations import validate_open_ticket, validate_ticket_id
 
 from .models import RequestCloseAccount, RequestOpenAccount, Staff, Tickets
