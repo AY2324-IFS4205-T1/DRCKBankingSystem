@@ -5,12 +5,12 @@
         "fields": {
             "is_superuser": false,
             "username": "test1",
-            "password": "pbkdf2_sha256$600000$rpg8FVMIFwUlcPRbyNoh4i$7kgo5c78i4ykDkQuOTV2dARpP/Yr9RTEqbDcW74McNg=",
+            "password": "pbkdf2_sha256$600000$7dWNkOQWJaIEKl055sTmlS$+wUcsENxJpuWY0LXGz+vclSuflsjYzpP1f9XqBUEQdU=",
             "email": "test1@gmail.com",
             "phone_no": "12345678",
             "type": "Customer",
-            "date_joined": "2023-09-17T18:32:52.970Z",
-            "last_login": "2023-09-17T18:39:01.192Z",
+            "date_joined": "2023-09-30T07:56:50.887Z",
+            "last_login": "2023-09-30T10:32:16.607Z",
             "is_active": true,
             "groups": [],
             "user_permissions": []
@@ -22,12 +22,12 @@
         "fields": {
             "is_superuser": false,
             "username": "test2",
-            "password": "pbkdf2_sha256$600000$ru9XnncuOPit0BcIC65S5Z$k5BeKny9R7IHJ90FJfNkDqjhoKqJsYl/LMdLKw/mudo=",
+            "password": "pbkdf2_sha256$600000$amCVcyr2nwrjGoN9wSH9DP$5KGpJmUcJ+IFk9KLCaPx3aSO/uTr85c3aqT7uUzE9Tw=",
             "email": "test2@gmail.com",
             "phone_no": "12345678",
             "type": "Customer",
-            "date_joined": "2023-09-17T18:33:07.803Z",
-            "last_login": "2023-09-17T18:36:12.826Z",
+            "date_joined": "2023-09-30T07:58:44.102Z",
+            "last_login": "2023-09-30T10:36:25.652Z",
             "is_active": true,
             "groups": [],
             "user_permissions": []
@@ -39,12 +39,12 @@
         "fields": {
             "is_superuser": false,
             "username": "staff1",
-            "password": "pbkdf2_sha256$600000$5KguBBDn7wGPxZt5T6NJwR$4otoD36voukcQ4obsg7UWMloxxrHD5rZcQQt0jvuNDU=",
+            "password": "pbkdf2_sha256$600000$o1XlvuKlbn51cNgK04autd$wO9pQBfh2QllntII2fSQDaL0O3jbuPa+TU/8sgm9Ovo=",
             "email": "staff1@gmail.com",
             "phone_no": "12345678",
             "type": "Staff",
-            "date_joined": "2023-09-17T18:33:44.673Z",
-            "last_login": "2023-09-17T18:36:32.860Z",
+            "date_joined": "2023-09-30T09:02:16.196Z",
+            "last_login": "2023-09-30T09:47:36.205Z",
             "is_active": true,
             "groups": [],
             "user_permissions": []
@@ -56,12 +56,12 @@
         "fields": {
             "is_superuser": false,
             "username": "staff2",
-            "password": "pbkdf2_sha256$600000$fePAMVJY21QTkcWBEVaRsV$5mQ1Hz/wBATvZID+2oMC/oN5o/JuT0YmPcExCtYjBJk=",
+            "password": "pbkdf2_sha256$600000$E6o1zj51YsAgWf1hrn88MT$RVmQPA6NtNBZvPpjJ1jvn4cUaOtAp8eXlCz+hewJY7k=",
             "email": "staff2@gmail.com",
             "phone_no": "12345678",
             "type": "Staff",
-            "date_joined": "2023-09-17T18:33:59.206Z",
-            "last_login": "2023-09-17T18:33:59.206Z",
+            "date_joined": "2023-09-30T11:29:02.160Z",
+            "last_login": "2023-09-30T11:29:02.160Z",
             "is_active": true,
             "groups": [],
             "user_permissions": []
@@ -73,12 +73,12 @@
         "fields": {
             "is_superuser": false,
             "username": "staff3",
-            "password": "pbkdf2_sha256$600000$xQlMepW8hLTyc9vp6ah7LL$KgznpsZqe1E7ah+FbeZKT52/ong+Ujn685xcPXYd2X8=",
-            "email": "staff3@email.com",
+            "password": "pbkdf2_sha256$600000$LpHNPsGa3Bo4fOSISBxHmp$nJrW6f+qAXxmg4kyZtcMTLsQ6hPeoL4+Nw4OLIlZLsM=",
+            "email": "staff3@gmail.com",
             "phone_no": "12345678",
             "type": "Staff",
-            "date_joined": "2023-09-21T14:59:25.655Z",
-            "last_login": "2023-09-21T14:59:25.655Z",
+            "date_joined": "2023-09-30T11:30:05.096Z",
+            "last_login": "2023-09-30T11:30:05.096Z",
             "is_active": true,
             "groups": [],
             "user_permissions": []
@@ -90,12 +90,12 @@
         "fields": {
             "is_superuser": false,
             "username": "staff4",
-            "password": "pbkdf2_sha256$600000$yFyPQtufY7HHyAvXs8w9A1$3UzoHUviLk9Two8l/3srGDAwHl+PsLQhS3ktFWyZwco=",
-            "email": "staff4@email.com",
+            "password": "pbkdf2_sha256$600000$WKrxJgcZGaGfpqE1qWw6RZ$lNLPVsfTYqv790811V+qzmeM7/U4RcITInsRPYCPmKs=",
+            "email": "staff4@gmail.com",
             "phone_no": "12345678",
             "type": "Staff",
-            "date_joined": "2023-09-21T14:59:47.209Z",
-            "last_login": "2023-09-21T14:59:47.209Z",
+            "date_joined": "2023-09-30T11:30:37.638Z",
+            "last_login": "2023-09-30T11:30:37.638Z",
             "is_active": true,
             "groups": [],
             "user_permissions": []
@@ -107,8 +107,8 @@
         "fields": {
             "first_name": "first",
             "last_name": "last",
-            "birth_date": "2023-01-01",
-            "identity_no": "S1234567B",
+            "birth_date": "1999-01-01",
+            "identity_no": "S9934567B",
             "address": "jurong",
             "postal_code": "123456",
             "citizenship": "Singaporean Citizen",
@@ -121,8 +121,8 @@
         "fields": {
             "first_name": "first",
             "last_name": "last",
-            "birth_date": "2023-01-01",
-            "identity_no": "S1234567B",
+            "birth_date": "1999-01-01",
+            "identity_no": "S9934567B",
             "address": "jurong",
             "postal_code": "123456",
             "citizenship": "Singaporean Citizen",
@@ -152,36 +152,60 @@
     },
     {
         "model": "customer.accounts",
-        "pk": "315d9b27-1ba3-4ed8-a5c9-1bdfd042560c",
+        "pk": "276a9050-445f-4396-80e6-76d096574634",
         "fields": {
             "user": 2,
             "type": 1,
-            "balance": "0.00",
+            "balance": "15.00",
             "status": "Active",
-            "date_created": "2023-09-17T18:38:01.604Z"
+            "date_created": "2023-09-30T10:23:24.838Z"
         }
     },
     {
         "model": "customer.accounts",
-        "pk": "daa55c76-8b9c-4d7c-8ad9-ec485daa76f9",
+        "pk": "ef5c716e-8448-4365-95eb-4f551f10d1c1",
         "fields": {
             "user": 1,
             "type": 1,
-            "balance": "100.00",
+            "balance": "30.00",
             "status": "Active",
-            "date_created": "2023-09-17T18:37:54.473Z"
+            "date_created": "2023-09-30T10:20:53.321Z"
         }
     },
     {
         "model": "customer.transactions",
-        "pk": "3bbd0182-37ff-4803-8a62-d5546e8c92a8",
+        "pk": "01e6242e-f76c-4579-a4be-8add53782e1e",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "276a9050-445f-4396-80e6-76d096574634",
+            "recipient": null,
+            "description": "Yummy dinner!",
+            "amount": "55.00",
+            "date": "2023-09-30T10:38:18.232Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "ee4cc085-dc85-46f6-9921-683232067890",
         "fields": {
             "transaction_type": "Deposit",
             "sender": null,
-            "recipient": "daa55c76-8b9c-4d7c-8ad9-ec485daa76f9",
-            "description": "first paycheck!!",
+            "recipient": "ef5c716e-8448-4365-95eb-4f551f10d1c1",
+            "description": "Welcome reward!",
             "amount": "100.00",
-            "date": "2023-09-17T18:42:10.327Z"
+            "date": "2023-09-30T10:34:21.294Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "f0c3a288-3332-4490-b30c-d6c749594f6a",
+        "fields": {
+            "transaction_type": "Transfer",
+            "sender": "ef5c716e-8448-4365-95eb-4f551f10d1c1",
+            "recipient": "276a9050-445f-4396-80e6-76d096574634",
+            "description": "Here is your allowance!",
+            "amount": "70.00",
+            "date": "2023-09-30T10:35:41.761Z"
         }
     },
     {
@@ -191,7 +215,7 @@
             "first_name": "first",
             "last_name": "last",
             "title": "Ticket Reviewer",
-            "birth_date": "2023-01-01",
+            "birth_date": "1990-01-01",
             "gender": "Male"
         }
     },
@@ -199,10 +223,10 @@
         "model": "staff.staff",
         "pk": 4,
         "fields": {
-            "first_name": "first",
-            "last_name": "last",
+            "first_name": "first2",
+            "last_name": "last2",
             "title": "Ticket Reviewer",
-            "birth_date": "2023-01-01",
+            "birth_date": "1990-01-01",
             "gender": "Male"
         }
     },
@@ -210,10 +234,10 @@
         "model": "staff.staff",
         "pk": 5,
         "fields": {
-            "first_name": "first",
-            "last_name": "last",
+            "first_name": "first3",
+            "last_name": "last3",
             "title": "Security Engineer",
-            "birth_date": "2023-01-01",
+            "birth_date": "1990-01-01",
             "gender": "Male"
         }
     },
@@ -221,59 +245,87 @@
         "model": "staff.staff",
         "pk": 6,
         "fields": {
-            "first_name": "first",
-            "last_name": "last",
+            "first_name": "first4",
+            "last_name": "last4",
             "title": "Researcher",
-            "birth_date": "2023-01-01",
+            "birth_date": "1990-01-01",
             "gender": "Male"
         }
     },
     {
         "model": "staff.tickets",
-        "pk": "073eb525-7eb8-4ac7-a372-0955465cfb80",
+        "pk": "17afb844-09a9-4f15-ae97-3e9c4fdbe479",
+        "fields": {
+            "ticket_type": "Opening Account",
+            "status": "Rejected",
+            "created_by": 1,
+            "created_date": "2023-09-30T08:45:40.140Z",
+            "closed_by": 3,
+            "closed_date": "2023-09-30T10:23:02.300Z"
+        }
+    },
+    {
+        "model": "staff.tickets",
+        "pk": "73dd9830-b391-452c-86b9-389c6411ae56",
+        "fields": {
+            "ticket_type": "Opening Account",
+            "status": "Approved",
+            "created_by": 2,
+            "created_date": "2023-09-30T08:56:50.448Z",
+            "closed_by": 3,
+            "closed_date": "2023-09-30T10:23:24.834Z"
+        }
+    },
+    {
+        "model": "staff.tickets",
+        "pk": "df07d3fb-9338-446b-89a2-f3353d344273",
+        "fields": {
+            "ticket_type": "Opening Account",
+            "status": "Approved",
+            "created_by": 1,
+            "created_date": "2023-09-30T08:44:38.761Z",
+            "closed_by": 3,
+            "closed_date": "2023-09-30T10:20:53.316Z"
+        }
+    },
+    {
+        "model": "staff.tickets",
+        "pk": "f80804c7-8e72-4e81-a9aa-610b5eb79e92",
         "fields": {
             "ticket_type": "Opening Account",
             "status": "Open",
             "created_by": 1,
-            "created_date": "2023-09-17T18:35:50.234Z",
+            "created_date": "2023-09-30T08:45:54.284Z",
             "closed_by": null,
             "closed_date": null
         }
     },
     {
-        "model": "staff.tickets",
-        "pk": "0d9cd690-5141-4e99-8fd0-992ca2ecfa9c",
+        "model": "staff.requestopenaccount",
+        "pk": "17afb844-09a9-4f15-ae97-3e9c4fdbe479",
         "fields": {
-            "ticket_type": "Opening Account",
-            "status": "Approved",
-            "created_by": 1,
-            "created_date": "2023-09-17T18:35:36.857Z",
-            "closed_by": 3,
-            "closed_date": "2023-09-17T18:37:54.468Z"
+            "account_type": 2
         }
     },
     {
-        "model": "staff.tickets",
-        "pk": "4581a8c1-93b1-4a86-b882-eba9191d36ab",
+        "model": "staff.requestopenaccount",
+        "pk": "73dd9830-b391-452c-86b9-389c6411ae56",
         "fields": {
-            "ticket_type": "Opening Account",
-            "status": "Approved",
-            "created_by": 2,
-            "created_date": "2023-09-17T18:36:19.700Z",
-            "closed_by": 3,
-            "closed_date": "2023-09-17T18:38:01.599Z"
+            "account_type": 1
         }
     },
     {
-        "model": "staff.tickets",
-        "pk": "ce77f63a-063b-43d0-b7f3-85972b8f81c4",
+        "model": "staff.requestopenaccount",
+        "pk": "df07d3fb-9338-446b-89a2-f3353d344273",
         "fields": {
-            "ticket_type": "Opening Account",
-            "status": "Rejected",
-            "created_by": 1,
-            "created_date": "2023-09-17T18:35:43.138Z",
-            "closed_by": 3,
-            "closed_date": "2023-09-17T18:38:20.130Z"
+            "account_type": 1
+        }
+    },
+    {
+        "model": "staff.requestopenaccount",
+        "pk": "f80804c7-8e72-4e81-a9aa-610b5eb79e92",
+        "fields": {
+            "account_type": 3
         }
     }
 ]

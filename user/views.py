@@ -1,29 +1,29 @@
 from django.http import FileResponse
-
+from knox.auth import TokenAuthentication
+from knox.views import LogoutView as KnoxLogoutView
 from rest_framework import permissions, status
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from knox.auth import TokenAuthentication
+from user.serializers import (GetTwoFASerializer, RemoveTwoFASerializer,
+                              VerifyTwoFASerializer)
 
-from user.serializers import GetTwoFASerializer, VerifyTwoFASerializer
 
-# Create your views here.
 class AuthenticationTypeCheckView(APIView):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
-    
-    # Check if user is authenticated and see if the database user type and request user type matches
+
     def get(self, request):
-        # Retrieves the request user type
-        input_user_type = request.headers['Type']
-        if input_user_type != self.request.user.type:
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
-        
-        return Response(status=status.HTTP_200_OK)
-    
-# Create your views here.
+        return Response({"user_type": request.user.type}, status=status.HTTP_200_OK)
+
+
+class LogoutView(KnoxLogoutView):
+    def post(self, request, format=None):
+        RemoveTwoFASerializer(request.user)
+        return super().post(request, format)
+
+
 class SetupTwoFactorAuthenticationView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
     authentication_classes = (TokenAuthentication,)
@@ -34,14 +34,17 @@ class SetupTwoFactorAuthenticationView(APIView):
 
 
 class VerifyTwoFactorAuthenticationView(APIView):
+    '''
+    otp: 12345678
+    '''
     permission_classes = (permissions.IsAuthenticated,)
     authentication_classes = (TokenAuthentication,)
 
     def post(self, request):
         serializer = VerifyTwoFASerializer(
-            request.user, request.data, data=request.data
+            request.user, request.data, request.headers.get('Authorization'), data=request.data
         )
         if serializer.is_valid():
-            result = {"result": serializer.verify()}
-            return Response(result, status=status.HTTP_200_OK)
+            json_result = serializer.verify()
+            return Response(json_result, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

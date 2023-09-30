@@ -47,4 +47,6 @@ class TwoFA(models.Model):
         db_table = "two_fa"
 
     user = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE)
-    key = models.CharField(max_length=1024)
+    key = models.CharField(max_length=32)
+    last_authenticated = models.DateTimeField(null=True)
+    knox_token = models.CharField(max_length=64, blank=True)

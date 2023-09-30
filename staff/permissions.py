@@ -20,3 +20,21 @@ class IsTicketReviewer(BasePermission):
         """
         user = Staff.objects.get(user=request.user)
         return user.title == Staff.Title.REVIEWER
+
+class IsSecurityOfficer(BasePermission):
+    
+    def has_permission(self, request, view):
+        """
+        Return `True` if permission is granted, `False` otherwise.
+        """
+        user = Staff.objects.get(user=request.user)
+        return user.title == Staff.Title.SECURITY
+
+class IsResearcher(BasePermission):
+    
+    def has_permission(self, request, view):
+        """
+        Return `True` if permission is granted, `False` otherwise.
+        """
+        user = Staff.objects.get(user=request.user)
+        return user.title == Staff.Title.RESEARCHER

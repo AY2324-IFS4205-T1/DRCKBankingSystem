@@ -1,7 +1,6 @@
-from secrets import choice
-from string import ascii_letters
-
 from django.contrib.auth import authenticate
+from django.utils import timezone
+from pyotp import random_base32
 from rest_framework import serializers
 
 from user.twofa import generate_qr, verify_otp
@@ -56,16 +55,19 @@ class GetTwoFASerializer(serializers.Serializer):
         super().__init__(**kwargs)
     
     def get_qr_code(self):
-        twofa = TwoFA.objects.get_or_create(user=self.user)[0]
-        twofa.key = ''.join(choice(ascii_letters) for _ in range(1024))
-        twofa.save()
-        return generate_qr(twofa.key, self.user.username)
+        two_fa = TwoFA.objects.get_or_create(user=self.user)[0]
+        two_fa.key = random_base32()
+        two_fa.save()
+        return generate_qr(two_fa.key, self.user.username)
 
 
 class VerifyTwoFASerializer(serializers.Serializer):
-    def __init__(self, user, json_dict, **kwargs):
+    def __init__(self, user, json_dict, authorisation_header, **kwargs):
         self.user = user
         self.json_dict = json_dict
+        self.authorisation_header = ""
+        if authorisation_header[:6] == "Token ":
+            self.authorisation_header = authorisation_header[6:]
         super().__init__(**kwargs)
         
     def validate(self, attrs):
@@ -74,5 +76,23 @@ class VerifyTwoFASerializer(serializers.Serializer):
         return super().validate(attrs)
 
     def verify(self):
-        return verify_otp(self.two_fa.key, self.otp)
+        result = verify_otp(self.two_fa.key, self.otp)
+        if result:
+            self.two_fa.last_authenticated = timezone.now()
+            self.two_fa.knox_token = self.authorisation_header
+        else:
+            self.two_fa.last_authenticated = None
+            self.two_fa.knox_token = ""
+        self.two_fa.save()
+        return {"2FA success": result, "last_authenticated": self.two_fa.last_authenticated}
+
+
+class RemoveTwoFASerializer(serializers.Serializer):
+    def __init__(self, user, **kwargs):
+        self.user = user
+        two_fa = TwoFA.objects.get(user=self.user)
+        two_fa.last_authenticated = None
+        two_fa.knox_token = ""
+        two_fa.save()
+        super().__init__(**kwargs)
 
