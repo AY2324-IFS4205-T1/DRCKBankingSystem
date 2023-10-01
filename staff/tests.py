@@ -23,6 +23,7 @@ class TestWelcome(TestLogout): # staff action
         response = self.client.get(reverse("staffWelcome"), **self.header)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+
 class TestGetOpenTickets(TestLogout): # staff action
     def test_should_not_get_open_tickets(self):
         response = self.client.get(reverse("getOpenTickets"))
@@ -226,4 +227,5 @@ class TestAnonymisation(TestLogout): # staff action
         self.two_fa_staff4()
         sample_anonymise = {"k_value": "1", "query": "1"}
         response = self.client.post(reverse("anonymisation"), sample_anonymise, **self.header)
+        print(response.json())
         self.assertEqual(response.status_code, status.HTTP_200_OK)

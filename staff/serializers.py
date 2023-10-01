@@ -95,7 +95,10 @@ class TicketDetailsSerializer(serializers.Serializer):
         self.customer = self.ticket.created_by
         customer_json = serialize("json", [self.customer,])
         customer_json = json.loads(customer_json)[0]["fields"]
+        del customer_json['address']
+        del customer_json['postal_code']
         del customer_json['identity_no']
+        del customer_json["gender"]
         customer_json["email"] = self.customer.user.email
         customer_json["phone_no"] = self.customer.user.phone_no
         return customer_json
@@ -183,5 +186,8 @@ class AnonymisationSerializer(serializers.Serializer):
         return super().validate(attrs)
 
     def get_anonymised_data(self):
-        data = user_inputs(self.k, self.query)
+        try:
+            data = user_inputs(self.k, self.query)
+        except Exception as error:
+            return {"error": error.__str__()}
         return {"data": data}

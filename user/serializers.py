@@ -2,11 +2,57 @@ from django.contrib.auth import authenticate
 from django.utils import timezone
 from pyotp import random_base32
 from rest_framework import serializers
+from rest_framework.exceptions import AuthenticationFailed
 
+from staff.models import Staff
+from user.authentication import TokenAndTwoFactorAuthentication
 from user.twofa import generate_qr, verify_otp
-from user.validations import validate_new_user, validate_otp, validate_user_2fa
+from user.validations import (validate_new_user, validate_otp,
+                              validate_page_type, validate_user_2fa)
 
 from .models import TwoFA, User
+
+
+class AuthCheckSerializer(serializers.Serializer):
+    def __init__(self, request, instance=None, data=..., **kwargs):
+        self.request = request
+        self.user = request.user
+        self.json_dict = request.data
+        self.response = {"authenticated": False, "authenticated_message": "", "authorised": False, "user_authorisation": ""}
+        super().__init__(instance, data, **kwargs)
+
+    def validate(self, attrs):
+        self.page_type = validate_page_type(self.json_dict)
+        return super().validate(attrs)
+    
+    def is_authenticated_and_forbidden(self):
+        # enforces a check in the order login -> authorisation -> 2fa verified
+        try:
+            authentication = TokenAndTwoFactorAuthentication().authenticate(self.request)
+            if authentication == None:
+                self.response["authenticated_message"] = "User not logged in."
+                return False
+            else:
+                self.response["authenticated"] = True
+                return self.is_forbidden()
+        except AuthenticationFailed as error:
+            if not self.is_forbidden():
+                self.response["authenticated_message"] = error.detail
+            return False
+    
+    def is_forbidden(self):
+        user_type = self.user.type
+        if user_type == "Staff":
+            user_type = Staff.objects.get(user=self.user).title
+        if user_type != self.page_type:
+            self.response["user_authorisation"] = user_type
+            return False
+        else:
+            self.response["authorised"] = True
+    
+    def get_response(self):
+        self.is_authenticated_and_forbidden()
+        return self.response
 
 
 class UserRegisterSerializer(serializers.ModelSerializer):

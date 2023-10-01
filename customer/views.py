@@ -18,21 +18,38 @@ from user.serializers import LoginSerializer, UserRegisterSerializer
 
 
 class CustomerRegistrationView(APIView):
-    """
-    username: test1
-    email: test1@gmail.com
-    phone_no: 12345678
-    password: G00dP@55word
-    first_name: first
-    last_name: last
-    birth_date: 1999-01-01
-    identity_no: S9934567B
-    address: jurong
-    postal_code: 123456
-    citizenship: Singaporean Citizen
-    gender: Male
-    """
+    """Post request
 
+    Args:
+        username: test1
+        email: test1@gmail.com
+        phone_no: 12345678
+        password: G00dP@55word
+        first_name: first
+        last_name: last
+        birth_date: 1999-01-01
+        identity_no: S9934567B
+        address: jurong
+        postal_code: 123456
+        citizenship: ["Singaporean Citizen", "Singaporean PR", "Non-Singaporean"]
+        gender: ["Male", "Female", "Others"]
+
+    Returns:
+        success: "Customer has been successfully registered."
+
+    password:
+        - must be at least maximum 0.7 similarity to username and email
+        - has a minimum length of 8 characters
+        - cannot be a common password
+        - cannot be fully numeric
+        - has a maximum length of 64 characters
+        - must have at least 2 uppercase characters
+        - must have at least 2 lowercase characters
+        - must have at least 1 numeric character
+        - must have at least 1 special character
+
+    identity_no needs to be valid with respect to citizenship and birth_date
+    """
     throttle_classes = [AnonRateThrottle]
 
     def post(self, request):
@@ -53,10 +70,14 @@ class CustomerRegistrationView(APIView):
 
 
 class CustomerLoginView(KnoxLoginView):
-    """
-    username: test1
-    password: G00dP@55word
-    Please keep the token for logout
+    """Post request
+
+    Args:        
+        username: test1
+        password: G00dP@55word
+
+    Returns:
+        _type_: _description_
     """
     serializer_class = LoginSerializer
     permission_classes = (permissions.AllowAny,)
@@ -74,21 +95,32 @@ class CustomerLoginView(KnoxLoginView):
 
 
 class CustomerWelcomeView(APIView):
+    """Get request
+
+    Returns:
+        last_login: timestamp
+        first_name: string,
+        last_name: string,
+    """
     permission_classes = (permissions.IsAuthenticated, IsCustomer,)
     authentication_classes = (TokenAndTwoFactorAuthentication,)
+    throttle_scope = "non_sensitive_request"
 
-    # Displays the user's first name, last name, last login in Dashboard
     def get(self, request):
         data = {
             "last_login": request.user.last_login,
             "first_name": request.user.customer.first_name,
             "last_name": request.user.customer.last_name,
         }
-
         return Response(data, status=status.HTTP_200_OK)
 
 
 class AccountTypesView(APIView):
+    """Get request
+
+    Returns:
+        account_types: list of account_types (string)
+    """
     permission_classes = (permissions.IsAuthenticated, IsCustomer,)
     authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "non_sensitive_request"
@@ -99,6 +131,11 @@ class AccountTypesView(APIView):
 
 
 class AccountsView(APIView):
+    """Get request
+
+    Returns:
+        accounts: list of accounts (account, balance, acct_type)
+    """
     permission_classes = (permissions.IsAuthenticated, IsCustomer,)
     authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "non_sensitive_request"
@@ -110,6 +147,14 @@ class AccountsView(APIView):
 
 
 class TransactionsView(APIView):
+    """Post request
+
+    Args:
+        account_id: account_id
+
+    Returns:
+        transactions: list of transactions
+    """
     permission_classes = (permissions.IsAuthenticated, IsCustomer,)
     authentication_classes = (TokenAndTwoFactorAuthentication,)
 
@@ -124,6 +169,21 @@ class TransactionsView(APIView):
 
 
 class CustomerTicketsView(APIView):
+    """Get request
+
+    Returns:
+        tickets: list of tickets ("ticket", "ticket_type", "status", "created_date", "closed_date") opened by customer
+
+        
+    Post request
+
+    Args:
+        ticket_type: ["Opening Account", "Closing Account"]
+        value: AccountType if opening account, account_id if closing account
+
+    Returns:
+        success: "Ticket has been created."
+    """
     permission_classes = (permissions.IsAuthenticated, IsCustomer)
     authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "non_sensitive_request"
@@ -141,9 +201,15 @@ class CustomerTicketsView(APIView):
 
 
 class DepositView(APIView):
-    """
-    account_id: 89c46857-d9f7-4f5d-b221-0936b78e8b7b
-    amount: 50
+    """Post request
+
+    Args:
+        account_id: account_id
+        amount: number
+        description: string
+
+    Returns:
+        new_balance: number
     """
     permission_classes = (permissions.IsAuthenticated, IsCustomer,)
     authentication_classes = (TokenAndTwoFactorAuthentication,)
@@ -158,11 +224,16 @@ class DepositView(APIView):
 
 
 class WithdrawView(APIView):
-    """
-    account_id: 89c46857-d9f7-4f5d-b221-0936b78e8b7b
-    amount: 50
-    """
+    """Post request
 
+    Args:
+        account_id: account_id
+        amount: number
+        description: string
+
+    Returns:
+        new_balance: number
+    """
     permission_classes = (permissions.IsAuthenticated, IsCustomer,)
     authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "sensitive_request"
@@ -176,13 +247,17 @@ class WithdrawView(APIView):
 
 
 class TransferView(APIView):
-    """
-    sender_id: 89c46857-d9f7-4f5d-b221-0936b78e8b7b
-    recipient_id: b7ee7413-3dbd-4fde-96b8-658dfc02b62f
-    amount: 50
-    description: string
-    """
+    """Post request
 
+    Args:
+        sender_id: account_id
+        recipient_id: account_id
+        amount: number
+        description: string
+
+    Returns:
+        success: "Transfer was successfully made."
+    """
     permission_classes = (permissions.IsAuthenticated, IsCustomer,)
     authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "sensitive_request"

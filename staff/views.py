@@ -17,18 +17,36 @@ from user.serializers import LoginSerializer, UserRegisterSerializer
 
 # Create your views here.
 class StaffRegistrationView(APIView):
+    """TO BE DELETED IN PRODUCTION
+    Post request
+
+    Args:
+        username: staff1
+        email: staff1@gmail.com
+        phone_no: 12345678
+        password: G00dP@55word
+        first_name: first
+        last_name: last
+        birth_date: 1999-01-01
+        title: ["Ticket Reviewer", "Security Engineer", "Researcher"]
+        gender: ["Male", "Female", "Others"]
+
+    Returns:
+        success: "Staff is successfully registered."
+
+    password:
+        - must be at least maximum 0.7 similarity to username and email
+        - has a minimum length of 8 characters
+        - cannot be a common password
+        - cannot be fully numeric
+        - has a maximum length of 64 characters
+        - must have at least 2 uppercase characters
+        - must have at least 2 lowercase characters
+        - must have at least 1 numeric character
+        - must have at least 1 special character
+
+    identity_no needs to be valid with respect to citizenship and birth_date
     """
-    username: staff1
-    email: staff1@gmail.com
-    phone_no: 12345678
-    password: G00dP@55word
-    first_name: first
-    last_name: last
-    birth_date: 1990-01-01
-    title: Ticket Reviewer
-    gender: Male
-    """
-    
     throttle_classes = [AnonRateThrottle]
 
     def post(self, request):
@@ -47,6 +65,15 @@ class StaffRegistrationView(APIView):
 
 
 class StaffLoginView(KnoxLoginView):
+    """Post request
+
+    Args:        
+        username: staff1
+        password: G00dP@55word
+
+    Returns:
+        _type_: _description_
+    """
     serializer_class = LoginSerializer
     permission_classes = (permissions.AllowAny,)
     throttle_classes = [AnonRateThrottle]
@@ -63,6 +90,13 @@ class StaffLoginView(KnoxLoginView):
     
 
 class StaffWelcomeView(APIView):
+    """Get request
+
+    Returns:
+        last_login: timestamp
+        first_name: string,
+        last_name: string,
+    """
     permission_classes = (permissions.IsAuthenticated, IsStaff)
     authentication_classes = (TokenAndTwoFactorAuthentication,)
 
@@ -77,6 +111,11 @@ class StaffWelcomeView(APIView):
         return Response(data, status=status.HTTP_200_OK)
 
 class GetOpenTicketsView(APIView):
+    """Get request
+
+    Returns:
+        tickets: list of opened tickets
+    """
     permission_classes = (permissions.IsAuthenticated, IsStaff, IsTicketReviewer,)
     authentication_classes = (TokenAndTwoFactorAuthentication,)
 
@@ -86,6 +125,11 @@ class GetOpenTicketsView(APIView):
 
 
 class GetClosedTicketsView(APIView):
+    """Get request
+
+    Returns:
+        tickets: list of closed tickets
+    """
     permission_classes = (permissions.IsAuthenticated, IsStaff, IsTicketReviewer,)
     authentication_classes = (TokenAndTwoFactorAuthentication,)
 
@@ -95,9 +139,16 @@ class GetClosedTicketsView(APIView):
 
 
 class StaffTicketView(APIView):
-    '''
-    ticket_id: 
-    '''
+    """Post request
+
+    Args:
+        ticket_id: ticket_id
+
+    Returns:
+        ticket: ticket, ticket_type, status, created_date, closed_date, value
+        customer: first_name, last_name, birth_date, citizenship, email, phone_no
+        accounts: list of accounts (account, type, balance, status, date_created) owned by customer
+    """
     permission_classes = (permissions.IsAuthenticated, IsStaff, IsTicketReviewer,)
     authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "non_sensitive_request"
@@ -111,10 +162,14 @@ class StaffTicketView(APIView):
 
 
 class ApproveView(APIView):
-    """
-    ticket_id: d1fa1bcc-c558-4f45-86eb-fef2caff0ecb
-    """
+    """Post request
 
+    Args:
+        ticket_id: d1fa1bcc-c558-4f45-86eb-fef2caff0ecb
+
+    Returns:
+        success: "Ticket has been approved."
+    """
     permission_classes = (permissions.IsAuthenticated, IsStaff, IsTicketReviewer,)
     authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "sensitive_request"
@@ -128,10 +183,14 @@ class ApproveView(APIView):
 
 
 class RejectView(APIView):
-    """
-    ticket_id: b69eed6a-d494-48c1-84e7-6b53ed3ab5db
-    """
+    """Post request
 
+    Args:
+        ticket_id: d1fa1bcc-c558-4f45-86eb-fef2caff0ecb
+
+    Returns:
+        success: "Ticket has been rejected."
+    """
     permission_classes = (permissions.IsAuthenticated, IsStaff, IsTicketReviewer,)
     authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "sensitive_request"
@@ -145,6 +204,15 @@ class RejectView(APIView):
 
       
 class AnonymisationView(APIView):
+    """Post request
+
+    Args:
+        k_value: number
+        query: number
+
+    Returns:
+        data: anonymised data
+    """
     permission_classes = (permissions.IsAuthenticated, IsStaff, IsResearcher)
     authentication_classes = (TokenAndTwoFactorAuthentication,)
 

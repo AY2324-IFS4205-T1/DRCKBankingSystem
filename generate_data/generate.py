@@ -1,14 +1,15 @@
 import json
 import random
 import string
-from datetime import datetime, timedelta, timezone
-from user.models import User
-from customer.models import AccountTypes, Accounts
-from django.utils import timezone
 import subprocess
-from django.utils.timezone import make_aware
+from datetime import datetime, timedelta
+from secrets import choice
+
 from django.contrib.auth.hashers import make_password
-import os
+from django.utils.timezone import make_aware
+
+from customer.models import Accounts, AccountTypes
+from user.models import User
 
 TRANSACTIONS_MODEL = "customer.Transactions"
 
@@ -33,9 +34,9 @@ def get_random_identity_number():
     """
     Generates random identity number based on regex='^[STFG]\d{7}[A-Z]$'
     """
-    first_char = random.choice("STFGM")
+    first_char = choice("STFGM")
     digits = ''.join(random.choices(string.digits, k=7))
-    last_char = random.choice(string.ascii_uppercase)
+    last_char = choice(string.ascii_uppercase)
     identity_no = f"{first_char}{digits}{last_char}"
     return identity_no
 
@@ -48,7 +49,7 @@ def get_random_postal_code():
 def get_random_citizenship():
     # List of possible nationalities
     nationalities = ["Singaporean Citizen", "Singaporean PR", "Non-Singaporean"]
-    random_nationality = random.choice(nationalities)
+    random_nationality = choice(nationalities)
     return random_nationality
 
 
@@ -86,7 +87,7 @@ def get_random_datetime():
 
 def get_random_gender():
     genders = ["Male", "Female"]
-    return random.choice(genders)
+    return choice(genders)
 
 
 def get_random_account_type():
@@ -94,7 +95,7 @@ def get_random_account_type():
     Retrieves all account types from database and randomly chooses one
     """
     types = list(AccountTypes.objects.values_list('type', flat=True))
-    return random.choice(types)
+    return choice(types)
 
 
 def get_random_balance():
@@ -116,11 +117,11 @@ def get_random_account_id(check):
     """
     if check == 0:
         account_id = list(Accounts.objects.values_list('account', flat=True))
-        return random.choice(account_id)
+        return choice(account_id)
     else:
         while True:
             account_id = list(Accounts.objects.values_list('account', flat=True))
-            new_account_id = random.choice(account_id)
+            new_account_id = choice(account_id)
             if new_account_id != check:
                 return new_account_id
 
@@ -138,7 +139,7 @@ def get_random_transaction_value(sender_id):
 
 def get_random_transaction_type():
     transaction_types = ["Deposit", "Withdrawal", "Transfer"]
-    return random.choice(transaction_types)
+    return choice(transaction_types)
 
 
 def generate_random_password(length=15):
@@ -147,7 +148,7 @@ def generate_random_password(length=15):
     """
     characters = string.ascii_letters + string.digits + string.punctuation
     length = max(length, 12)
-    password = ''.join(random.choice(characters) for _ in range(length))
+    password = ''.join(choice(characters) for _ in range(length))
     return password
 
 
