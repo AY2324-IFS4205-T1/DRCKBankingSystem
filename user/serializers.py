@@ -37,7 +37,7 @@ class AuthCheckSerializer(serializers.Serializer):
                 return self.is_forbidden()
         except AuthenticationFailed as error:
             if not self.is_forbidden():
-                self.response["authorised_message"] = error.detail
+                self.response["authenticated_message"] = error.detail
             return False
     
     def is_forbidden(self):

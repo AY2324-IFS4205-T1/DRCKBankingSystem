@@ -322,21 +322,21 @@ class TestAuthCheck(TestLogout):
         self.login_customer_1()
         response = self.client.post(reverse("auth_check"), sample_auth_check, **self.header)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        expected = {'authenticated': False, 'authenticated_message': '', 'authorised': False, 'user_authorisation': 'Customer', 'authorised_message': 'User does not have 2FA set up.'}
+        expected = {'authenticated': False, 'authenticated_message': 'User does not have 2FA set up.', 'authorised': False, 'user_authorisation': 'Customer'}
         self.assertEqual(response.json(), expected)
         
         # login, authorised, but no 2FA
         sample_auth_check = {"page_type": "Customer"}
         response = self.client.post(reverse("auth_check"), sample_auth_check, **self.header)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        expected = {'authenticated': False, 'authenticated_message': '', 'authorised': True, 'user_authorisation': '', 'authorised_message': 'User does not have 2FA set up.'}
+        expected = {'authenticated': False, 'authenticated_message': 'User does not have 2FA set up.', 'authorised': True, 'user_authorisation': ''}
         self.assertEqual(response.json(), expected)
         
         # login, authorised, 2FA set up but not verified
         self.create_two_fa_customer1()
         response = self.client.post(reverse("auth_check"), sample_auth_check, **self.header)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        expected = {'authenticated': False, 'authenticated_message': '', 'authorised': True, 'user_authorisation': '', 'authorised_message': 'The session has changed, 2FA needs to be verified again.'}
+        expected = {'authenticated': False, 'authenticated_message': 'The session has changed, 2FA needs to be verified again.', 'authorised': True, 'user_authorisation': ''}
         self.assertEqual(response.json(), expected)
         
         # login, 2FA, but unauthorised
