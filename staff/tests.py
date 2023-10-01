@@ -227,4 +227,5 @@ class TestAnonymisation(TestLogout): # staff action
         self.two_fa_staff4()
         sample_anonymise = {"k_value": "1", "query": "1"}
         response = self.client.post(reverse("anonymisation"), sample_anonymise, **self.header)
+        print(response.json())
         self.assertEqual(response.status_code, status.HTTP_200_OK)

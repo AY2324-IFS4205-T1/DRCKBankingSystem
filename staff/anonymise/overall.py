@@ -365,6 +365,9 @@ def user_inputs(k, query):
         write_to_json_file(unanon_json, "unanon.json")
         return {"anonymised": anon_json,
                 "unanonymised": unanon_json} ## placeholder for testing of API
+
+    else:
+        return {"anonymised": "anon_json", "unanonymised": "unanon_json"}
         
         
 # TESTING PURPOSES: For API Calls

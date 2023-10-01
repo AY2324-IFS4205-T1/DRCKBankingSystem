@@ -183,5 +183,8 @@ class AnonymisationSerializer(serializers.Serializer):
         return super().validate(attrs)
 
     def get_anonymised_data(self):
-        data = user_inputs(self.k, self.query)
+        try:
+            data = user_inputs(self.k, self.query)
+        except Exception as error:
+            return {"error": error.__str__()}
         return {"data": data}
