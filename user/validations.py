@@ -2,6 +2,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.forms import ValidationError as FormValidationError
 from django.utils.translation import ngettext
 from rest_framework.serializers import ValidationError
+from staff.models import Staff
 
 from user.models import TwoFA, User
 
@@ -114,6 +115,20 @@ class SpecialCharacterValidator:
                 code="insufficient_special",
                 params={"min_number": self.min_number},
             )
+        
+
+def validate_page_type(json_dict):
+    try:
+        page_type = json_dict["page_type"]
+    except KeyError:
+        raise ValidationError("Field 'page_type' missing.")
+
+    user_types = User.user_type.values
+    staff_types = Staff.Title.values
+
+    if page_type in (user_types + staff_types):
+        return page_type
+    raise ValidationError("Invalid 'page_type' value.")
     
 
 def validate_new_user(username, user_type):

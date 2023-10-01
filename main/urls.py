@@ -23,7 +23,7 @@ from customer.views import (AccountsView, AccountTypesView, CustomerLoginView,
 from staff.views import (AnonymisationView, ApproveView, GetClosedTicketsView, GetOpenTicketsView,
                          RejectView, StaffLoginView, StaffRegistrationView,
                          StaffTicketView, StaffWelcomeView)
-from user.views import (AuthenticationTypeCheckView, LogoutView,
+from user.views import (AuthenticationCheckView, LogoutView,
                         SetupTwoFactorAuthenticationView,
                         VerifyTwoFactorAuthenticationView)
 
@@ -54,7 +54,7 @@ urlpatterns = [
 
     #In logout, header key: Authorization, Value: Token 3510ff361b..
     path('logout', LogoutView.as_view(), name='logout'),
-    path('auth_check', AuthenticationTypeCheckView.as_view(), name='auth_check'),
+    path('auth_check', AuthenticationCheckView.as_view(), name='auth_check'),
     
     # 2 Factor Authentication
     path("setup_2FA", SetupTwoFactorAuthenticationView.as_view(), name="setup_2fa"),

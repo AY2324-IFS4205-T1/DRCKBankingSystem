@@ -23,6 +23,7 @@ class TestWelcome(TestLogout): # staff action
         response = self.client.get(reverse("staffWelcome"), **self.header)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+
 class TestGetOpenTickets(TestLogout): # staff action
     def test_should_not_get_open_tickets(self):
         response = self.client.get(reverse("getOpenTickets"))
