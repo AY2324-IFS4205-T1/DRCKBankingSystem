@@ -312,7 +312,10 @@ class TestAuthCheck(TestLogout):
 
     def test_should_auth_check(self):
         # no login
-        sample_auth_check = {"page_type": "Ticket Reviewer"}
+        sample_customer_auth_check = {"page_type": "Customer"}
+        sample_ticket_auth_check = {"page_type": "Ticket Reviewer"}
+
+        sample_auth_check = sample_ticket_auth_check
         response = self.client.post(reverse("auth_check"), sample_auth_check)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         expected = {'authenticated': False, 'authenticated_message': 'User not logged in.', 'authorised': False, 'user_authorisation': ''}
@@ -326,7 +329,7 @@ class TestAuthCheck(TestLogout):
         self.assertEqual(response.json(), expected)
         
         # login, authorised, but no 2FA
-        sample_auth_check = {"page_type": "Customer"}
+        sample_auth_check = sample_customer_auth_check
         response = self.client.post(reverse("auth_check"), sample_auth_check, **self.header)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         expected = {'authenticated': False, 'authenticated_message': 'User does not have 2FA set up.', 'authorised': True, 'user_authorisation': ''}
@@ -341,14 +344,14 @@ class TestAuthCheck(TestLogout):
         
         # login, 2FA, but unauthorised
         self.two_fa_customer_1()
-        sample_auth_check = {"page_type": "Ticket Reviewer"}
+        sample_auth_check = sample_ticket_auth_check
         response = self.client.post(reverse("auth_check"), sample_auth_check, **self.header)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         expected = {'authenticated': True, 'authenticated_message': '', 'authorised': False, 'user_authorisation': 'Customer'}
         self.assertEqual(response.json(), expected)
         
         # login, authorised, and 2FAt
-        sample_auth_check = {"page_type": "Customer"}
+        sample_auth_check = sample_customer_auth_check
         response = self.client.post(reverse("auth_check"), sample_auth_check, **self.header)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         expected = {'authenticated': True, 'authenticated_message': '', 'authorised': True, 'user_authorisation': ''}
