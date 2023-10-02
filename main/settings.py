@@ -169,13 +169,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'Asia/Singapore'
 USE_TZ = True
-
 USE_I18N = True
-
-USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
@@ -193,9 +189,8 @@ AUTH_USER_MODEL = "user.User"
 AUTHENTICATION_BACKENDS = ['user.authentication.UserAuth'] #'django.contrib.auth.backends.ModelBackend'
 
 # Throttling
-TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
-sensitive_request_throttle_rate = "10/minute" if not TESTING else "100000/second"
-non_sensitive_request_throttle_rate = "60/minute" if not TESTING else "100000/second"
+sensitive_request_throttle_rate = "10/minute" if not DEBUG else "100000/second"
+non_sensitive_request_throttle_rate = "60/minute" if not DEBUG else "100000/second"
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication', ),
     "DEFAULT_THROTTLE_CLASSES": [
