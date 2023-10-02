@@ -5,9 +5,9 @@ from rest_framework import status
 
 from user.tests import TestLogout
 
-approved_ticket_id = "df07d3fb-9338-446b-89a2-f3353d344273"
-rejected_ticket_id = "17afb844-09a9-4f15-ae97-3e9c4fdbe479"
-open_ticket_id = "f80804c7-8e72-4e81-a9aa-610b5eb79e92"
+approved_ticket_id = "367bffbc-87dd-4d6b-b060-5747d6509b54"
+rejected_ticket_id = "7fe0efae-482f-4dfb-b5e0-b3198b1d2f3a"
+open_ticket_id = "68023295-ca4c-435d-9d45-2b9b1ef1ba34"
 
 class TestWelcome(TestLogout): # staff action
     def test_should_not_get_open_tickets(self):
@@ -227,5 +227,4 @@ class TestAnonymisation(TestLogout): # staff action
         self.two_fa_staff4()
         sample_anonymise = {"k_value": "1", "query": "1"}
         response = self.client.post(reverse("anonymisation"), sample_anonymise, **self.header)
-        print(response.json())
         self.assertEqual(response.status_code, status.HTTP_200_OK)
