@@ -89,8 +89,7 @@ class CustomerLoginView(KnoxLoginView):
         if serializer.is_valid():
             user = serializer.validated_data["user"]
             login(request, user)
-            response = super().post(request, format=None)
-            return Response(response.data, status=status.HTTP_200_OK)
+            return super().post(request, format=None)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

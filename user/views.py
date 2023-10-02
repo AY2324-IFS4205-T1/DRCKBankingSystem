@@ -13,6 +13,7 @@ from user.serializers import (AuthCheckSerializer, GetTwoFASerializer,
 class LogoutView(KnoxLogoutView):
     def post(self, request, format=None):
         RemoveTwoFASerializer(request.user)
+        request.user.auth_token_set.all().delete()
         return super().post(request, format)
 
 
@@ -57,13 +58,13 @@ class AuthenticationCheckView(APIView):
     """Post Request
 
     Args:
-        page_type: ["Customer", "Ticket Reviewer", "Security Engineer", "Researcher"]
+        page_type: ["Customer", "Ticket Reviewer", "Auditor", "Researcher"]
 
     Returns:
         authenticated: True/False
         authenticated_message: ["User not logged in.", "The session has changed, 2FA needs to be verified again.", "2FA has not been verified.", "2FA timeout, 2FA needs to be verified again."]
         authorised: True/False
-        user_authorisation: ["User not logged in.", "The session has changed, 2FA needs to be verified again.", "2FA has not been verified.", "2FA timeout, 2FA needs to be verified again."]
+        user_authorisation: ["Customer", "Ticket Reviewer", "Auditor", "Researcher"]
     """
     permission_classes = (permissions.AllowAny,)
     throttle_classes = [AnonRateThrottle]
