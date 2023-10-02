@@ -169,13 +169,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'Asia/Singapore'
 USE_TZ = True
-
 USE_I18N = True
-
-USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
@@ -193,9 +189,8 @@ AUTH_USER_MODEL = "user.User"
 AUTHENTICATION_BACKENDS = ['user.authentication.UserAuth'] #'django.contrib.auth.backends.ModelBackend'
 
 # Throttling
-TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
-sensitive_request_throttle_rate = "10/minute" if not TESTING else "100000/second"
-non_sensitive_request_throttle_rate = "60/minute" if not TESTING else "100000/second"
+sensitive_request_throttle_rate = "10/minute" if not DEBUG else "100000/second"
+non_sensitive_request_throttle_rate = "60/minute" if not DEBUG else "100000/second"
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication', ),
     "DEFAULT_THROTTLE_CLASSES": [
@@ -213,10 +208,11 @@ REST_FRAMEWORK = {
 REST_KNOX = {
     'SECURE_HASH_ALGORITHM':'cryptography.hazmat.primitives.hashes.SHA512',
     'AUTH_TOKEN_CHARACTER_LENGTH': 64, # By default, it is set to 64 characters (this shouldn't need changing).
-    'TOKEN_TTL': timedelta(minutes=45), # The default is 10 hours i.e., timedelta(hours=10)).
+    'TOKEN_TTL': timedelta(minutes=15), # The default is 10 hours i.e., timedelta(hours=10)).
     'USER_SERIALIZER': 'knox.serializers.UserSerializer',
-    'TOKEN_LIMIT_PER_USER': None, # By default, this option is disabled and set to None -- thus no limit.
-    'AUTO_REFRESH': False, # This defines if the token expiry time is extended by TOKEN_TTL each time the token is used.
+    'TOKEN_LIMIT_PER_USER': None if DEBUG else 1, # By default, this option is disabled and set to None -- thus no limit.
+    'AUTO_REFRESH': True, # This defines if the token expiry time is extended by TOKEN_TTL each time the token is used.
+    'MIN_REFRESH_INTERVAL': 60, # This is the minimum time in seconds that needs to pass for the token expiry to be updated in the database.
     'EXPIRY_DATETIME_FORMAT': api_settings.DATETIME_FORMAT,
 }
 

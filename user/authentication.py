@@ -1,9 +1,11 @@
-from django.contrib.auth import get_user_model
 from datetime import timedelta
+
+from django.contrib.auth import get_user_model
 from django.utils import timezone
 from knox.auth import TokenAuthentication
 from rest_framework.exceptions import AuthenticationFailed
 
+from main.settings import REST_KNOX
 from user.models import TwoFA
 
 # https://reintech.io/blog/writing-custom-authentication-backend-django
@@ -46,11 +48,13 @@ class TokenAndTwoFactorAuthentication(TokenAuthentication):
             raise AuthenticationFailed("2FA has not been verified.")
 
         difference = timezone.now() - two_fa.last_authenticated
-        is_two_fa_authenticated = difference < timedelta(minutes=15)
+        is_two_fa_authenticated = difference < REST_KNOX["TOKEN_TTL"]
 
         if is_two_fa_authenticated:
-            two_fa.last_authenticated = timezone.now()
-            two_fa.save()
+            delta = (timezone.now() + REST_KNOX["TOKEN_TTL"] - two_fa.last_authenticated).total_seconds()
+            if delta > REST_KNOX["MIN_REFRESH_INTERVAL"]:
+                two_fa.last_authenticated = timezone.now()
+                two_fa.save()
             return token_authenticated
         else:
             two_fa.last_authenticated = None
