@@ -3,8 +3,8 @@ from rest_framework import status
 
 from user.tests import TestLogout
 
-customer1_account_id = "ef5c716e-8448-4365-95eb-4f551f10d1c1"
-customer2_account_id = "276a9050-445f-4396-80e6-76d096574634"
+customer1_account_id = "2f890e04-5239-418b-a7ff-42e5018af860"
+customer2_account_id = "d90e5d13-b69e-47e6-aa53-abc090528401"
 
 
 class TestWelcome(TestLogout):  # customer action

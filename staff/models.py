@@ -18,7 +18,7 @@ class Staff(models.Model):
 
     class Title(models.TextChoices):
         REVIEWER = "Ticket Reviewer"
-        SECURITY = "Security Engineer"
+        AUDITOR = "Auditor"
         RESEARCHER = "Researcher"
 
     user = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE)

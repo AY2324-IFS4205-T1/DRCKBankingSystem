@@ -1,3 +1,5 @@
+import uuid
+
 from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager,
                                         PermissionsMixin)
 from django.db import models
@@ -28,6 +30,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         CUSTOMER = "Customer"
         STAFF = "Staff"
 
+    user = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     username = models.CharField(max_length=150)
     password = models.CharField(max_length=128)
     email = models.EmailField()

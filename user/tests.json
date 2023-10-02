@@ -1,16 +1,16 @@
 [
     {
         "model": "user.user",
-        "pk": 1,
+        "pk": "476e8652-b696-43f7-8be7-7992e2289404",
         "fields": {
             "is_superuser": false,
             "username": "test1",
-            "password": "pbkdf2_sha256$600000$7dWNkOQWJaIEKl055sTmlS$+wUcsENxJpuWY0LXGz+vclSuflsjYzpP1f9XqBUEQdU=",
+            "password": "pbkdf2_sha256$600000$7PG45bWVHbioYk9wVecVzD$M164lcHIwONEuQRzejI6iVwPTRh1DU4O1qsToe23dAA=",
             "email": "test1@gmail.com",
             "phone_no": "12345678",
             "type": "Customer",
-            "date_joined": "2023-09-30T07:56:50.887Z",
-            "last_login": "2023-09-30T10:32:16.607Z",
+            "date_joined": "2023-10-02T13:28:17.904Z",
+            "last_login": "2023-10-02T13:46:07.353Z",
             "is_active": true,
             "groups": [],
             "user_permissions": []
@@ -18,33 +18,16 @@
     },
     {
         "model": "user.user",
-        "pk": 2,
-        "fields": {
-            "is_superuser": false,
-            "username": "test2",
-            "password": "pbkdf2_sha256$600000$amCVcyr2nwrjGoN9wSH9DP$5KGpJmUcJ+IFk9KLCaPx3aSO/uTr85c3aqT7uUzE9Tw=",
-            "email": "test2@gmail.com",
-            "phone_no": "12345678",
-            "type": "Customer",
-            "date_joined": "2023-09-30T07:58:44.102Z",
-            "last_login": "2023-09-30T10:36:25.652Z",
-            "is_active": true,
-            "groups": [],
-            "user_permissions": []
-        }
-    },
-    {
-        "model": "user.user",
-        "pk": 3,
+        "pk": "7b3b6f3e-8d65-4a1f-8cf6-3bfd5668dd89",
         "fields": {
             "is_superuser": false,
             "username": "staff1",
-            "password": "pbkdf2_sha256$600000$o1XlvuKlbn51cNgK04autd$wO9pQBfh2QllntII2fSQDaL0O3jbuPa+TU/8sgm9Ovo=",
+            "password": "pbkdf2_sha256$600000$iqV1bAfj5XtjAKILLpHrTZ$whkFcOH1HyWd/u+idQfqBkEzoHQX2XN+spRNo1PfT4o=",
             "email": "staff1@gmail.com",
             "phone_no": "12345678",
             "type": "Staff",
-            "date_joined": "2023-09-30T09:02:16.196Z",
-            "last_login": "2023-09-30T09:47:36.205Z",
+            "date_joined": "2023-10-02T13:32:53.868Z",
+            "last_login": "2023-10-02T13:42:09.245Z",
             "is_active": true,
             "groups": [],
             "user_permissions": []
@@ -52,33 +35,16 @@
     },
     {
         "model": "user.user",
-        "pk": 4,
-        "fields": {
-            "is_superuser": false,
-            "username": "staff2",
-            "password": "pbkdf2_sha256$600000$E6o1zj51YsAgWf1hrn88MT$RVmQPA6NtNBZvPpjJ1jvn4cUaOtAp8eXlCz+hewJY7k=",
-            "email": "staff2@gmail.com",
-            "phone_no": "12345678",
-            "type": "Staff",
-            "date_joined": "2023-09-30T11:29:02.160Z",
-            "last_login": "2023-09-30T11:29:02.160Z",
-            "is_active": true,
-            "groups": [],
-            "user_permissions": []
-        }
-    },
-    {
-        "model": "user.user",
-        "pk": 5,
+        "pk": "8a6c8364-4b99-4192-a86d-860b3cd404dd",
         "fields": {
             "is_superuser": false,
             "username": "staff3",
-            "password": "pbkdf2_sha256$600000$LpHNPsGa3Bo4fOSISBxHmp$nJrW6f+qAXxmg4kyZtcMTLsQ6hPeoL4+Nw4OLIlZLsM=",
+            "password": "pbkdf2_sha256$600000$x7VwlKSCiaw39BkyGjCddM$mEiFq0xDckdysoppEaau+2wYLDKrSm4Dr/PGO2Fjgb8=",
             "email": "staff3@gmail.com",
             "phone_no": "12345678",
             "type": "Staff",
-            "date_joined": "2023-09-30T11:30:05.096Z",
-            "last_login": "2023-09-30T11:30:05.096Z",
+            "date_joined": "2023-10-02T13:34:46.131Z",
+            "last_login": "2023-10-02T13:34:46.131Z",
             "is_active": true,
             "groups": [],
             "user_permissions": []
@@ -86,16 +52,50 @@
     },
     {
         "model": "user.user",
-        "pk": 6,
+        "pk": "8dbc3512-819d-49f5-a9ab-85d01af6adff",
         "fields": {
             "is_superuser": false,
             "username": "staff4",
-            "password": "pbkdf2_sha256$600000$WKrxJgcZGaGfpqE1qWw6RZ$lNLPVsfTYqv790811V+qzmeM7/U4RcITInsRPYCPmKs=",
+            "password": "pbkdf2_sha256$600000$OeoTn7ft52Udt88flH3SWJ$J87zcZFcDsIo7nc4TSsHP/LimBsN0kK9ejfyYQZV5Qs=",
             "email": "staff4@gmail.com",
             "phone_no": "12345678",
             "type": "Staff",
-            "date_joined": "2023-09-30T11:30:37.638Z",
-            "last_login": "2023-09-30T11:30:37.638Z",
+            "date_joined": "2023-10-02T13:35:29.133Z",
+            "last_login": "2023-10-02T13:35:29.133Z",
+            "is_active": true,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "user.user",
+        "pk": "933b2980-bc5f-469c-be78-0ba4dc8fe42c",
+        "fields": {
+            "is_superuser": false,
+            "username": "test2",
+            "password": "pbkdf2_sha256$600000$3ZPda7vuRSYUrDheBjWTpZ$TKbV69Cum3jrhkc8vwKy1xP8MMSahIzpUazyTs+Wy6g=",
+            "email": "test2@gmail.com",
+            "phone_no": "12345678",
+            "type": "Customer",
+            "date_joined": "2023-10-02T13:28:50.698Z",
+            "last_login": "2023-10-02T13:51:12.632Z",
+            "is_active": true,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "user.user",
+        "pk": "f8182f45-99dc-4e2e-ad5b-938ee5f9f0db",
+        "fields": {
+            "is_superuser": false,
+            "username": "staff2",
+            "password": "pbkdf2_sha256$600000$Ece8s6zQVasC7ydGvW8151$TLNdSzot8G9Q6qkMYA85ZOVTd0bpeh/z9Gx8y3Ggk0k=",
+            "email": "staff2@gmail.com",
+            "phone_no": "12345678",
+            "type": "Staff",
+            "date_joined": "2023-10-02T13:33:05.048Z",
+            "last_login": "2023-10-02T13:33:05.048Z",
             "is_active": true,
             "groups": [],
             "user_permissions": []
@@ -103,10 +103,10 @@
     },
     {
         "model": "customer.customer",
-        "pk": 1,
+        "pk": "476e8652-b696-43f7-8be7-7992e2289404",
         "fields": {
-            "first_name": "first",
-            "last_name": "last",
+            "first_name": "first1",
+            "last_name": "last1",
             "birth_date": "1999-01-01",
             "identity_no": "S9934567B",
             "address": "jurong",
@@ -117,16 +117,16 @@
     },
     {
         "model": "customer.customer",
-        "pk": 2,
+        "pk": "933b2980-bc5f-469c-be78-0ba4dc8fe42c",
         "fields": {
-            "first_name": "first",
-            "last_name": "last",
+            "first_name": "first2",
+            "last_name": "last2",
             "birth_date": "1999-01-01",
             "identity_no": "S9934567B",
             "address": "jurong",
             "postal_code": "123456",
             "citizenship": "Singaporean Citizen",
-            "gender": "Male"
+            "gender": "Female"
         }
     },
     {
@@ -152,68 +152,68 @@
     },
     {
         "model": "customer.accounts",
-        "pk": "276a9050-445f-4396-80e6-76d096574634",
+        "pk": "2f890e04-5239-418b-a7ff-42e5018af860",
         "fields": {
-            "user": 2,
+            "user": "476e8652-b696-43f7-8be7-7992e2289404",
             "type": 1,
-            "balance": "15.00",
+            "balance": "70.00",
             "status": "Active",
-            "date_created": "2023-09-30T10:23:24.838Z"
+            "date_created": "2023-10-02T13:44:30.521Z"
         }
     },
     {
         "model": "customer.accounts",
-        "pk": "ef5c716e-8448-4365-95eb-4f551f10d1c1",
+        "pk": "d90e5d13-b69e-47e6-aa53-abc090528401",
         "fields": {
-            "user": 1,
+            "user": "933b2980-bc5f-469c-be78-0ba4dc8fe42c",
             "type": 1,
-            "balance": "30.00",
+            "balance": "20.00",
             "status": "Active",
-            "date_created": "2023-09-30T10:20:53.321Z"
+            "date_created": "2023-10-02T13:44:51.080Z"
         }
     },
     {
         "model": "customer.transactions",
-        "pk": "01e6242e-f76c-4579-a4be-8add53782e1e",
+        "pk": "5f4b3e48-7aea-4b54-9a78-d0e829dd7955",
         "fields": {
             "transaction_type": "Withdrawal",
-            "sender": "276a9050-445f-4396-80e6-76d096574634",
+            "sender": "d90e5d13-b69e-47e6-aa53-abc090528401",
             "recipient": null,
             "description": "Yummy dinner!",
-            "amount": "55.00",
-            "date": "2023-09-30T10:38:18.232Z"
+            "amount": "10.00",
+            "date": "2023-10-02T13:52:08.544Z"
         }
     },
     {
         "model": "customer.transactions",
-        "pk": "ee4cc085-dc85-46f6-9921-683232067890",
+        "pk": "b260f933-a02f-4916-b9f6-d0d4e97b5cd5",
+        "fields": {
+            "transaction_type": "Transfer",
+            "sender": "2f890e04-5239-418b-a7ff-42e5018af860",
+            "recipient": "d90e5d13-b69e-47e6-aa53-abc090528401",
+            "description": "Happy birthday!",
+            "amount": "30.00",
+            "date": "2023-10-02T13:50:49.938Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "d26ce2bc-cff0-4207-8413-d0bf3c8d5bf1",
         "fields": {
             "transaction_type": "Deposit",
             "sender": null,
-            "recipient": "ef5c716e-8448-4365-95eb-4f551f10d1c1",
-            "description": "Welcome reward!",
+            "recipient": "2f890e04-5239-418b-a7ff-42e5018af860",
+            "description": "First paycheck!",
             "amount": "100.00",
-            "date": "2023-09-30T10:34:21.294Z"
-        }
-    },
-    {
-        "model": "customer.transactions",
-        "pk": "f0c3a288-3332-4490-b30c-d6c749594f6a",
-        "fields": {
-            "transaction_type": "Transfer",
-            "sender": "ef5c716e-8448-4365-95eb-4f551f10d1c1",
-            "recipient": "276a9050-445f-4396-80e6-76d096574634",
-            "description": "Here is your allowance!",
-            "amount": "70.00",
-            "date": "2023-09-30T10:35:41.761Z"
+            "date": "2023-10-02T13:49:05.902Z"
         }
     },
     {
         "model": "staff.staff",
-        "pk": 3,
+        "pk": "7b3b6f3e-8d65-4a1f-8cf6-3bfd5668dd89",
         "fields": {
-            "first_name": "first",
-            "last_name": "last",
+            "first_name": "ticket_reviewer",
+            "last_name": "staff1",
             "title": "Ticket Reviewer",
             "birth_date": "1990-01-01",
             "gender": "Male"
@@ -221,111 +221,111 @@
     },
     {
         "model": "staff.staff",
-        "pk": 4,
+        "pk": "8a6c8364-4b99-4192-a86d-860b3cd404dd",
         "fields": {
-            "first_name": "first2",
-            "last_name": "last2",
-            "title": "Ticket Reviewer",
+            "first_name": "auditor",
+            "last_name": "staff3",
+            "title": "Auditor",
             "birth_date": "1990-01-01",
             "gender": "Male"
         }
     },
     {
         "model": "staff.staff",
-        "pk": 5,
+        "pk": "8dbc3512-819d-49f5-a9ab-85d01af6adff",
         "fields": {
-            "first_name": "first3",
-            "last_name": "last3",
-            "title": "Security Engineer",
-            "birth_date": "1990-01-01",
-            "gender": "Male"
-        }
-    },
-    {
-        "model": "staff.staff",
-        "pk": 6,
-        "fields": {
-            "first_name": "first4",
-            "last_name": "last4",
+            "first_name": "researcher",
+            "last_name": "staff4",
             "title": "Researcher",
             "birth_date": "1990-01-01",
+            "gender": "Female"
+        }
+    },
+    {
+        "model": "staff.staff",
+        "pk": "f8182f45-99dc-4e2e-ad5b-938ee5f9f0db",
+        "fields": {
+            "first_name": "ticket_reviewer",
+            "last_name": "staff2",
+            "title": "Ticket Reviewer",
+            "birth_date": "1990-01-01",
             "gender": "Male"
         }
     },
     {
         "model": "staff.tickets",
-        "pk": "17afb844-09a9-4f15-ae97-3e9c4fdbe479",
-        "fields": {
-            "ticket_type": "Opening Account",
-            "status": "Rejected",
-            "created_by": 1,
-            "created_date": "2023-09-30T08:45:40.140Z",
-            "closed_by": 3,
-            "closed_date": "2023-09-30T10:23:02.300Z"
-        }
-    },
-    {
-        "model": "staff.tickets",
-        "pk": "73dd9830-b391-452c-86b9-389c6411ae56",
+        "pk": "367bffbc-87dd-4d6b-b060-5747d6509b54",
         "fields": {
             "ticket_type": "Opening Account",
             "status": "Approved",
-            "created_by": 2,
-            "created_date": "2023-09-30T08:56:50.448Z",
-            "closed_by": 3,
-            "closed_date": "2023-09-30T10:23:24.834Z"
+            "created_by": "933b2980-bc5f-469c-be78-0ba4dc8fe42c",
+            "created_date": "2023-10-02T13:41:44.187Z",
+            "closed_by": "7b3b6f3e-8d65-4a1f-8cf6-3bfd5668dd89",
+            "closed_date": "2023-10-02T13:44:51.067Z"
         }
     },
     {
         "model": "staff.tickets",
-        "pk": "df07d3fb-9338-446b-89a2-f3353d344273",
-        "fields": {
-            "ticket_type": "Opening Account",
-            "status": "Approved",
-            "created_by": 1,
-            "created_date": "2023-09-30T08:44:38.761Z",
-            "closed_by": 3,
-            "closed_date": "2023-09-30T10:20:53.316Z"
-        }
-    },
-    {
-        "model": "staff.tickets",
-        "pk": "f80804c7-8e72-4e81-a9aa-610b5eb79e92",
+        "pk": "68023295-ca4c-435d-9d45-2b9b1ef1ba34",
         "fields": {
             "ticket_type": "Opening Account",
             "status": "Open",
-            "created_by": 1,
-            "created_date": "2023-09-30T08:45:54.284Z",
+            "created_by": "476e8652-b696-43f7-8be7-7992e2289404",
+            "created_date": "2023-10-02T13:39:58.234Z",
             "closed_by": null,
             "closed_date": null
         }
     },
     {
+        "model": "staff.tickets",
+        "pk": "7fe0efae-482f-4dfb-b5e0-b3198b1d2f3a",
+        "fields": {
+            "ticket_type": "Opening Account",
+            "status": "Rejected",
+            "created_by": "476e8652-b696-43f7-8be7-7992e2289404",
+            "created_date": "2023-10-02T13:39:43.771Z",
+            "closed_by": "7b3b6f3e-8d65-4a1f-8cf6-3bfd5668dd89",
+            "closed_date": "2023-10-02T13:45:39.565Z"
+        }
+    },
+    {
+        "model": "staff.tickets",
+        "pk": "cd6eaa63-d9ee-440b-a1cf-8eba1a1feec4",
+        "fields": {
+            "ticket_type": "Opening Account",
+            "status": "Approved",
+            "created_by": "476e8652-b696-43f7-8be7-7992e2289404",
+            "created_date": "2023-10-02T13:39:34.270Z",
+            "closed_by": "7b3b6f3e-8d65-4a1f-8cf6-3bfd5668dd89",
+            "closed_date": "2023-10-02T13:44:30.508Z"
+        }
+    },
+    {
         "model": "staff.requestopenaccount",
-        "pk": "17afb844-09a9-4f15-ae97-3e9c4fdbe479",
+        "pk": "367bffbc-87dd-4d6b-b060-5747d6509b54",
+        "fields": {
+            "account_type": 1
+        }
+    },
+    {
+        "model": "staff.requestopenaccount",
+        "pk": "68023295-ca4c-435d-9d45-2b9b1ef1ba34",
+        "fields": {
+            "account_type": 3
+        }
+    },
+    {
+        "model": "staff.requestopenaccount",
+        "pk": "7fe0efae-482f-4dfb-b5e0-b3198b1d2f3a",
         "fields": {
             "account_type": 2
         }
     },
     {
         "model": "staff.requestopenaccount",
-        "pk": "73dd9830-b391-452c-86b9-389c6411ae56",
+        "pk": "cd6eaa63-d9ee-440b-a1cf-8eba1a1feec4",
         "fields": {
             "account_type": 1
-        }
-    },
-    {
-        "model": "staff.requestopenaccount",
-        "pk": "df07d3fb-9338-446b-89a2-f3353d344273",
-        "fields": {
-            "account_type": 1
-        }
-    },
-    {
-        "model": "staff.requestopenaccount",
-        "pk": "f80804c7-8e72-4e81-a9aa-610b5eb79e92",
-        "fields": {
-            "account_type": 3
         }
     }
 ]
