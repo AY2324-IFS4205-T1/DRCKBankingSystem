@@ -4,9 +4,11 @@ import string
 import subprocess
 from datetime import datetime, timedelta
 from secrets import choice
+from uuid import UUID
 
 from django.contrib.auth.hashers import make_password
 from django.utils.timezone import make_aware
+from django.db import connection
 
 from customer.models import Accounts, AccountTypes
 from user.models import User
@@ -18,7 +20,7 @@ def get_userids():
     """
     Retrieves all user_ids of exisiting Customers in database
     """
-    user_ids = list(User.objects.filter(type='Customer').values_list('id', flat=True))
+    user_ids = list(User.objects.filter(type='Customer').values_list('user', flat=True))
     return user_ids
 
 
@@ -180,13 +182,20 @@ def generate_auth_user(num_users):
         json.dump(data, json_file, indent=4)
 
 
+class UUIDEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, UUID):
+            return str(obj)
+        return super().default(obj)
+    
+
 def generate_customer():
     user_ids = get_userids()
     data = []
 
     for i, user_id in enumerate(user_ids):
         user_data = {
-            "pk": user_id, 
+            "pk": str(user_id), 
             "model": "customer.Customer",
             "fields": {
                 "user": str(user_id),
@@ -202,7 +211,7 @@ def generate_customer():
         }
         data.append(user_data)
     with open("generate_data/fixtures/customers.json", "w") as json_file:
-        json.dump(data, json_file, indent=4)
+        json.dump(data, json_file, indent=4, cls=UUIDEncoder)
 
 def generate_account():
     user_ids = get_userids()
@@ -300,24 +309,40 @@ def load_data(fixture_file):
     except subprocess.CalledProcessError as e:
         print(f"Command failed with error: {e}")
 
+def execute_delete_sql():
+    with connection.cursor() as cursor:
+        cursor.execute("TRUNCATE django.auth_user CASCADE;")
 
+
+# Define number of users and number of transactions you want to generate
+customer_num = 50
+transaction_num = 100
+
+
+# Delete all the data in database
+print("Clearing database of all data")
+execute_delete_sql()
 
 # Main Function
-# Define number of users you want to generate
-generate_auth_user(30)
+generate_auth_user(customer_num)
+print(f"Loading {customer_num} Users data into django.auth_user table")
 load_data("generate_data/fixtures/auth_users.json")
 
 generate_customer()
+print(f"Loading {customer_num} Customer data into customer.customer_info table")
 load_data("generate_data/fixtures/customers.json")
 
 if not AccountTypes.objects.exists():
+    print("Loading Account Types data into customer.account_types table")
     load_data("generate_data/fixtures/account_types.json")
 
 generate_account()
+print(f"Loading {customer_num} Account data into customer.accounts table")
 load_data("generate_data/fixtures/accounts.json")
 
-# # Define number of transactions you want to generate
-generate_transaction(300)
+# Define number of transactions you want to generate
+generate_transaction(transaction_num)
+print(f"Loading {transaction_num} Transaction data into customer.transactions table")
 load_data("generate_data/fixtures/transactions.json")
 
 print("Customer schema is populated!")
