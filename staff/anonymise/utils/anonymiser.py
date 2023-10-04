@@ -132,6 +132,7 @@ def anonymise(transaction_data, k_value, transaction_type):
     """
     Main function for calling anonymising based on the different transaction types of data.
     Reads input value of k from user and anonymises transaction data that is parsed in.
+    Returns data as dict.
     """
     # Read in Transaction History data
     if transaction_type == 'Withdrawal':
