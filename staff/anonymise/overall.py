@@ -1,16 +1,23 @@
-from django.db import models
-from customer.models import Transactions, Accounts, Customer
 from django.db.models import F, Q, Sum, Count
-from staff.anonymise.utils.anonymiser import anonymise
-from enum import Enum
-from datetime import datetime, date, timedelta
-from django.utils import timezone
-from django.db.models.functions import TruncMonth, ExtractMonth, ExtractYear
+from customer.models import Transactions
+from django.db.models.functions import ExtractMonth, ExtractYear
+
 import json
+from enum import Enum
+from datetime import datetime, date
 from decimal import Decimal
+from django.http import JsonResponse
+
+from staff.anonymise.utils.anonymiser import anonymise
+
 
 
 MAXIMUM_K_VALUE = 10 # anyhow put
+
+# First Query Parameters
+TYPE_OF_CITIZEN = 'Singaporean Citizen'
+NUM_YEARS = 10
+TRANSACTION_TYPE = 'Withdrawal'
 
 
 def age_convert(birth_date):
@@ -181,11 +188,11 @@ def unanonymised_first_query():
 
     # Filter data based on the past five years and Singaporean citizens
     current_date = datetime.now()
-    five_years_ago = current_date.replace(year=current_date.year - 4, month=1, day=1, hour=0, minute=0, second=0)
+    five_years_ago = current_date.replace(year=current_date.year - NUM_YEARS + 1, month=1, day=1, hour=0, minute=0, second=0)
     formatted_datetime = five_years_ago.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
 
     citizen_yearly_transactions = transactions.filter(
-        sender__user__citizenship='Singaporean Citizen', date__gte=formatted_datetime
+        sender__user__citizenship=TYPE_OF_CITIZEN, date__gte=formatted_datetime
         )
     group_transactions = citizen_yearly_transactions.annotate(
         year=ExtractYear('date')
@@ -234,11 +241,58 @@ class DecimalEncoder(json.JSONEncoder):
         if isinstance(obj, Decimal):
             return str(obj)
         return super().default(obj)
+
+def format_attributes(range):
+    parts = range.split("~")
+    output_string = " - ".join(parts)
+    return output_string
+
+def anonymise_postal_code(input_string):
+    parts = input_string.split(" - ")
+    first_part = parts[0][:2] + "****"
+    if len(parts) == 1:
+        return first_part
+    elif len(parts) == 2:
+        second_part = parts[1][:2] + "****"
+        result_string = f"{first_part} - {second_part}"
+        return result_string
+    return None
+
+def format_citizenship(input_string):
+    formatted_string = input_string.replace("SingaporeanCitizen", "Singaporean Citizen")
+    formatted_string = formatted_string.replace("SingaporeanPR", "Singapore PR")
+    return formatted_string
+
+  
+def format_anon_withdrawal_data(anon_withdrawal):
+    formatted_data = []
     
+    for withdrawal in anon_withdrawal:
+        age_range = format_attributes(withdrawal['sender_age'])
+        gender_range = format_attributes(withdrawal['sender_gender'])
+        postal_code_range = format_attributes(withdrawal['sender_postal_code'])
+        anon_postal_code = anonymise_postal_code(postal_code_range)
+        citizenship = format_attributes(withdrawal['sender_citizenship'])
+        spaced_citizenship = format_citizenship(citizenship)
+        
+        record = {
+            'sender_age': age_range,
+            'sender_gender': gender_range,
+            'sender_postal_code': anon_postal_code,
+            'sender_citizenship': spaced_citizenship,
+            'transaction_amount': withdrawal['transaction_amount'],
+            'month': withdrawal['month'],
+            'year': withdrawal['year']
+        }
+        formatted_data.append(record)
+
+        # For TESTING PURPOSE: will form a dict with the formatted info and print
+    json_data = json.dumps(formatted_data, indent=4, cls=DecimalEncoder)
+    return json_data
 
 def anonymised_first_query(data):
     """
-    Query: Average withdrawal amounts of Singaporean citizens for the past 5 years
+    Query: Average withdrawal amounts of Singaporean citizens for the past 10 years
     Use Case: High level view of average withdrawal amounts for researchers to gain insights on Singaporean 
     spending patterns
 
@@ -252,8 +306,8 @@ def anonymised_first_query(data):
     """
 
     current_year = date.today().year
-    past_five_years = current_year - 5
-    citizenship_status = 'Singaporean Citizen'
+    past_five_years = current_year - NUM_YEARS
+    citizenship_status = TYPE_OF_CITIZEN
     citizenship_status = citizenship_status.replace(" ","")
 
     # Filter the transaction data for Singaporeans in the past 5 years
@@ -299,7 +353,7 @@ def anonymised_first_query(data):
     # Return in correct format for json
     json_data = json.dumps(all_data, indent=4, cls=DecimalEncoder)
 
-    # TESTING PURPOSES: Returns dict to send to function for printing
+    # TESTING PURPOSES: Returns dict yearly_data to send to function for printing
     return yearly_data, json_data
 
 
@@ -330,6 +384,10 @@ class UserInputs():
         else:
             raise ValueError("Invalid query option. Choose from '1' or '2'.")
 
+class TooShortException(Exception):
+    pass
+
+
 # TESTING PURPOSES: Get rid of this printing to json file
 def write_to_json_file(json_data, file_name):
     file_path = "staff/anonymise/data/" + file_name
@@ -348,30 +406,50 @@ def user_inputs(k, query):
     new_input = UserInputs(k, query)
 
     if new_input.query == "1": # Average withdrawal amount of Singaporeans for the past 5 years
-        
-        # Retrieve all withdrawal data from database
-        withdrawal_history = retrieve_all_transactions('Withdrawal')
-        
-        # Anonymise the withdrawal data
-        anon_withdrawal_data = anonymise(withdrawal_history, k, 'Withdrawal')
-        
-        # Perform first query on anonymised data
-        anon_query_result, anon_json = anonymised_first_query(anon_withdrawal_data)
-        write_to_json_file(anon_json, "anon.json")
+        try:
+            # Retrieve all withdrawal data from database
+            withdrawal_history = retrieve_all_transactions('Withdrawal')
+            
+            # Handles null: returns an empty response
+            if not withdrawal_history:
+                return JsonResponse({})
+            
+            # Handles case when there is not enough data
+            if len(withdrawal_history) < k:
+                raise TooShortException("Not enough data for anonymisation.")
+            
+            # Anonymise the withdrawal data
+            anon_withdrawal_data = anonymise(withdrawal_history, k, 'Withdrawal')
+            anon_withdrawal_json = format_anon_withdrawal_data(anon_withdrawal_data)
+            write_to_json_file(anon_withdrawal_json, "anon_withdrawal.json")
+            
+            # Perform first query on anonymised data
+            anon_query_result, anon_query_json = anonymised_first_query(anon_withdrawal_data)
+            write_to_json_file(anon_query_json, "anon_query.json")
 
-        # TESTING PURPOSES: Write the first query result to file
-        write_first_anon_query(anon_query_result)
-        _, unanon_json = unanonymised_first_query()
-        write_to_json_file(unanon_json, "unanon.json")
-        return {"anonymised": anon_json,
-                "unanonymised": unanon_json} ## placeholder for testing of API
+            # TESTING PURPOSES: Write the first query result to file
+            write_first_anon_query(anon_query_result)
+
+            # Perform first query on unanonymised query
+            _, unanon_query_json = unanonymised_first_query()
+            write_to_json_file(unanon_query_json, "unanon_query.json")
+
+            return {"anonymised": anon_query_json,
+                    "unanonymised": unanon_query_json} ## placeholder for testing of API
+        
+        except TooShortException as e:
+            print(f"Error: {e}")
+        
+        except Exception as e:
+            print(f"An error occurred: {e}")
+
 
     else:
         return {"anonymised": "anon_json", "unanonymised": "unanon_json"}
         
         
 # TESTING PURPOSES: For API Calls
-# user_inputs(4, "1")
+user_inputs(4, "1")
 
 
 
