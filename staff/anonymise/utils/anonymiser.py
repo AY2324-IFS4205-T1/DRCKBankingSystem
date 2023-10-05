@@ -114,7 +114,7 @@ def get_result_one(data, intuitive_order, qi_num, sa_num, k=10):
     """
     Run Mondrian Algorithm one time, with k=10 as default. Returns anonymised data
     """
-    result, _ = mondrian(data, k, RELAX, qi_num)
+    result, eval_result = mondrian(data, k, RELAX, qi_num)
 
     # Convert numerical values back to categorical values if necessary
     if DATA_SELECT == 'a':
@@ -123,7 +123,7 @@ def get_result_one(data, intuitive_order, qi_num, sa_num, k=10):
         for r in result:
             r[-1] = ','.join(r[-1])
 
-    return result
+    return result, eval_result
 
 
 
@@ -139,7 +139,7 @@ def anonymise(transaction_data, k_value, transaction_type):
         DATA, intuitive_order, qi_num, sa_num = read_withdrawal(transaction_data)
         file_name = "anon_withdrawal.data"
 
-    result = get_result_one(DATA, intuitive_order, qi_num, sa_num, k_value)
+    result, eval_result = get_result_one(DATA, intuitive_order, qi_num, sa_num, k_value)
     write_to_file(result, file_name)
     output = prepare_output(result, transaction_type)
-    return output
+    return output, eval_result
