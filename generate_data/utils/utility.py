@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 import random
+import secrets
 import subprocess
 from django.db import connection
 
@@ -16,20 +17,20 @@ def get_random_datetime():
     start_year = 1990 # Assume we are a new-ish bank
     
     end_year = now.year
-    year = random.randint(start_year, end_year)
+    year = secrets.randbelow(end_year - start_year + 1) + start_year
 
-    month = random.randint(1, 12)
+    month = secrets.randbelow(12) + 1
     # Months have different days 
     if month == 2:
-        day = random.randint(1, 28) # i am NOT doing leap years
+        day = secrets.randbelow(28) + 1 # i am NOT doing leap years
     elif month == 1 | month == 3 | month == 5 | month == 7 | month == 8 | month == 10 | month == 12:
-        day = random.randint(1, 31)
+        day = secrets.randbelow(31) + 1
     else: 
-        day = random.randint(1, 30) 
+        day = secrets.randbelow(30) + 1
     
-    hour = random.randint(0, 23)
-    minute = random.randint(0, 59)
-    second = random.randint(0, 59)
+    hour = secrets.randbelow(23) + 1
+    minute = secrets.randbelow(59) + 1
+    second = secrets.randbelow(59) + 1
 
     current_datetime = datetime.now()
     new = current_datetime.replace(year, month, day, hour, minute, second)
@@ -38,7 +39,7 @@ def get_random_datetime():
     return formatted_datetime
 
 def get_random_balance():
-    balance = random.randint(1, 999999)
+    balance = secrets.randbelow(999999) + 1
     return str(balance)
     
 
@@ -52,9 +53,11 @@ def load_data(fixture_file):
     except subprocess.CalledProcessError as e:
         print(f"Command failed with error: {e}")
 
+
 def execute_delete_sql():
     with connection.cursor() as cursor:
         cursor.execute("TRUNCATE django.auth_user CASCADE;")
+
 
 def get_userids():
     """
