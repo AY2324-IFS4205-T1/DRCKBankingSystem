@@ -27,18 +27,28 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DJANGO_DEBUG") == "True"
 
-# CORS header
-CORS_ALLOW_ALL_ORIGINS = True
-# CORS_ALLOWED_ORIGINS = [
-#     "https://ifs4205-23s1-1-1-i.comp.nus.edu.sg:8080",
-#     "http://192.168.37.141:8080"
-# ]
+if DEBUG:
+    CORS_ALLOW_ALL_ORIGINS = True
+    ALLOWED_HOSTS = ['.localhost', '127.0.0.1', '[::1]']
+else:
+    CORS_ALLOWED_ORIGINS = [
+        "https://ifs4205-23s1-1-1-i.comp.nus.edu.sg:3000"
+    ]
+    ALLOWED_HOSTS = ['ifs4205-23s1-1-2-i.comp.nus.edu.sg']
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_SECONDS = 31536000
+    ATOMIC_REQUESTS = True
+    X_FRAME_OPTIONS = "DENY"
+    SESSION_COOKIE_SECURE = True
+    SESSION_COOKIE_HTTPONLY = True
+    CSRF_COOKIE_SECURE = True
+    CSRF_COOKIE_HTTPONLY = True
+    SECURE_REFERRER_POLICY = "same-origin"
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 
-
-ALLOWED_HOSTS = ['ifs4205-23s1-1-1-i.comp.nus.edu.sg', '.localhost', '127.0.0.1', '[::1]', '192.168.37.141']
-
+    
 
 # Application definition
 INSTALLED_APPS = [
@@ -91,22 +101,68 @@ WSGI_APPLICATION = 'main.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-DATABASES = { 
-    'default': { 
-        'ENGINE': 'django.db.backends.postgresql_psycopg2', 
-        'OPTIONS': { 
-            'options': '-c search_path=django' 
+if DEBUG:
+    DATABASES = { 
+        'default': { 
+            'ENGINE': 'django.db.backends.postgresql_psycopg2', 
+            'OPTIONS': { 
+                'options': '-c search_path=django' 
+            }, 
+            'NAME': os.environ["POSTGRES_DBNAME_AUTH"], 
+            'USER': os.environ["POSTGRES_USER_AUTH"], 
+            'PASSWORD': os.environ["POSTGRES_PASSWORD_AUTH"], 
+            'HOST': os.environ["POSTGRES_HOST_AUTH"], 
+            'PORT': os.environ["POSTGRES_PORT_AUTH"], 
+            'TEST': { 
+                'NAME': 'test_drck_banking', 
+            } 
         }, 
-        'NAME': os.environ["POSTGRES_DBNAME_AUTH"], 
-        'USER': os.environ["POSTGRES_USER_AUTH"], 
-        'PASSWORD': os.environ["POSTGRES_PASSWORD_AUTH"], 
-        'HOST': os.environ["POSTGRES_HOST_AUTH"], 
-        'PORT': os.environ["POSTGRES_PORT_AUTH"], 
-        'TEST': { 
-            'NAME': 'test_drck_banking', 
-        } 
-    }, 
-}  
+    }  
+else:
+    if 'migrate' in sys.argv or 'makemigrations' in sys.argv:
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.postgresql_psycopg2',
+                'OPTIONS': {
+                    'options': '-c search_path=django',
+                    'sslmode': 'verify-ca',
+                    'sslcert': os.environ["CLIENT_CERT"],
+                    'sslkey': os.environ["CLIENT_KEY"],
+                    'sslrootcert': os.environ["CA_CERT"],    
+                },
+                'NAME': os.environ["POSTGRES_DBNAME_AUTH"],
+                'USER': os.environ["POSTGRES_USERMIGRATE_AUTH"],
+                'PASSWORD': os.environ["POSTGRES_USERMIGRATE_PASSWORD_AUTH"],
+                'HOST': os.environ["POSTGRES_HOST_AUTH"],
+                'PORT': os.environ["POSTGRES_PORT_AUTH"],
+                'TEST': {
+                    'NAME': 'test_drck_banking',
+                }
+            },
+        }
+        print("Using database config for migrations")
+    else:
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.postgresql_psycopg2',
+                'OPTIONS': {
+                    'options': '-c search_path=django',
+                    'sslmode': 'verify-ca',
+                    'sslcert': os.environ["CLIENT_CERT"],
+                    'sslkey': os.environ["CLIENT_KEY"],
+                    'sslrootcert': os.environ["CA_CERT"],    
+                },
+                'NAME': os.environ["POSTGRES_DBNAME_AUTH"],
+                'USER': os.environ["POSTGRES_USER_AUTH"],
+                'PASSWORD': os.environ["POSTGRES_PASSWORD_AUTH"],
+                'HOST': os.environ["POSTGRES_HOST_AUTH"],
+                'PORT': os.environ["POSTGRES_PORT_AUTH"],
+                'TEST': {
+                    'NAME': 'test_drck_banking',
+                }
+            },
+        }
+        print("Using database config for application")    
 
 
 # Password validation
@@ -215,10 +271,3 @@ REST_KNOX = {
     'MIN_REFRESH_INTERVAL': 60, # This is the minimum time in seconds that needs to pass for the token expiry to be updated in the database.
     'EXPIRY_DATETIME_FORMAT': api_settings.DATETIME_FORMAT,
 }
-
-# Clickjacking
-X_FRAME_OPTIONS = "DENY"
-
-# Race Conditions
-ATOMIC_REQUESTS = True
-
