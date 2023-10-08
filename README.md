@@ -50,6 +50,13 @@ drck_banking=# exit
 
 To run tests: `python manage.py test --keepdb`. This is because with Postgres, Django cannot create new schemas on its own, so we have to preserve the above setup. By default, all entries should be deleted after testing.
 
+When generating `tests.json` test fixtures, after completing the API calls, there are a few things to note:
+
+* Delete all default tables
+* Delete the user.two_fa table
+* Edit account_id in `customer/tests.py`
+* Edit ticket_id in `staff/test.py`
+
 ## For code coverage
 
 ```bash

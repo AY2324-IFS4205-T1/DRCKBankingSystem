@@ -1,3 +1,5 @@
+import uuid
+
 from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager,
                                         PermissionsMixin)
 from django.db import models
@@ -28,6 +30,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         CUSTOMER = "Customer"
         STAFF = "Staff"
 
+    user = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     username = models.CharField(max_length=150)
     password = models.CharField(max_length=128)
     email = models.EmailField()
@@ -47,4 +50,6 @@ class TwoFA(models.Model):
         db_table = "two_fa"
 
     user = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE)
-    key = models.CharField(max_length=1024)
+    key = models.CharField(max_length=32)
+    last_authenticated = models.DateTimeField(null=True)
+    knox_token = models.CharField(max_length=64, blank=True)

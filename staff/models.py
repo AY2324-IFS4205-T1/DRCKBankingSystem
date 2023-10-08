@@ -2,7 +2,7 @@ import uuid
 
 from django.db import models
 
-from customer.models import AccountTypes, Customer, Accounts
+from customer.models import Accounts, AccountTypes, Customer
 from user.models import User
 
 
@@ -18,7 +18,7 @@ class Staff(models.Model):
 
     class Title(models.TextChoices):
         REVIEWER = "Ticket Reviewer"
-        SECURITY = "Security Engineer"
+        AUDITOR = "Auditor"
         RESEARCHER = "Researcher"
 
     user = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE)
@@ -48,7 +48,6 @@ class Tickets(models.Model):
     
     ticket = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     ticket_type = models.CharField(max_length=15, choices=TicketType.choices)
-    # account_type = models.ForeignKey(AccountTypes, on_delete=models.PROTECT)
     status = models.CharField(max_length=8, choices=TicketStatus.choices)
     created_by = models.ForeignKey(Customer, related_name='created_tickets', on_delete=models.PROTECT)
     created_date = models.DateTimeField(auto_now_add=True)
