@@ -4,17 +4,20 @@ from rest_framework import status
 
 from user.tests import TestLogout
 
+good_start = "2023-03-09T00:00"
+good_end = "2023-11-09T00:00"
+
 class TestLoginLogging(TestLogout): # staff action
     def test_login_logs(self):
-        sample_login_logs = {"severity": "High", "start": "2023-03-09T00:00", "end": "2023-11-09T00:00"}
-        bad_field_severity = {"ssssseverity": "High", "start": "2023-03-09T00:00", "end": "2023-11-09T00:00"}
-        bad_field_start = {"severity": "High", "sssstart": "2023-03-09T00:00", "end": "2023-11-09T00:00"}
-        bad_field_end = {"severity": "High", "start": "2023-03-09T00:00", "eeeeend": "2023-11-09T00:00"}
-        bad_value_severity = {"severity": "HHHHigh", "start": "2023-03-09T00:00", "end": "2023-11-09T00:00"}
-        bad_value_start = {"severity": "High", "start": "2023-0ferg00:00", "end": "2023-11-09T00:00"}
-        bad_value_end = {"severity": "High", "start": "2023-03-09T00:00", "end": "2023-grdnyt0:00"}
-        bad_value_end_after_now = {"severity": "High", "start": "2023-03-09T00:00", "end": "2050-11-09T00:00"}
-        bad_value_end_before_start = {"severity": "High", "start": "2023-09-09T00:00", "end": "2023-03-09T00:00"}
+        sample_login_logs = {"severity": "High", "start": good_start, "end": good_end}
+        bad_field_severity = {"ssssseverity": "High", "start": good_start, "end": good_end}
+        bad_field_start = {"severity": "High", "sssstart": good_start, "end": good_end}
+        bad_field_end = {"severity": "High", "start": good_start, "eeeeend": good_end}
+        bad_value_severity = {"severity": "HHHHigh", "start": good_start, "end": good_end}
+        bad_value_start = {"severity": "High", "start": "2023-0ferg00:00", "end": good_end}
+        bad_value_end = {"severity": "High", "start": good_start, "end": "2023-grdnyt0:00"}
+        bad_value_end_after_now = {"severity": "High", "start": good_start, "end": "2050-11-09T00:00"}
+        bad_value_end_before_start = {"severity": "High", "start": "2023-09-09T00:00", "end": good_start}
 
         response = self.client.post(reverse("login_logs"), sample_login_logs)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
@@ -39,15 +42,15 @@ class TestLoginLogging(TestLogout): # staff action
 
 class TestAPILogging(TestLogout): # staff action
     def test_API_logs(self):
-        sample_login_logs = {"severity": "High", "start": "2023-03-09T00:00", "end": "2023-11-09T00:00"}
-        bad_field_severity = {"ssssseverity": "High", "start": "2023-03-09T00:00", "end": "2023-11-09T00:00"}
-        bad_field_start = {"severity": "High", "sssstart": "2023-03-09T00:00", "end": "2023-11-09T00:00"}
-        bad_field_end = {"severity": "High", "start": "2023-03-09T00:00", "eeeeend": "2023-11-09T00:00"}
-        bad_value_severity = {"severity": "HHHHigh", "start": "2023-03-09T00:00", "end": "2023-11-09T00:00"}
-        bad_value_start = {"severity": "High", "start": "2023-0ferg00:00", "end": "2023-11-09T00:00"}
-        bad_value_end = {"severity": "High", "start": "2023-03-09T00:00", "end": "2023-grdnyt0:00"}
-        bad_value_end_after_now = {"severity": "High", "start": "2023-03-09T00:00", "end": "2050-11-09T00:00"}
-        bad_value_end_before_start = {"severity": "High", "start": "2023-09-09T00:00", "end": "2023-03-09T00:00"}
+        sample_login_logs = {"severity": "High", "start": good_start, "end": good_end}
+        bad_field_severity = {"ssssseverity": "High", "start": good_start, "end": good_end}
+        bad_field_start = {"severity": "High", "sssstart": good_start, "end": good_end}
+        bad_field_end = {"severity": "High", "start": good_start, "eeeeend": good_end}
+        bad_value_severity = {"severity": "HHHHigh", "start": good_start, "end": good_end}
+        bad_value_start = {"severity": "High", "start": "2023-0ferg00:00", "end": good_end}
+        bad_value_end = {"severity": "High", "start": good_start, "end": "2023-grdnyt0:00"}
+        bad_value_end_after_now = {"severity": "High", "start": good_start, "end": "2050-11-09T00:00"}
+        bad_value_end_before_start = {"severity": "High", "start": "2023-09-09T00:00", "end": good_start}
 
         response = self.client.post(reverse("api_logs"), sample_login_logs)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
