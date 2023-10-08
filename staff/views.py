@@ -74,12 +74,11 @@ class StaffLoginView(KnoxLoginView):
     Returns:
         _type_: _description_
     """
-    serializer_class = LoginSerializer
     permission_classes = (permissions.AllowAny,)
     throttle_classes = [AnonRateThrottle]
 
     def post(self, request):
-        serializer = self.serializer_class(User.user_type.STAFF, data=request.data)
+        serializer = LoginSerializer(User.user_type.STAFF, data=request.data)
 
         if serializer.is_valid():
             user = serializer.validated_data["user"]
