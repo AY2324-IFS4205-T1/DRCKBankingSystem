@@ -272,3 +272,28 @@ REST_KNOX = {
     'MIN_REFRESH_INTERVAL': 60, # This is the minimum time in seconds that needs to pass for the token expiry to be updated in the database.
     'EXPIRY_DATETIME_FORMAT': api_settings.DATETIME_FORMAT,
 }
+
+# Logging
+# https://docs.djangoproject.com/en/4.2/topics/logging/
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'simple': {
+            'format': '%(levelname)s %(asctime)s %(message)s'
+        },
+    },
+    'handlers': {
+        'db_log': {
+            'level': 'INFO',
+            'class': 'log.handler.DatabaseLogHandler',
+            'formatter': 'simple'
+        },
+    },
+    'loggers': {
+        'db': {
+            'handlers': ['db_log'],
+            'level': 'INFO',
+        }
+    },
+}

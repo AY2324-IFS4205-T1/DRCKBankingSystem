@@ -16,6 +16,8 @@ from user.authentication import TokenAndTwoFactorAuthentication
 from user.models import User
 from user.serializers import LoginSerializer, UserRegisterSerializer
 
+import logging
+db_logger = logging.getLogger('db')
 
 class CustomerRegistrationView(APIView):
     """Post request
@@ -88,6 +90,7 @@ class CustomerLoginView(KnoxLoginView):
         if serializer.is_valid():
             user = serializer.validated_data["user"]
             login(request, user)
+            db_logger.info('LOGIN', extra={'level': 'Low', 'user': user, 'is_success': True, 'ip': '127.0.0.1'})
             return super().post(request, format=None)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
