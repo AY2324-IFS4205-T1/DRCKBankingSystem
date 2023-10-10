@@ -42,6 +42,9 @@ class AuthCheckSerializer(serializers.Serializer):
     
     def is_forbidden(self):
         user_type = self.user.type
+        if user_type != self.page_type:
+            self.response["authorised"] = True
+            return True
         if user_type == "Staff":
             user_type = Staff.objects.get(user=self.user).title
         if user_type != self.page_type:
