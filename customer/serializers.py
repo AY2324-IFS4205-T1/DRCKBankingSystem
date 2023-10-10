@@ -127,13 +127,12 @@ class DepositSerializer(serializers.Serializer):
         self.customer_account = validate_account(self.json_dict)
         assert validate_account_owner(self.user_id, self.customer_account)
         self.amount = validate_amount(self.json_dict)
-        self.description = validate_description(self.json_dict)
         return super().validate(attrs)
 
     def create(self, validated_data):
         Transactions.objects.create(
             recipient=self.customer_account,
-            description=self.description,
+            description="ATM Deposit",
             amount=self.amount,
             transaction_type=Transactions.TransactionTypes.DEPOSIT,
         )
@@ -154,13 +153,12 @@ class WithdrawSerializer(serializers.Serializer):
         assert validate_account_owner(self.user_id, self.customer_account)
         self.amount = validate_amount(self.json_dict)
         assert validate_sufficient_amount(self.customer_account, self.amount)
-        self.description = validate_description(self.json_dict)
         return super().validate(attrs)
 
     def create(self, validated_data):
         Transactions.objects.create(
             sender=self.customer_account,
-            description=self.description,
+            description="ATM Withdrawal",
             amount=self.amount,
             transaction_type=Transactions.TransactionTypes.WITHDRAWAL,
         )
