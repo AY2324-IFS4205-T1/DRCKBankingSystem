@@ -1,5 +1,6 @@
 from django.contrib.auth.password_validation import validate_password
 from django.db.models import Q
+from django.forms.models import model_to_dict
 from rest_framework import serializers
 
 from customer.validations import (validate_account, validate_account_owner,
@@ -136,7 +137,7 @@ class DepositSerializer(serializers.Serializer):
             amount=self.amount,
             transaction_type=Transactions.TransactionTypes.DEPOSIT,
         )
-        self.customer_account.balance = float(self.customer_account.balance) + float(self.amount)
+        self.customer_account.balance = self.customer_account.balance + self.amount
         self.customer_account.save()
         return self.customer_account.balance
 
@@ -162,7 +163,7 @@ class WithdrawSerializer(serializers.Serializer):
             amount=self.amount,
             transaction_type=Transactions.TransactionTypes.WITHDRAWAL,
         )
-        self.customer_account.balance = float(self.customer_account.balance) - float(self.amount)
+        self.customer_account.balance = self.customer_account.balance - self.amount
         self.customer_account.save()
         return self.customer_account.balance
 
@@ -179,25 +180,26 @@ class TransferSerializer(serializers.Serializer):
         assert validate_account_owner(self.user_id, self.sender_account)
         self.recipient_account = validate_account(self.json_dict, "recipient_id")
         assert validate_sender_recipient(self.sender_account, self.recipient_account)
-        self.initial_total = float(self.sender_account.balance) + float(
-            self.recipient_account.balance
-        )
+        self.initial_total = self.sender_account.balance + self.recipient_account.balance
         self.amount = validate_amount(self.json_dict)
         assert validate_sufficient_amount(self.sender_account, self.amount)
         self.description = validate_description(self.json_dict)
         return super().validate(attrs)
 
     def create(self, validated_data):
-        ticket = Transactions.objects.create(
+        self.transaction = Transactions.objects.create(
             sender=self.sender_account,
             recipient=self.recipient_account,
             description=self.description,
             amount=self.amount,
             transaction_type=Transactions.TransactionTypes.TRANSFER,
         )
-        self.sender_account.balance = float(self.sender_account.balance) - float(self.amount)
-        self.recipient_account.balance = float(self.recipient_account.balance) + float(self.amount)
+        self.sender_account.balance = self.sender_account.balance - self.amount
+        self.recipient_account.balance = self.recipient_account.balance + self.amount
         assert validate_total_balance(self.initial_total, self.sender_account.balance, self.recipient_account.balance)
         self.sender_account.save()
         self.recipient_account.save()
-        return ticket
+        return self.transaction
+    
+    def get_transaction(self):
+        return model_to_dict(self.transaction)
