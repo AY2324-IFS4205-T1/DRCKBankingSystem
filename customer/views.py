@@ -254,7 +254,7 @@ class TransferView(APIView):
         description: string
 
     Returns:
-        success: "Transfer was successfully made."
+        transaction: transaction information
     """
     permission_classes = (permissions.IsAuthenticated, IsCustomer,)
     authentication_classes = (TokenAndTwoFactorAuthentication,)
@@ -264,5 +264,5 @@ class TransferView(APIView):
         serializer = TransferSerializer(request.user, request.data, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response({"success": "Transfer was successfully made."}, status=status.HTTP_200_OK)
+            return Response({"transaction": serializer.data}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
