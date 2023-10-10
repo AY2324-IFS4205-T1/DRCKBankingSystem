@@ -49,7 +49,7 @@ def validate_ticket_input(json_dict):
 
 def validate_account_type(value):
     try:
-        account_type = AccountTypes.objects.get(name=value)
+        account_type = AccountTypes.objects.get(type=value)
     except ObjectDoesNotExist:
         raise ValidationError("Account type given does not exist.")
     return account_type
