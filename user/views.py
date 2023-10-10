@@ -73,5 +73,8 @@ class AuthenticationCheckView(APIView):
         serialiser = AuthCheckSerializer(request, data=request.data)
         if serialiser.is_valid():
             response = serialiser.get_response()
-            return Response(response, status=status.HTTP_200_OK)
+            if response["authenticated"] and response["authorised"]:
+                return Response(response, status=status.HTTP_200_OK)
+            else:
+                return Response(response, status=status.HTTP_403_FORBIDDEN)
         return Response(serialiser.errors, status=status.HTTP_400_BAD_REQUEST)
