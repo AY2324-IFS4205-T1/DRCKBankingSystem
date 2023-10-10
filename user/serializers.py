@@ -34,15 +34,15 @@ class AuthCheckSerializer(serializers.Serializer):
                 return False
             else:
                 self.response["authenticated"] = True
-                return self.is_forbidden()
+                return self.is_authorised()
         except AuthenticationFailed as error:
-            if not self.is_forbidden():
+            if self.is_authorised():
                 self.response["authenticated_message"] = error.detail
             return False
     
-    def is_forbidden(self):
+    def is_authorised(self):
         user_type = self.user.type
-        if user_type != self.page_type:
+        if user_type == self.page_type:
             self.response["authorised"] = True
             return True
         if user_type == "Staff":
@@ -52,6 +52,7 @@ class AuthCheckSerializer(serializers.Serializer):
             return False
         else:
             self.response["authorised"] = True
+            return True
     
     def get_response(self):
         self.is_authenticated_and_forbidden()
