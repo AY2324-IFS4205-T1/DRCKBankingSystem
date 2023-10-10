@@ -136,7 +136,7 @@ class DepositSerializer(serializers.Serializer):
             amount=self.amount,
             transaction_type=Transactions.TransactionTypes.DEPOSIT,
         )
-        self.customer_account.balance = self.customer_account.balance + self.amount
+        self.customer_account.balance = float(self.customer_account.balance) + float(self.amount)
         self.customer_account.save()
         return self.customer_account.balance
 
@@ -162,7 +162,7 @@ class WithdrawSerializer(serializers.Serializer):
             amount=self.amount,
             transaction_type=Transactions.TransactionTypes.WITHDRAWAL,
         )
-        self.customer_account.balance = self.customer_account.balance - self.amount
+        self.customer_account.balance = float(self.customer_account.balance) - float(self.amount)
         self.customer_account.save()
         return self.customer_account.balance
 
