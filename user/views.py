@@ -58,13 +58,13 @@ class AuthenticationCheckView(APIView):
     """Post Request
 
     Args:
-        page_type: ["Customer", "Staff", "Ticket Reviewer", "Auditor", "Researcher"]
+        page_type: string, options are: ["Customer", "Staff", "Ticket Reviewer", "Auditor", "Researcher"]
 
     Returns:
         authenticated: True/False
-        authenticated_message: ["User not logged in.", "The session has changed, 2FA needs to be verified again.", "2FA has not been verified.", "2FA timeout, 2FA needs to be verified again."]
+        authenticated_message: string, options are ["User not logged in.", "The session has changed, 2FA needs to be verified again.", "2FA has not been verified.", "2FA timeout, 2FA needs to be verified again."]
         authorised: True/False
-        user_authorisation: ["Customer", "Ticket Reviewer", "Auditor", "Researcher"]
+        user_authorisation: string, options are ["Customer", "Ticket Reviewer", "Auditor", "Researcher"]
     """
     permission_classes = (permissions.AllowAny,)
     throttle_classes = [AnonRateThrottle]

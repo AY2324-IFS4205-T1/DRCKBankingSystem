@@ -31,8 +31,8 @@ class CustomerRegistrationView(APIView):
         identity_no: S9934567B
         address: jurong
         postal_code: 123456
-        citizenship: ["Singaporean Citizen", "Singaporean PR", "Non-Singaporean"]
-        gender: ["Male", "Female", "Others"]
+        citizenship: string, options are ["Singaporean Citizen", "Singaporean PR", "Non-Singaporean"]
+        gender: string, options are ["Male", "Female", "Others"]
 
     Returns:
         success: "Customer has been successfully registered."
@@ -176,7 +176,7 @@ class CustomerTicketsView(APIView):
     Post request
 
     Args:
-        ticket_type: ["Opening Account", "Closing Account"]
+        ticket_type: string, options are ["Opening Account", "Closing Account"]
         value: AccountType if opening account, account_id if closing account
 
     Returns:
