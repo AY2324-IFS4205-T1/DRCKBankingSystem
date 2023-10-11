@@ -17,7 +17,7 @@ from user.models import User
 from user.serializers import LoginSerializer, UserRegisterSerializer
 
 import logging
-db_logger = logging.getLogger('db')
+db_logger = logging.getLogger('login_log')
 
 class CustomerRegistrationView(APIView):
     """Post request
@@ -90,8 +90,10 @@ class CustomerLoginView(KnoxLoginView):
         if serializer.is_valid():
             user = serializer.validated_data["user"]
             login(request, user)
-            db_logger.info('LOGIN', extra={'level': 'Low', 'user': user, 'is_success': True, 'ip': '127.0.0.1'})
+            db_logger.info('LOGIN', extra={'level': 'Low', 'user': user.username, 'is_success': True, 'ip': '127.0.0.1'})
             return super().post(request, format=None)
+        if "username" in request.data:
+            db_logger.info('LOGIN', extra={'level': 'Low', 'user': request.data['username'], 'is_success': False, 'ip': '127.0.0.1'})
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

@@ -278,21 +278,15 @@ REST_KNOX = {
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-    'formatters': {
-        'simple': {
-            'format': '%(levelname)s %(asctime)s %(message)s'
-        },
-    },
     'handlers': {
-        'db_log': {
+        'login_handler': {
             'level': 'INFO',
-            'class': 'log.handler.DatabaseLogHandler',
-            'formatter': 'simple'
+            'class': 'log.handler.DatabaseLogHandler'
         },
     },
     'loggers': {
-        'db': {
-            'handlers': ['db_log'],
+        'login_log': {
+            'handlers': ['login_handler'],
             'level': 'INFO',
         }
     },

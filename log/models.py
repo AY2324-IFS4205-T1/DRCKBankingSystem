@@ -19,7 +19,7 @@ class LoginLog(models.Model):
 
     id = models.AutoField(primary_key=True)
     level = models.CharField(max_length=6, choices=Severity.choices)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    username = models.CharField(max_length=150)
     is_success = models.BooleanField()
     timestamp = models.DateTimeField(auto_now_add=True)
     ip = models.GenericIPAddressField()
@@ -35,10 +35,3 @@ class APILog(models.Model):
     api = models.TextField()
     method = models.CharField(max_length=4, choices=APIMethod.choices)
     ip = models.GenericIPAddressField()
-
-class TransactionLog(models.Model):
-    class Meta:
-        db_table = 'log"."transaction_log'
-
-    transaction_id = models.OneToOneField(Transactions, primary_key=True, on_delete=models.CASCADE)
-    level = models.CharField(max_length=6, choices=Severity.choices)
