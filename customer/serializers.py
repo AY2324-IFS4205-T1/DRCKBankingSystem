@@ -202,4 +202,7 @@ class TransferSerializer(serializers.Serializer):
         return self.transaction
     
     def get_transaction(self):
-        return model_to_dict(self.transaction)
+        transaction_json = model_to_dict(self.transaction)
+        transaction_json["transaction"] = self.transaction.transaction
+        transaction_json["date"] = self.transaction.date
+        return transaction_json
