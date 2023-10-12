@@ -1,7 +1,7 @@
 from django.db import models
+from staff.models import Staff
 
 from user.models import User
-from customer.models import Transactions
 
 # Create your models here
 class Severity(models.TextChoices):
@@ -10,9 +10,6 @@ class Severity(models.TextChoices):
     LOW = "Low"
     INFO = "Information"
 
-class APIMethod(models.TextChoices):
-    GET = "GET"
-    POST = "POST"
 
 class LoginLog(models.Model):
     class Meta:
@@ -26,16 +23,20 @@ class LoginLog(models.Model):
     ip = models.GenericIPAddressField()
     timestamp = models.DateTimeField(auto_now_add=True)
     count = models.SmallIntegerField()
-    level = models.CharField(max_length=11, choices=Severity.choices)
+    severity = models.CharField(max_length=11, choices=Severity.choices)
 
-class APILog(models.Model):
+
+class AccessControlLogs(models.Model):
     class Meta:
-        db_table = 'log"."api_log'
+        db_table = 'log"."access_control_log'
 
     id = models.AutoField(primary_key=True)
-    level = models.CharField(max_length=11, choices=Severity.choices)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    timestamp = models.DateTimeField(auto_now_add=True)
-    api = models.TextField()
-    method = models.CharField(max_length=4, choices=APIMethod.choices)
+    user_permission_type = models.CharField(choices=list(User.user_type.choices)+list(Staff.Title.choices))
+    user_violation_count = models.SmallIntegerField()
+    api_permission_type = models.CharField(choices=list(User.user_type.choices)+list(Staff.Title.choices))
+    api_view_name = models.TextField()
     ip = models.GenericIPAddressField()
+    ip_violation_count = models.SmallIntegerField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    severity = models.CharField(max_length=11, choices=Severity.choices)

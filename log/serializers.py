@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from log.models import APILog, LoginLog
+from log.models import LoginLog
 
 from log.validations import validate_datetimes, validate_severity
 
