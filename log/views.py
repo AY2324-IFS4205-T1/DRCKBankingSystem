@@ -13,12 +13,12 @@ class LoginLoggingView(APIView):
     """Post request
 
     Args:
-        severity: ("High", "Medium", "Low") defaults to None
+        severity: ("High", "Medium", "Low") defaults to None which returns all
         start: datetime string defaults to 1 day ago (e.g. 2023-10-28T01:30)
         end: datetime string defaults to now (e.g. 2023-10-28T01:30)
 
     Returns:
-        List of login logs
+        List of login logs capped at the last 100
     """
     permission_classes = (permissions.IsAuthenticated, IsStaff, IsAuditor)
     authentication_classes = (TokenAndTwoFactorAuthentication,)
