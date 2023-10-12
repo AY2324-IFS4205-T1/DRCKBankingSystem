@@ -23,7 +23,7 @@ from customer.views import (AccountsView, AccountTypesView, CustomerLoginView,
 from staff.views import (AnonymisationView, ApproveView, GetClosedTicketsView, GetOpenTicketsView,
                          RejectView, StaffLoginView, StaffRegistrationView,
                          StaffTicketView, StaffWelcomeView)
-from user.views import (AuthenticationCheckView, LogoutView,
+from user.views import (AuthenticationCheckView, GetIPTestingView, LogoutView,
                         SetupTwoFactorAuthenticationView,
                         VerifyTwoFactorAuthenticationView)
 
@@ -59,4 +59,6 @@ urlpatterns = [
     # 2 Factor Authentication
     path("setup_2FA", SetupTwoFactorAuthenticationView.as_view(), name="setup_2fa"),
     path("verify_2FA", VerifyTwoFactorAuthenticationView.as_view(), name="verify_2fa"),
+
+    path("ip", GetIPTestingView.as_view(), name="ip")
 ]

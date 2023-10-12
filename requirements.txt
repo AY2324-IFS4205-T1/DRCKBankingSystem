@@ -6,3 +6,4 @@ djangorestframework==3.14.0 # Web APIs for Django, made easy.
 psycopg2-binary==2.9.9 # psycopg2 - Python-PostgreSQL Database Adapter
 pyotp==2.9.0 # PyOTP is a Python library for generating and verifying one-time passwords.
 qrcode==7.4.2 # qrcode is a pure python QR Code generator
+python-ipware==1.0.5 # A python package for server applications to retrieve client's IP address
