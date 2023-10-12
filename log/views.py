@@ -40,7 +40,7 @@ class AccessControlLoggingView(APIView):
         end: datetime string defaults to now (e.g. 2023-10-28T01:30)
 
     Returns:
-        List of API logs
+        List of API logs capped at the first 100
     """
     permission_classes = (permissions.IsAuthenticated, IsStaff, IsAuditor)
     authentication_classes = (TokenAndTwoFactorAuthentication,)

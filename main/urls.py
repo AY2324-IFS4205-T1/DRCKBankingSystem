@@ -63,5 +63,5 @@ urlpatterns = [
 
     # Logging
     path("staff/login_logs", LoginLoggingView.as_view(), name="login_logs"),
-    path("staff/access_control_logs", AccessControlLoggingView.as_view(), name="api_logs"),
+    path("staff/access_control_logs", AccessControlLoggingView.as_view(), name="access_control_logs"),
 ]
