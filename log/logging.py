@@ -7,6 +7,11 @@ from staff.models import Staff
 from user.models import User
 
 
+def get_ip_address_from_request(request):
+        ip, _ = IpWare().get_client_ip(meta=request.META)
+        return ip.exploded
+
+
 class LoginLogger:
     NUMBER_OF_SECONDS_FOR_SESSION = 300 # 5 minutes
 
@@ -22,23 +27,12 @@ class LoginLogger:
         if self.login_response != None:
             is_success = self.login_response.status_code == 200
         username = self.login_request.data["username"]
-        ip = self.get_ip_address_from_request()
+        ip = get_ip_address_from_request(self.login_request)
         logs_by_ip = LoginLog.objects.filter(ip=ip).order_by("-timestamp")
         count = self.get_count(is_success, logs_by_ip)
         logs_by_username = LoginLog.objects.filter(login_type=self.login_type, username=username).order_by("-timestamp")
         severity = self.get_severity(is_success, ip, count, logs_by_username)
         LoginLog.objects.create(login_type=self.login_type, is_success=is_success, username=username, user=self.user, ip=ip, count=count, severity=severity)
-
-    def get_ip_address_from_request(self):
-        proxy_count = 11
-        ip = None
-        while ip == None:
-            proxy_count -= 1
-            if proxy_count < 0:
-                return None
-            ipw = IpWare(proxy_count=proxy_count)
-            ip, _ = ipw.get_client_ip(meta=self.login_request.META)
-        return ip.exploded
 
     def get_count(self, is_success, logs_by_ip):
         if is_success:
@@ -83,7 +77,7 @@ class AccessControlLogger:
         if user_permission_type == User.user_type.STAFF:
             user_permission_type = Staff.objects.get(user=self.user).title
         user_violation_count = self.get_user_violation_count()
-        ip = self.get_ip_address_from_request()
+        ip = get_ip_address_from_request(self.request)
         ip_violation_count = self.get_ip_violation_count(ip)
         severity = self.get_severity(user_violation_count, ip_violation_count)
         AccessControlLogs.objects.create(user=self.user, user_permission_type=user_permission_type, user_violation_count=user_violation_count, api_permission_type=self.api_permission_type, api_view_name=self.view_name, ip=ip, ip_violation_count=ip_violation_count, severity=severity)
@@ -94,17 +88,6 @@ class AccessControlLogger:
             count = log.user_violation_count + 1
             break
         return count
-
-    def get_ip_address_from_request(self):
-        proxy_count = 11
-        ip = None
-        while ip == None:
-            proxy_count -= 1
-            if proxy_count < 0:
-                return None
-            ipw = IpWare(proxy_count=proxy_count)
-            ip, _ = ipw.get_client_ip(meta=self.request.META)
-        return ip.exploded
 
     def get_ip_violation_count(self, ip):
         count = 1
