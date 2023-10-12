@@ -47,7 +47,8 @@ class ConflictOfInterestLogs(models.Model):
     class Meta:
         db_table = 'log"."conflict_interest_log'
 
-    ticket = models.ForeignKey(Tickets, on_delete=models.CASCADE, primary_key=True)
+    id = models.AutoField(primary_key=True)
+    ticket = models.ForeignKey(Tickets, on_delete=models.CASCADE)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True)
     customer_username = models.CharField(max_length=150)
     customer_ip = models.GenericIPAddressField(null=True)

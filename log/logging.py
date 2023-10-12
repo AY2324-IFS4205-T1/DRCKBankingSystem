@@ -44,7 +44,7 @@ class LoginLogger:
                 return 1
             # new login session after attempting more than 5 min ago
             time_delta = (timezone.now() - log.timestamp).total_seconds()
-            if time_delta > self.NUMBER_OF_SECONDS_FOR_SESSION:
+            if time_delta > NUMBER_OF_SECONDS_FOR_SESSION:
                 return 1
             return log.count + 1
         return 1
@@ -55,7 +55,7 @@ class LoginLogger:
         
         for log in logs_by_username:
             time_delta = (timezone.now() - log.timestamp).total_seconds()
-            if time_delta <= self.NUMBER_OF_SECONDS_FOR_SESSION and ip != log.ip:
+            if time_delta <= NUMBER_OF_SECONDS_FOR_SESSION and ip != log.ip:
                 return Severity.HIGH
             if count > 4:
                 return Severity.HIGH

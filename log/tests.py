@@ -2,7 +2,8 @@
 from django.forms import model_to_dict
 from django.urls import reverse
 from rest_framework import status
-from log.models import AccessControlLogs, LoginLog
+from log.models import AccessControlLogs, ConflictOfInterestLogs, LoginLog
+from staff.models import Tickets
 
 from user.tests import TestLogout
 
@@ -65,3 +66,19 @@ class TestAccessControlLogging(TestLogout): # staff action
 
         logs = AccessControlLogs.objects.all()
         self.assertEqual(len(logs), 5)
+
+
+class TestConflictOfInterestLogging(TestLogout): # staff action
+    def test_should_log(self):
+        self.two_fa_customer_2()
+        sample_open_ticket = {"ticket_type": "Opening Account", "value": "3"}
+        self.client.post(reverse("customerTickets"), sample_open_ticket, **self.header)
+
+        customer_2_id = "933b2980-bc5f-469c-be78-0ba4dc8fe42c"
+        open_ticket_id = Tickets.objects.get(created_by=customer_2_id, status=Tickets.TicketStatus.OPEN).ticket
+        self.two_fa_staff1()
+        sample_approve = {"ticket_id": open_ticket_id}
+        self.client.post(reverse("ticketApprove"), sample_approve, **self.header)
+        
+        logs = ConflictOfInterestLogs.objects.all()
+        self.assertEqual(len(logs), 1)
