@@ -18,6 +18,6 @@ class LoggingSerializer(serializers.Serializer):
     def get_login_logs(self):
         logs = LoginLog.objects.filter(timestamp__gte=self.start_time, timestamp__lte=self.end_time)
         if self.severity != None:
-            logs.filter(level=self.severity)
+            logs.filter(severity=self.severity)
         return list(logs.values())[:100]
 
