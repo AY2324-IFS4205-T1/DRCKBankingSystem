@@ -31,8 +31,8 @@ class CustomerRegistrationView(APIView):
         identity_no: S9934567B
         address: jurong
         postal_code: 123456
-        citizenship: ["Singaporean Citizen", "Singaporean PR", "Non-Singaporean"]
-        gender: ["Male", "Female", "Others"]
+        citizenship: string, options are ["Singaporean Citizen", "Singaporean PR", "Non-Singaporean"]
+        gender: string, options are ["Male", "Female", "Others"]
 
     Returns:
         success: "Customer has been successfully registered."
@@ -79,12 +79,11 @@ class CustomerLoginView(KnoxLoginView):
     Returns:
         _type_: _description_
     """
-    serializer_class = LoginSerializer
     permission_classes = (permissions.AllowAny,)
     throttle_classes = [AnonRateThrottle]
 
     def post(self, request):
-        serializer = self.serializer_class(User.user_type.CUSTOMER, data=request.data)
+        serializer = LoginSerializer(User.user_type.CUSTOMER, data=request.data)
 
         if serializer.is_valid():
             user = serializer.validated_data["user"]
@@ -177,7 +176,7 @@ class CustomerTicketsView(APIView):
     Post request
 
     Args:
-        ticket_type: ["Opening Account", "Closing Account"]
+        ticket_type: string, options are ["Opening Account", "Closing Account"]
         value: AccountType if opening account, account_id if closing account
 
     Returns:
@@ -255,7 +254,7 @@ class TransferView(APIView):
         description: string
 
     Returns:
-        success: "Transfer was successfully made."
+        transaction: transaction information
     """
     permission_classes = (permissions.IsAuthenticated, IsCustomer,)
     authentication_classes = (TokenAndTwoFactorAuthentication,)
@@ -265,5 +264,6 @@ class TransferView(APIView):
         serializer = TransferSerializer(request.user, request.data, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response({"success": "Transfer was successfully made."}, status=status.HTTP_200_OK)
+            transaction = serializer.get_transaction()
+            return Response(transaction, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

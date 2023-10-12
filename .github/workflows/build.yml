@@ -8,6 +8,7 @@ on:
       types: [opened, synchronize, reopened]
 env:
   DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+  DJANGO_DEBUG: ${{ secrets.DJANGO_DEBUG }}
   POSTGRES_HOST_AUTH: "postgres"
   POSTGRES_PORT_AUTH: "5432"
   POSTGRES_DBNAME_AUTH: "test_drck_banking"

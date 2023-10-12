@@ -131,7 +131,7 @@ class TestCustomerTickets(TestLogout):  # customer action
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_should_open_without_repeat(self):
-        sample_open_ticket = {"ticket_type": "Opening Account", "value": "Savings"}
+        sample_open_ticket = {"ticket_type": "Opening Account", "value": "1"}
         self.two_fa_customer_1()
         response = self.client.post(reverse("customerTickets"), sample_open_ticket, **self.header)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
