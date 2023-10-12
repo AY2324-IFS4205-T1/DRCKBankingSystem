@@ -2,7 +2,7 @@ from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from log.permissions import IsAuditor
-from log.serializers import LoggingSerializer
+from log.serializers import AccessControlLoggingSerializer, LoginLoggingSerializer
 
 from staff.permissions import IsStaff
 from user.authentication import TokenAndTwoFactorAuthentication
@@ -18,20 +18,20 @@ class LoginLoggingView(APIView):
         end: datetime string defaults to now (e.g. 2023-10-28T01:30)
 
     Returns:
-        List of login logs capped at the last 100
+        List of login logs capped at the first 100
     """
     permission_classes = (permissions.IsAuthenticated, IsStaff, IsAuditor)
     authentication_classes = (TokenAndTwoFactorAuthentication,)
 
     def post(self, request):
-        serializer = LoggingSerializer(request.user, request.data, data=request.data)
+        serializer = LoginLoggingSerializer(request.user, request.data, data=request.data)
         if serializer.is_valid():
-            serializer = serializer.get_login_logs()
+            serializer = serializer.get_logs()
             return Response({"login_logs": serializer}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class APILoggingView(APIView):
+class AccessControlLoggingView(APIView):
     """Post request
 
     Args:
@@ -46,8 +46,8 @@ class APILoggingView(APIView):
     authentication_classes = (TokenAndTwoFactorAuthentication,)
 
     def post(self, request):
-        serializer = LoggingSerializer(request.user, request.data, data=request.data)
+        serializer = AccessControlLoggingSerializer(request.user, request.data, data=request.data)
         if serializer.is_valid():
-            serializer = serializer.get_api_logs()
-            return Response({"api_logs": serializer}, status=status.HTTP_200_OK)
+            serializer = serializer.get_logs()
+            return Response({"access_control_logs": serializer}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

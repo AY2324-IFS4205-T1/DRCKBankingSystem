@@ -20,7 +20,7 @@ from customer.views import (AccountsView, AccountTypesView, CustomerLoginView,
                             CustomerRegistrationView, CustomerTicketsView,
                             CustomerWelcomeView, DepositView, TransactionsView,
                             TransferView, WithdrawView)
-from log.views import APILoggingView, LoginLoggingView
+from log.views import AccessControlLoggingView, LoginLoggingView
 from staff.views import (AnonymisationView, ApproveView, GetClosedTicketsView, GetOpenTicketsView,
                          RejectView, StaffLoginView, StaffRegistrationView,
                          StaffTicketView, StaffWelcomeView)
@@ -63,5 +63,5 @@ urlpatterns = [
 
     # Logging
     path("staff/login_logs", LoginLoggingView.as_view(), name="login_logs"),
-    path("staff/api_logs", APILoggingView.as_view(), name="api_logs"),
+    path("staff/access_control_logs", AccessControlLoggingView.as_view(), name="api_logs"),
 ]
