@@ -16,9 +16,7 @@ class LoginLoggingSerializer(serializers.Serializer):
         return super().validate(attrs)
 
     def get_logs(self):
-        logs = LoginLog.objects.filter(
-            timestamp__gte=self.start_time, timestamp__lte=self.end_time
-        )
+        logs = LoginLog.objects.filter(timestamp__gte=self.start_time, timestamp__lte=self.end_time).reverse()
         if self.severity != None:
             logs= logs.filter(severity=self.severity)
         return list(logs.values())[:100]
@@ -36,7 +34,7 @@ class AccessControlLoggingSerializer(serializers.Serializer):
         return super().validate(attrs)
 
     def get_logs(self):
-        logs = AccessControlLogs.objects.filter(timestamp__gte=self.start_time, timestamp__lte=self.end_time)
+        logs = AccessControlLogs.objects.filter(timestamp__gte=self.start_time, timestamp__lte=self.end_time).reverse()
         if self.severity != None:
             logs = logs.filter(severity=self.severity)
         return list(logs.values())[:100]
@@ -55,7 +53,8 @@ class ConflictOfInterestLoggingSerializer(serializers.Serializer):
         return super().validate(attrs)
 
     def get_logs(self):
-        logs = ConflictOfInterestLogs.objects.filter(id__gte=self.log_id)
+        logs = ConflictOfInterestLogs.objects.all().reverse()
+        logs = logs[:self.log_id]
         if self.severity != None:
             logs = logs.filter(severity=self.severity)
         return list(logs.values())[:100]

@@ -42,7 +42,7 @@ def validate_log_id(json_dict):
         log_id = json_dict["log_id"]
         log_id = int(log_id)
     except KeyError:
-        return 1
+        return -1
     except ValueError:
-        return 1
+        return -1
     return log_id

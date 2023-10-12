@@ -58,10 +58,10 @@ class ConflictOfInterestLoggingView(APIView):
 
     Args:
         severity: ("High", "Medium", "Low") defaults to None
-        log_id: int defaults to 1 (first log in entry)
+        log_id: int to view logs with id <= log_id, defaults to -1 (last possible log)
 
     Returns:
-        List of conflict of interest logs capped at the first 100
+        List of conflict of interest logs capped at the most recent 100
     """
     permission_classes = (permissions.IsAuthenticated, IsStaff, IsAuditor)
     authentication_classes = (TokenAndTwoFactorAuthentication,)
