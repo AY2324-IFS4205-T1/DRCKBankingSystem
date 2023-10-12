@@ -168,4 +168,4 @@ gitleaks.toml
 customer/migrations/
 user/migrations/
 staff/migrations/
-log/migrations
+log/migrations/
