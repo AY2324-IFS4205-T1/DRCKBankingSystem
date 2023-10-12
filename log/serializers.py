@@ -15,14 +15,9 @@ class LoggingSerializer(serializers.Serializer):
         self.start_time, self.end_time = validate_datetimes(self.json_dict)
         return super().validate(attrs)
 
-    def get_logs(self, model):
-        logs = model.objects.filter(timestamp__gte=self.start_time, timestamp__lte=self.end_time)
+    def get_login_logs(self):
+        logs = LoginLog.objects.filter(timestamp__gte=self.start_time, timestamp__lte=self.end_time)
         if self.severity != None:
             logs.filter(level=self.severity)
         return list(logs)
-    
-    def get_login_logs(self):
-        return self.get_logs(LoginLog)
 
-    def get_api_logs(self):
-        return self.get_logs(APILog)

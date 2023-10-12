@@ -12,6 +12,7 @@ from customer.serializers import (CreateTicketSerializer, CustomerSerializer,
                                   DepositSerializer, GetTicketsSerializer,
                                   TransactionsSerializer, TransferSerializer,
                                   WithdrawSerializer)
+from log.logging import log_login_attempt
 from user.authentication import TokenAndTwoFactorAuthentication
 from user.models import User
 from user.serializers import LoginSerializer, UserRegisterSerializer
@@ -88,7 +89,10 @@ class CustomerLoginView(KnoxLoginView):
         if serializer.is_valid():
             user = serializer.validated_data["user"]
             login(request, user)
-            return super().post(request, format=None)
+            response = super().post(request, format=None)
+            log_login_attempt(User.user_type.CUSTOMER, request, response, user)
+            return response
+        log_login_attempt(User.user_type.CUSTOMER, request)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

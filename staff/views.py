@@ -4,6 +4,7 @@ from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle
 from rest_framework.views import APIView
+from log.logging import log_login_attempt
 
 from staff.permissions import IsResearcher, IsStaff, IsTicketReviewer
 from staff.serializers import (AnonymisationSerializer, ApproveSerializer,
@@ -83,7 +84,10 @@ class StaffLoginView(KnoxLoginView):
         if serializer.is_valid():
             user = serializer.validated_data["user"]
             login(request, user)
-            return super().post(request, format=None)
+            response = super().post(request, format=None)
+            log_login_attempt(User.user_type.STAFF, request, response, user)
+            return response
+        log_login_attempt(User.user_type.STAFF, request)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
