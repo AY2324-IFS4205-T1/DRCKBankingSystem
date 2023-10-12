@@ -110,3 +110,27 @@ class TestConflictOfInterestLogging(TestLogout): # staff action
         
         logs = ConflictOfInterestLogs.objects.all()
         self.assertEqual(len(logs), 1)
+
+    def test_conflict_of_interest_logs_view(self):
+        sample_login_logs = {"severity": "High", "log_id": 1}
+        bad_field_severity = {"ssssseverity": "High", "log_id": 1}
+        bad_field_log_id = {"severity": "High", "lllllog_id": 1}
+        bad_value_severity = {"severity": "HHHHigh", "log_id": 1}
+        bad_value_log_id = {"severity": "High", "log_id": -1000000}
+
+        response = self.client.post(reverse("access_control_logs"), sample_login_logs)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        self.two_fa_customer_1()
+        response = self.client.post(reverse("access_control_logs"), sample_login_logs, **self.header)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        self.two_fa_staff1()
+        response = self.client.post(reverse("access_control_logs"), sample_login_logs, **self.header)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        self.two_fa_staff3()        
+        requests = [sample_login_logs, bad_field_severity, bad_field_log_id, bad_value_severity, bad_value_log_id]
+        for request in requests:
+            response = self.client.post(reverse("access_control_logs"), request, **self.header)
+            self.assertEqual(response.status_code, status.HTTP_200_OK)

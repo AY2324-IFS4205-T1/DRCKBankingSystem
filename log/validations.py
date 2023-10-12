@@ -41,6 +41,8 @@ def validate_log_id(json_dict):
     try:
         log_id = json_dict["log_id"]
         log_id = int(log_id)
+        if log_id <= 0:
+            return -1
     except KeyError:
         return -1
     except ValueError:
