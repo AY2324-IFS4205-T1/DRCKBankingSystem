@@ -36,3 +36,13 @@ def validate_datetimes(json_dict):
         raise ValidationError("Start time must be before end time.")
 
     return start_time, end_time
+
+def validate_log_id(json_dict):
+    try:
+        log_id = json_dict["log_id"]
+        log_id = int(log_id)
+    except KeyError:
+        return 1
+    except ValueError:
+        return 1
+    return log_id
