@@ -1,5 +1,6 @@
 from django.db import models
-from staff.models import Staff
+from customer.models import Customer
+from staff.models import Staff, Tickets
 
 from user.models import User
 
@@ -22,7 +23,7 @@ class LoginLog(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     ip = models.GenericIPAddressField()
     timestamp = models.DateTimeField(auto_now_add=True)
-    count = models.SmallIntegerField()
+    count = models.PositiveSmallIntegerField()
     severity = models.CharField(max_length=11, choices=Severity.choices)
 
 
@@ -33,10 +34,25 @@ class AccessControlLogs(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     user_permission_type = models.CharField(choices=list(User.user_type.choices)+list(Staff.Title.choices))
-    user_violation_count = models.SmallIntegerField()
+    user_violation_count = models.PositiveSmallIntegerField()
     api_permission_type = models.CharField(choices=list(User.user_type.choices)+list(Staff.Title.choices))
     api_view_name = models.TextField()
     ip = models.GenericIPAddressField()
-    ip_violation_count = models.SmallIntegerField()
+    ip_violation_count = models.PositiveSmallIntegerField()
     timestamp = models.DateTimeField(auto_now_add=True)
     severity = models.CharField(max_length=11, choices=Severity.choices)
+
+
+class ConflictOfInterestLogs(models.Model):
+    class Meta:
+        db_table = 'log"."conflict_interest_log'
+
+    ticket = models.ForeignKey(Tickets, on_delete=models.CASCADE, primary_key=True)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True)
+    customer_username = models.CharField(max_length=150)
+    customer_ip = models.GenericIPAddressField(null=True)
+    staff = models.ForeignKey(Staff, on_delete=models.CASCADE, null=True)
+    staff_username = models.CharField(max_length=150)
+    staff_ip = models.GenericIPAddressField(null=True)
+    time_to_approve = models.PositiveBigIntegerField(null=True)
+    severity = models.CharField(max_length=11, choices=Severity.choices, blank=True)

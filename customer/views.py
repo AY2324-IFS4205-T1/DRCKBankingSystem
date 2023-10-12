@@ -12,7 +12,7 @@ from customer.serializers import (CreateTicketSerializer, CustomerSerializer,
                                   DepositSerializer, GetTicketsSerializer,
                                   TransactionsSerializer, TransferSerializer,
                                   WithdrawSerializer)
-from log.logging import LoginLogger
+from log.logging import ConflictOfInterestLogger, LoginLogger
 from user.authentication import TokenAndTwoFactorAuthentication
 from user.models import User
 from user.serializers import LoginSerializer, UserRegisterSerializer
@@ -197,7 +197,8 @@ class CustomerTicketsView(APIView):
     def post(self, request):
         serializer = CreateTicketSerializer(request.user, request.data, data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            ticket = serializer.save()
+            ConflictOfInterestLogger(request, ticket)
             return Response({"success": "Ticket has been created."}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

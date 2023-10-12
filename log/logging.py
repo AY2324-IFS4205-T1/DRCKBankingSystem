@@ -1,11 +1,12 @@
 from django.utils import timezone
 
-from log.models import AccessControlLogs, LoginLog, Severity
+from log.models import AccessControlLogs, ConflictOfInterestLogs, LoginLog, Severity
 from ipware.ipware import IpWare
 from staff.models import Staff
 
 from user.models import User
 
+NUMBER_OF_SECONDS_FOR_SESSION = 300 # 5 minutes
 
 def get_ip_address_from_request(request):
         ip, _ = IpWare().get_client_ip(meta=request.META)
@@ -13,7 +14,7 @@ def get_ip_address_from_request(request):
 
 
 class LoginLogger:
-    NUMBER_OF_SECONDS_FOR_SESSION = 300 # 5 minutes
+    
 
     def __init__(self, login_type, login_request, login_response=None, user=None):
         self.login_type = login_type
@@ -102,3 +103,39 @@ class AccessControlLogger:
         if user_violation_count > 2 or ip_violation_count > 2:
             return Severity.MEDIUM
         return Severity.LOW
+
+
+class ConflictOfInterestLogger:
+    def __init__(self, request, ticket):
+        self.log, created = ConflictOfInterestLogs.objects.get_or_create(ticket=ticket)
+        self.ip = get_ip_address_from_request(request)
+        if created:
+            self.populate_customer_details()
+        else:
+            self.populate_staff_details()
+    
+    def populate_customer_details(self):
+        self.log.customer = self.log.ticket.created_by
+        self.log.customer_username = self.log.customer.user.username
+        self.log.customer_ip = self.ip
+        self.log.save()
+
+    def populate_staff_details(self):
+        self.log.staff = self.log.ticket.closed_by
+        self.log.staff_username = self.log.staff.user.username
+        self.log.staff_ip = self.ip
+        self.log.time_to_approve = (self.log.ticket.closed_date - self.log.ticket.created_date).total_seconds()
+        self.log.severity = self.get_severity()
+        self.log.save()
+
+    def get_severity(self):
+        same_username = self.log.customer_username == self.log.staff_username
+        same_ip = self.log.customer_ip == self.log.staff_ip
+
+        if same_ip:
+            return Severity.HIGH
+        if same_username:
+            return Severity.MEDIUM
+        if self.log.time_to_approve <= NUMBER_OF_SECONDS_FOR_SESSION:
+            return Severity.LOW
+        return Severity.INFO
