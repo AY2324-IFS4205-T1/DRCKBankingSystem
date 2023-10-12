@@ -36,7 +36,7 @@ class AuthCheckSerializer(serializers.Serializer):
                 self.response["authenticated"] = True
                 return self.is_authorised()
         except AuthenticationFailed as error:
-            if not self.is_authorised():
+            if self.is_authorised():
                 self.response["authenticated_message"] = error.detail
             return False
     
