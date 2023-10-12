@@ -5,6 +5,7 @@ from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle
 from rest_framework.views import APIView
+from ipware import IpWare
 
 from user.serializers import (AuthCheckSerializer, GetTwoFASerializer,
                               RemoveTwoFASerializer, VerifyTwoFASerializer)
@@ -78,3 +79,21 @@ class AuthenticationCheckView(APIView):
             else:
                 return Response(response, status=status.HTTP_403_FORBIDDEN)
         return Response(serialiser.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class GetIPTestingView(APIView):
+    permission_classes = (permissions.AllowAny,)
+    def get(self, request):
+        try:
+            proxy_count = 11
+            ip = None
+            trusted_route = None
+            while ip == None:
+                proxy_count -= 1
+                if proxy_count < 0:
+                    return Response(status=status.HTTP_400_BAD_REQUEST)
+                ipw = IpWare(proxy_count=proxy_count)
+                ip, trusted_route = ipw.get_client_ip(meta=request.META)
+            response = {"ip exploded": ip.exploded, "proxy_count": proxy_count, "trusted_route": trusted_route}
+            return Response(response, status=status.HTTP_200_OK)
+        except Exception:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
