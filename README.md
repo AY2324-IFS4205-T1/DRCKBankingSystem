@@ -20,9 +20,11 @@ postgres=# \c drck_banking postgres;
 drck_banking=# CREATE SCHEMA django;
 drck_banking=# CREATE SCHEMA customer;
 drck_banking=# CREATE SCHEMA staff;
+drck_banking=# CREATE SCHEMA log;
 drck_banking=# GRANT ALL ON SCHEMA django to django;
 drck_banking=# GRANT ALL ON SCHEMA customer to django;
 drck_banking=# GRANT ALL ON SCHEMA staff to django;
+drck_banking=# GRANT ALL ON SCHEMA log to django;
 drck_banking=# exit
 ```
 
@@ -42,9 +44,11 @@ postgres=# \c test_drck_banking postgres;
 drck_banking=# CREATE SCHEMA django;
 drck_banking=# CREATE SCHEMA customer;
 drck_banking=# CREATE SCHEMA staff;
+drck_banking=# CREATE SCHEMA log;
 drck_banking=# GRANT ALL ON SCHEMA django to django;
 drck_banking=# GRANT ALL ON SCHEMA customer to django;
 drck_banking=# GRANT ALL ON SCHEMA staff to django;
+drck_banking=# GRANT ALL ON SCHEMA log to django;
 drck_banking=# exit
 ```
 

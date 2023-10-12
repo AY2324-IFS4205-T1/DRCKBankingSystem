@@ -88,7 +88,7 @@ class TicketDetailsSerializer(serializers.Serializer):
         if self.ticket.ticket_type == Tickets.TicketType.OPEN_ACCOUNT:
             ticket_json["value"] = RequestOpenAccount.objects.get(ticket=self.ticket).account_type.name
         if self.ticket.ticket_type == Tickets.TicketType.CLOSE_ACCOUNT:
-            ticket_json["value"] = RequestCloseAccount.objects.get(ticket=self.ticket).account_id.account
+            ticket_json["value"] = RequestCloseAccount.objects.get(ticket=self.ticket).account_id
         return ticket_json
     
     def get_customer_details(self):

@@ -28,8 +28,8 @@ class StaffRegistrationView(APIView):
         first_name: first
         last_name: last
         birth_date: 1999-01-01
-        title: string, options are ["Ticket Reviewer", "Security Engineer", "Researcher"]
-        gender: string, options are ["Male", "Female", "Others"]
+        title: ["Ticket Reviewer", "Security Engineer", "Researcher"]
+        gender: ["Male", "Female", "Others"]
 
     Returns:
         success: "Staff is successfully registered."
@@ -74,11 +74,12 @@ class StaffLoginView(KnoxLoginView):
     Returns:
         _type_: _description_
     """
+    serializer_class = LoginSerializer
     permission_classes = (permissions.AllowAny,)
     throttle_classes = [AnonRateThrottle]
 
     def post(self, request):
-        serializer = LoginSerializer(User.user_type.STAFF, data=request.data)
+        serializer = self.serializer_class(User.user_type.STAFF, data=request.data)
 
         if serializer.is_valid():
             user = serializer.validated_data["user"]
