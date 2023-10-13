@@ -1,4 +1,7 @@
 import json
+
+from datetime import datetime
+
 from staff.anonymise.utils.requirements import DecimalEncoder
     
 class AnonymisedDataFormatterBase:
@@ -23,26 +26,32 @@ class AnonymisedDataFormatterBase:
         formatted_string = formatted_string.replace("SingaporeanPR", "Singapore PR")
         return formatted_string
     
-class WithdrawalAnonymisedFormatter(AnonymisedDataFormatterBase):
-    def format_anon_withdrawal_data(self, anon_withdrawal):
+    def format_anon_data(self, anon_data):
         formatted_data = []
-    
-        for withdrawal in anon_withdrawal:
-            age_range = self.format_attributes(withdrawal['sender_age'])
-            gender_range = self.format_attributes(withdrawal['sender_gender'])
-            postal_code_range = self.format_attributes(withdrawal['sender_postal_code'])
+
+        for d in anon_data:
+            age_range = self.format_attributes(d['age'])
+            gender_range = self.format_attributes(d['gender'])
+            postal_code_range = self.format_attributes(d['postal_code'])
             anon_postal_code = self.anonymise_postal_code(postal_code_range)
-            citizenship = self.format_attributes(withdrawal['sender_citizenship'])
+            citizenship = self.format_attributes(d['citizenship'])
             spaced_citizenship = self.format_citizenship(citizenship)
+
+            today_year = datetime.now().year
             
             record = {
-                'sender_age': age_range,
-                'sender_gender': gender_range,
-                'sender_postal_code': anon_postal_code,
-                'sender_citizenship': spaced_citizenship,
-                'transaction_amount': withdrawal['transaction_amount'],
-                'month': withdrawal['month'],
-                'year': withdrawal['year']
+                'age': age_range,
+                'gender': gender_range,
+                'postal_code': anon_postal_code,
+                'citizenship': spaced_citizenship,
+                f'{today_year-4}_sum': d['first_sum'],
+                f'{today_year-3}_sum': d['second_sum'],
+                f'{today_year-2}_sum': d['third_sum'],
+                f'{today_year-1}_sum': d['fourth_sum'],
+                f'{today_year}_sum': d['fifth_sum'],
+                'savings_balance': d['first_balance'],
+                'credit_card_balance': d['second_balance'],
+                'investment_balance': d['third_balance']
             }
             formatted_data.append(record)
 

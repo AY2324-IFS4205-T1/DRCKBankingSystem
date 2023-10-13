@@ -1,5 +1,5 @@
 """
-Read transaction history data set. Should be able to get rid of this
+Read transaction history data set
 """
 
 # !/usr/bin/env python
@@ -7,12 +7,12 @@ Read transaction history data set. Should be able to get rid of this
 
 
 
-ATT_NAME = ['sender_age', 'sender_gender', 'sender_address', 'sender_citizenship', 
-            'amount', 'recipient_age', 'recipient_gender', 'recipient_postal_code', 'recipient_citizenship',
-            'month', 'year']
-QI_INDEX = [0, 1, 2, 3, 5, 6, 7, 8]
-IS_CAT = [False, True, False, True, False, True, False, True]
-SA_INDEX = [4, 9, 10]
+ATT_NAME = ['sender_age', 'sender_gender', 'sender_postal_code', 'sender_citizenship', 
+            'first_sum', 'second_sum', 'third_sum', 'fourth_sum', 'fifth_sum', 'first_balance',
+            'second_balance', 'third_balance']
+QI_INDEX = [0, 1, 2, 3]
+IS_CAT = [False, True, False, True]
+SA_INDEX = [4, 5, 6, 7, 8, 9, 10, 11]
 __DEBUG = False
 
 def convert_to_categorical(qi_num, intuitive_dict, intuitive_number, intuitive_order, line):

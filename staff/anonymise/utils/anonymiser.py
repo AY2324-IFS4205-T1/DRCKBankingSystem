@@ -1,7 +1,8 @@
 import copy
 from staff.anonymise.utils.mondrian import mondrian
-from staff.anonymise.utils.read_my_data import read_data as read_test
-from staff.anonymise.utils.read_withdrawal_data import read_data as read_withdrawal
+from staff.anonymise.utils.read_data import read_data
+# from staff.anonymise.utils.read_withdrawal_data import read_data as read_withdrawal_deposit
+# from staff.anonymise.utils.read_transfer_data import read_data as read_transfer
 import json
 
 # Read my test record
@@ -18,6 +19,10 @@ DEPOSIT_COLUMNS = ['recipient_age', 'recipient_gender', 'recipient_postal_code',
 TRANSFER_COLUMNS = ['sender_age', 'sender_gender', 'sender_postal_code', 'sender_citizenship',
                     'recipient_age', 'recipient_gender', 'recipient_postal_code', 'recipient_citizenship',
                     'transaction_amount', 'month', 'year']
+
+ANON_COLUMNS = ['age', 'gender', 'postal_code', 'citizenship', 
+                'first_sum', 'second_sum', 'third_sum', 'fourth_sum', 'fifth_sum', 'first_balance',
+                'second_balance', 'third_balance']
 
 def convert_intuitive_order(intuitive_order, record, i, connect_str='~'):
     """
@@ -91,16 +96,11 @@ def write_to_file(result, file_name):
     print(f"Anonymised data written to {file_name}")
 
 
-def prepare_output(result, type):
+def prepare_output(result):
     """
     Stores results into a dictionary for to prepare for query 
     """
-    if type == 'Deposit':
-        column_names = DEPOSIT_COLUMNS 
-    elif type == 'Withdrawal':
-        column_names = WITHDRAWAL_COLUMNS 
-    else: # Type is 'Transfer'
-        column_names = TRANSFER_COLUMNS
+    column_names = ANON_COLUMNS
     data_dict = []
     for row in result:
         row_dict = {}
@@ -135,11 +135,14 @@ def anonymise(transaction_data, k_value, transaction_type):
     Returns data as dict.
     """
     # Read in Transaction History data
-    if transaction_type == 'Withdrawal':
-        DATA, intuitive_order, qi_num, sa_num = read_withdrawal(transaction_data)
-        file_name = "anon_withdrawal.data"
-
+    # if transaction_type == 'Withdrawal' or transaction_type == 'Deposit':
+    #     DATA, intuitive_order, qi_num, sa_num = read_withdrawal_deposit(transaction_data)
+    # else:
+    #     DATA, intuitive_order, qi_num, sa_num = read_transfer(transaction_data)
+    DATA, intuitive_order, qi_num, sa_num = read_data(transaction_data)
+    
     result, eval_result = get_result_one(DATA, intuitive_order, qi_num, sa_num, k_value)
+    file_name = f"anon_{transaction_type.lower()}.data"
     write_to_file(result, file_name)
-    output = prepare_output(result, transaction_type)
+    output = prepare_output(result)
     return output, eval_result
