@@ -65,4 +65,5 @@ urlpatterns = [
     path("staff/login_logs", LoginLoggingView.as_view(), name="login_logs"),
     path("staff/access_control_logs", AccessControlLoggingView.as_view(), name="access_control_logs"),
     path("staff/conflict_interest_logs", ConflictOfInterestLoggingView.as_view(), name="conflict_interest_logs"),
+
 ]
