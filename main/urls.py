@@ -60,5 +60,4 @@ urlpatterns = [
     path("setup_2FA", SetupTwoFactorAuthenticationView.as_view(), name="setup_2fa"),
     path("verify_2FA", VerifyTwoFactorAuthenticationView.as_view(), name="verify_2fa"),
 
-    path("ip", GetIPTestingView.as_view(), name="ip")
 ]
