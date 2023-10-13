@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle
 from rest_framework.views import APIView
 
+from log.logging import ConflictOfInterestLogger, LoginLogger
 from staff.permissions import IsResearcher, IsStaff, IsTicketReviewer
 from staff.serializers import (AnonymisationSerializer, ApproveSerializer,
                                GetClosedTicketsSerializer,
@@ -83,7 +84,10 @@ class StaffLoginView(KnoxLoginView):
         if serializer.is_valid():
             user = serializer.validated_data["user"]
             login(request, user)
-            return super().post(request, format=None)
+            response = super().post(request, format=None)
+            LoginLogger(User.user_type.STAFF, request, response, user)
+            return response
+        LoginLogger(User.user_type.STAFF, request)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
@@ -175,7 +179,8 @@ class ApproveView(APIView):
     def post(self, request):
         serializer = ApproveSerializer(request.user, request.data, data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            ticket = serializer.save()
+            ConflictOfInterestLogger(request, ticket)
             return Response({"success": "Ticket has been approved."}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

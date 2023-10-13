@@ -48,7 +48,6 @@ else:
     SECURE_REFERRER_POLICY = "same-origin"
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 
-    
 
 # Application definition
 INSTALLED_APPS = [
@@ -63,7 +62,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'user',
     'customer',
-    'staff'
+    'staff',
+    'log'
 ]
 
 MIDDLEWARE = [
@@ -162,7 +162,7 @@ else:
                 }
             },
         }
-        print("Using database config for application")    
+        print("Using database config for application")  
 
 
 # Password validation
@@ -271,3 +271,10 @@ REST_KNOX = {
     'MIN_REFRESH_INTERVAL': 60, # This is the minimum time in seconds that needs to pass for the token expiry to be updated in the database.
     'EXPIRY_DATETIME_FORMAT': api_settings.DATETIME_FORMAT,
 }
+
+# Clickjacking
+X_FRAME_OPTIONS = "DENY"
+
+# Race Conditions
+ATOMIC_REQUESTS = True
+

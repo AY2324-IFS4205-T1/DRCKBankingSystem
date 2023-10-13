@@ -12,6 +12,7 @@ from customer.serializers import (CreateTicketSerializer, CustomerSerializer,
                                   DepositSerializer, GetTicketsSerializer,
                                   TransactionsSerializer, TransferSerializer,
                                   WithdrawSerializer)
+from log.logging import ConflictOfInterestLogger, LoginLogger
 from user.authentication import TokenAndTwoFactorAuthentication
 from user.models import User
 from user.serializers import LoginSerializer, UserRegisterSerializer
@@ -88,7 +89,10 @@ class CustomerLoginView(KnoxLoginView):
         if serializer.is_valid():
             user = serializer.validated_data["user"]
             login(request, user)
-            return super().post(request, format=None)
+            response = super().post(request, format=None)
+            LoginLogger(User.user_type.CUSTOMER, request, response, user)
+            return response
+        LoginLogger(User.user_type.CUSTOMER, request)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -193,7 +197,8 @@ class CustomerTicketsView(APIView):
     def post(self, request):
         serializer = CreateTicketSerializer(request.user, request.data, data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            ticket = serializer.save()
+            ConflictOfInterestLogger(request, ticket)
             return Response({"success": "Ticket has been created."}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

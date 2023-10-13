@@ -164,6 +164,11 @@ class TestCreateTwoFA(TestAuthentication):
         self.login_customer_1()
         response = self.client.get(reverse("setup_2fa"), **self.header)
         return response
+    
+    def create_two_fa_customer2(self):
+        self.login_customer_2()
+        response = self.client.get(reverse("setup_2fa"), **self.header)
+        return response
 
     def create_two_fa_staff1(self):
         self.login_staff_1()
@@ -229,6 +234,17 @@ class TestVerifyTwoFA(TestCreateTwoFA):
         response = self.client.post(reverse("verify_2fa"), sample_otp, **self.header)
         return response
 
+    def two_fa_customer_2(self):
+        self.create_two_fa_customer2()
+
+        user = User.objects.get(username="test2")
+        two_fa = TwoFA.objects.get(user=user)
+        otp = pyotp.totp.TOTP(two_fa.key, digest=sha512, digits=8).now()
+        sample_otp = {"otp": otp}
+
+        response = self.client.post(reverse("verify_2fa"), sample_otp, **self.header)
+        return response
+    
     def two_fa_staff1(self):
         self.create_two_fa_staff1()
 

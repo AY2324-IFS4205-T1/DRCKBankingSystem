@@ -200,7 +200,7 @@ class TransferSerializer(serializers.Serializer):
         self.sender_account.save()
         self.recipient_account.save()
         return self.transaction
-    
+
     def get_transaction(self):
         transaction_json = model_to_dict(self.transaction)
         transaction_json["transaction"] = self.transaction.transaction
