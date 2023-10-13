@@ -1,15 +1,9 @@
 import json
 from datetime import datetime, date
-from decimal import Decimal
-import math
 import statistics
 
-from django.db.models import F, Q, Sum, Count
-from customer.models import Transactions
-from django.db.models.functions import ExtractMonth, ExtractYear
+from staff.anonymise.utils.requirements import DecimalEncoder
 
-from staff.anonymise.utils.requirements import DecimalEncoder, age_convert
-from django.core import serializers
 
 def calculate_utility(anon_list, unanon_list):
     absolute_differences = [abs(anon_avg - actual_avg) for anon_avg, actual_avg in zip(anon_list, unanon_list)]

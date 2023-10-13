@@ -5,10 +5,11 @@ from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle
 from rest_framework.views import APIView
 
-from staff.permissions import IsResearcher, IsStaff, IsTicketReviewer
+from staff.permissions import IsAnonymiser, IsResearcher, IsStaff, IsTicketReviewer
 from staff.serializers import (AnonymisationSerializer, ApproveSerializer,
                                GetClosedTicketsSerializer,
-                               GetOpenTicketsSerializer, RejectSerializer,
+                               GetOpenTicketsSerializer, QuerySerializer,
+                               RejectSerializer,
                                StaffSerializer, TicketDetailsSerializer)
 from user.authentication import TokenAndTwoFactorAuthentication
 from user.models import User
@@ -207,7 +208,25 @@ class AnonymisationView(APIView):
 
     Args:
         k_value: number
-        query: number
+
+    Returns:
+        data: anonymised data
+    """
+    permission_classes = (permissions.IsAuthenticated, IsStaff, IsAnonymiser)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
+
+    def post(self, request):
+        serializer = AnonymisationSerializer(request.user, request.data, data=request.data)
+        if serializer.is_valid():
+            serializer = serializer.get_anonymised_data()
+            return Response(serializer, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class QueryView(APIView):
+    """Post request
+
+    Args:
+        anon_dict: anonymised_data
 
     Returns:
         data: anonymised data
@@ -216,8 +235,8 @@ class AnonymisationView(APIView):
     authentication_classes = (TokenAndTwoFactorAuthentication,)
 
     def post(self, request):
-        serializer = AnonymisationSerializer(request.user, request.data, data=request.data)
+        serializer = QuerySerializer(request.user, request.data, data=request.data)
         if serializer.is_valid():
-            serializer = serializer.get_anonymised_data()
+            serializer = serializer.get_query_result()
             return Response(serializer, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

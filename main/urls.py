@@ -21,6 +21,7 @@ from customer.views import (AccountsView, AccountTypesView, CustomerLoginView,
                             CustomerWelcomeView, DepositView, TransactionsView,
                             TransferView, WithdrawView)
 from staff.views import (AnonymisationView, ApproveView, GetClosedTicketsView, GetOpenTicketsView,
+                         QueryView,
                          RejectView, StaffLoginView, StaffRegistrationView,
                          StaffTicketView, StaffWelcomeView)
 from user.views import (AuthenticationCheckView, LogoutView,
@@ -51,6 +52,7 @@ urlpatterns = [
     path("staff/approve", ApproveView.as_view(), name="ticketApprove"),
     path("staff/reject", RejectView.as_view(), name="ticketReject"),
     path("staff/anonymisation", AnonymisationView.as_view(), name="anonymisation"),
+    path("staff/query", QueryView.as_view(), name="query"),
 
     #In logout, header key: Authorization, Value: Token 3510ff361b..
     path('logout', LogoutView.as_view(), name='logout'),
