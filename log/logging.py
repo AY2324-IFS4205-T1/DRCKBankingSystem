@@ -14,8 +14,6 @@ def get_ip_address_from_request(request):
 
 
 class LoginLogger:
-    
-
     def __init__(self, login_type, login_request, login_response=None, user=None):
         self.login_type = login_type
         self.login_request = login_request

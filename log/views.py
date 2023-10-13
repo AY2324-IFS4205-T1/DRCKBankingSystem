@@ -11,6 +11,11 @@ from user.authentication import TokenAndTwoFactorAuthentication
 # Create your views here.
 class LoginLoggingView(APIView):
     """Post request
+    The Login Logs records all login attempts.
+    Logs are marked with higher severity if:
+        1) Login attempt was unsuccessful.
+        2) Many unsuccessful attempts were executed within a short timeframe (5 minutes).
+        3) Unsuccessful attempt were made after a successful login from a different IP address.
 
     Args:
         severity: ("High", "Medium", "Low") defaults to None which returns all
@@ -33,6 +38,10 @@ class LoginLoggingView(APIView):
 
 class AccessControlLoggingView(APIView):
     """Post request
+    The AccessControl Logs records all unauthorised attempts to access an API.
+    Logs are marked with higher severity if:
+        1) Multiple attempts were made by the same user.
+        2) Multiple attempts were made by the same IP address.
 
     Args:
         severity: ("High", "Medium", "Low") defaults to None
@@ -55,6 +64,11 @@ class AccessControlLoggingView(APIView):
 
 class ConflictOfInterestLoggingView(APIView):
     """Post request
+    The ConflictOfInterest Logs records all approval of customer tickets.
+    Its main purpose is to identify a staff using their permissions as a staff to approve a ticket that they opened as a customer.
+    Logs are marked with higher severity if for each ticket:
+        1) The usernames of the customer and staff are the same.
+        2) The IP addresses of the customer and staff are the same.
 
     Args:
         severity: ("High", "Medium", "Low") defaults to None
