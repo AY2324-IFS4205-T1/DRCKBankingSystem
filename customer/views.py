@@ -70,7 +70,6 @@ class CustomerRegistrationView(APIView):
         return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@ensure_csrf_cookie
 class CustomerLoginView(KnoxLoginView):
     """Post request
 
@@ -84,6 +83,7 @@ class CustomerLoginView(KnoxLoginView):
     permission_classes = (permissions.AllowAny,)
     throttle_classes = [AnonRateThrottle]
 
+    @ensure_csrf_cookie
     def post(self, request):
         serializer = LoginSerializer(User.user_type.CUSTOMER, data=request.data)
 
