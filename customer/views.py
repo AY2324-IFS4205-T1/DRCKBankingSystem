@@ -15,7 +15,8 @@ from customer.serializers import (CreateTicketSerializer, CustomerSerializer,
                                   TransactionsSerializer, TransferSerializer,
                                   WithdrawSerializer)
 from log.logging import ConflictOfInterestLogger, LoginLogger
-from user.authentication import TokenAndTwoFactorAuthentication
+from user.authentication import (CSRFAndTokenAndTwoFactorAuthentication,
+                                 CSRFAuthentication)
 from user.models import User
 from user.serializers import LoginSerializer, UserRegisterSerializer
 
@@ -53,7 +54,9 @@ class CustomerRegistrationView(APIView):
 
     identity_no needs to be valid with respect to citizenship and birth_date
     """
+
     throttle_classes = [AnonRateThrottle]
+    authentication_classes = (CSRFAuthentication,)
 
     def post(self, request):
         user_serializer = UserRegisterSerializer(
@@ -65,24 +68,31 @@ class CustomerRegistrationView(APIView):
             customer_serializer = CustomerSerializer(data=request.data, user=user)
             if customer_serializer.is_valid():
                 customer_serializer.save(user=user)
-                return Response({"success": "Customer has been successfully registered."}, status=status.HTTP_201_CREATED)
+                return Response(
+                    {"success": "Customer has been successfully registered."},
+                    status=status.HTTP_201_CREATED,
+                )
             else:
                 user.delete()
-                return Response(customer_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                return Response(
+                    customer_serializer.errors, status=status.HTTP_400_BAD_REQUEST
+                )
         return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CustomerLoginView(KnoxLoginView):
     """Post request
 
-    Args:        
+    Args:
         username: test1
         password: G00dP@55word
 
     Returns:
         _type_: _description_
     """
+
     permission_classes = (permissions.AllowAny,)
+    authentication_classes = (CSRFAuthentication,)
     throttle_classes = [AnonRateThrottle]
 
     @method_decorator(ensure_csrf_cookie)
@@ -107,8 +117,9 @@ class CustomerWelcomeView(APIView):
         first_name: string,
         last_name: string,
     """
+
     permission_classes = (permissions.IsAuthenticated, IsCustomer,)
-    authentication_classes = (TokenAndTwoFactorAuthentication,)
+    authentication_classes = (CSRFAndTokenAndTwoFactorAuthentication,)
     throttle_scope = "non_sensitive_request"
 
     def get(self, request):
@@ -126,8 +137,9 @@ class AccountTypesView(APIView):
     Returns:
         account_types: list of account_types (string)
     """
+
     permission_classes = (permissions.IsAuthenticated, IsCustomer,)
-    authentication_classes = (TokenAndTwoFactorAuthentication,)
+    authentication_classes = (CSRFAndTokenAndTwoFactorAuthentication,)
     throttle_scope = "non_sensitive_request"
 
     def get(self, request):
@@ -141,13 +153,16 @@ class AccountsView(APIView):
     Returns:
         accounts: list of accounts (account, balance, acct_type)
     """
+
     permission_classes = (permissions.IsAuthenticated, IsCustomer,)
-    authentication_classes = (TokenAndTwoFactorAuthentication,)
+    authentication_classes = (CSRFAndTokenAndTwoFactorAuthentication,)
     throttle_scope = "non_sensitive_request"
 
     # Get all accounts of the user
     def get(self, request):
-        accounts = Accounts.objects.filter(user_id__user=self.request.user, status=Accounts.AccountStatus.ACTIVE).values("account", "balance", acct_type=F("type_id__name"))
+        accounts = Accounts.objects.filter(
+            user_id__user=self.request.user, status=Accounts.AccountStatus.ACTIVE
+        ).values("account", "balance", acct_type=F("type_id__name"))
         return Response({"accounts": accounts}, status=status.HTTP_200_OK)
 
 
@@ -160,13 +175,16 @@ class TransactionsView(APIView):
     Returns:
         transactions: list of transactions
     """
+
     permission_classes = (permissions.IsAuthenticated, IsCustomer,)
-    authentication_classes = (TokenAndTwoFactorAuthentication,)
+    authentication_classes = (CSRFAndTokenAndTwoFactorAuthentication,)
 
     # Get all transactions of an account
     def post(self, request):
         # Check if the account belong to the user
-        serialiser = TransactionsSerializer(request.user, request.data, data=request.data)
+        serialiser = TransactionsSerializer(
+            request.user, request.data, data=request.data
+        )
         if serialiser.is_valid():
             transactions = serialiser.get_transactions()
             return Response({"transactions": transactions}, status=status.HTTP_200_OK)
@@ -179,7 +197,7 @@ class CustomerTicketsView(APIView):
     Returns:
         tickets: list of tickets ("ticket", "ticket_type", "status", "created_date", "closed_date") opened by customer
 
-        
+
     Post request
 
     Args:
@@ -189,8 +207,9 @@ class CustomerTicketsView(APIView):
     Returns:
         success: "Ticket has been created."
     """
+
     permission_classes = (permissions.IsAuthenticated, IsCustomer)
-    authentication_classes = (TokenAndTwoFactorAuthentication,)
+    authentication_classes = (CSRFAndTokenAndTwoFactorAuthentication,)
     throttle_scope = "non_sensitive_request"
 
     def get(self, request):
@@ -198,11 +217,15 @@ class CustomerTicketsView(APIView):
         return Response({"tickets": serializer}, status=status.HTTP_200_OK)
 
     def post(self, request):
-        serializer = CreateTicketSerializer(request.user, request.data, data=request.data)
+        serializer = CreateTicketSerializer(
+            request.user, request.data, data=request.data
+        )
         if serializer.is_valid():
             ticket = serializer.save()
             ConflictOfInterestLogger(request, ticket)
-            return Response({"success": "Ticket has been created."}, status=status.HTTP_200_OK)
+            return Response(
+                {"success": "Ticket has been created."}, status=status.HTTP_200_OK
+            )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -217,8 +240,9 @@ class DepositView(APIView):
     Returns:
         new_balance: number
     """
+
     permission_classes = (permissions.IsAuthenticated, IsCustomer,)
-    authentication_classes = (TokenAndTwoFactorAuthentication,)
+    authentication_classes = (CSRFAndTokenAndTwoFactorAuthentication,)
     throttle_scope = "sensitive_request"
 
     def post(self, request):
@@ -240,8 +264,9 @@ class WithdrawView(APIView):
     Returns:
         new_balance: number
     """
+
     permission_classes = (permissions.IsAuthenticated, IsCustomer,)
-    authentication_classes = (TokenAndTwoFactorAuthentication,)
+    authentication_classes = (CSRFAndTokenAndTwoFactorAuthentication,)
     throttle_scope = "sensitive_request"
 
     def post(self, request):
@@ -264,8 +289,9 @@ class TransferView(APIView):
     Returns:
         transaction: transaction information
     """
+
     permission_classes = (permissions.IsAuthenticated, IsCustomer,)
-    authentication_classes = (TokenAndTwoFactorAuthentication,)
+    authentication_classes = (CSRFAndTokenAndTwoFactorAuthentication,)
     throttle_scope = "sensitive_request"
 
     def post(self, request):

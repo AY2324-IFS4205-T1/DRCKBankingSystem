@@ -2,10 +2,14 @@ from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from log.permissions import IsAuditor
-from log.serializers import AccessControlLoggingSerializer, ConflictOfInterestLoggingSerializer, LoginLoggingSerializer
+from log.serializers import (
+    AccessControlLoggingSerializer,
+    ConflictOfInterestLoggingSerializer,
+    LoginLoggingSerializer,
+)
 
 from staff.permissions import IsStaff
-from user.authentication import TokenAndTwoFactorAuthentication
+from user.authentication import CSRFAndTokenAndTwoFactorAuthentication
 
 
 # Create your views here.
@@ -25,11 +29,14 @@ class LoginLoggingView(APIView):
     Returns:
         List of login logs capped at the first 100
     """
+
     permission_classes = (permissions.IsAuthenticated, IsStaff, IsAuditor)
-    authentication_classes = (TokenAndTwoFactorAuthentication,)
+    authentication_classes = (CSRFAndTokenAndTwoFactorAuthentication,)
 
     def post(self, request):
-        serializer = LoginLoggingSerializer(request.user, request.data, data=request.data)
+        serializer = LoginLoggingSerializer(
+            request.user, request.data, data=request.data
+        )
         if serializer.is_valid():
             serializer = serializer.get_logs()
             return Response({"login_logs": serializer}, status=status.HTTP_200_OK)
@@ -51,14 +58,19 @@ class AccessControlLoggingView(APIView):
     Returns:
         List of access control logs capped at the first 100
     """
+
     permission_classes = (permissions.IsAuthenticated, IsStaff, IsAuditor)
-    authentication_classes = (TokenAndTwoFactorAuthentication,)
+    authentication_classes = (CSRFAndTokenAndTwoFactorAuthentication,)
 
     def post(self, request):
-        serializer = AccessControlLoggingSerializer(request.user, request.data, data=request.data)
+        serializer = AccessControlLoggingSerializer(
+            request.user, request.data, data=request.data
+        )
         if serializer.is_valid():
             serializer = serializer.get_logs()
-            return Response({"access_control_logs": serializer}, status=status.HTTP_200_OK)
+            return Response(
+                {"access_control_logs": serializer}, status=status.HTTP_200_OK
+            )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -77,12 +89,17 @@ class ConflictOfInterestLoggingView(APIView):
     Returns:
         List of conflict of interest logs capped at the most recent 100
     """
+
     permission_classes = (permissions.IsAuthenticated, IsStaff, IsAuditor)
-    authentication_classes = (TokenAndTwoFactorAuthentication,)
+    authentication_classes = (CSRFAndTokenAndTwoFactorAuthentication,)
 
     def post(self, request):
-        serializer = ConflictOfInterestLoggingSerializer(request.user, request.data, data=request.data)
+        serializer = ConflictOfInterestLoggingSerializer(
+            request.user, request.data, data=request.data
+        )
         if serializer.is_valid():
             serializer = serializer.get_logs()
-            return Response({"conflict_interest_logs": serializer}, status=status.HTTP_200_OK)
+            return Response(
+                {"conflict_interest_logs": serializer}, status=status.HTTP_200_OK
+            )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

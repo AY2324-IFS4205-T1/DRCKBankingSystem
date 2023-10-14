@@ -1,15 +1,37 @@
-from datetime import timedelta
-
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 from knox.auth import TokenAuthentication
-from rest_framework.exceptions import AuthenticationFailed
-from rest_framework.authentication import CSRFCheck
-from main.settings import REST_KNOX
 from rest_framework import exceptions
+from rest_framework.authentication import CSRFCheck
+from rest_framework.exceptions import AuthenticationFailed
+
+from main.settings import REST_KNOX
 from user.models import TwoFA
 
 # https://reintech.io/blog/writing-custom-authentication-backend-django
+
+
+class CSRFAuthentication:
+    def authenticate(self, request):
+        self.enforce_csrf(request)
+
+    # copied from restframework.authentication.SessionAuthentication
+    def enforce_csrf(self, request):
+        """
+        Enforce CSRF validation for session based authentication.
+        """
+
+        def dummy_get_response(request):  # pragma: no cover
+            return None
+
+        check = CSRFCheck(dummy_get_response)
+        # populates request.META['CSRF_COOKIE'], which is used in process_view()
+        check.process_request(request)
+        reason = check.process_view(request, None, (), {})
+        if reason:
+            # CSRF failed, bail with explicit error message
+            raise exceptions.PermissionDenied("CSRF Failed: %s" % reason)
+
 
 class UserAuth:
     def authenticate(self, _, username=None, password=None, type=None):
@@ -21,7 +43,7 @@ class UserAuth:
         else:
             if user.check_password(password):
                 return user
-            
+
     def get_user(self, user_id):
         user_model = get_user_model()
         try:
@@ -29,13 +51,18 @@ class UserAuth:
         except user_model.DoesNotExist:
             return None
 
-class TokenAndTwoFactorAuthentication(TokenAuthentication):
+
+class CSRFAndTokenAuthentication(TokenAuthentication, CSRFAuthentication):
+    def authenticate(self, request):
+        self.enforce_csrf(request)
+        return super().authenticate(request)
+
+
+class CSRFAndTokenAndTwoFactorAuthentication(CSRFAndTokenAuthentication):
     def authenticate(self, request):
         token_authenticated = super().authenticate(request)
         if token_authenticated == None:
             return None
-        
-        self.enforce_csrf(request)
 
         user = token_authenticated[0]
         token = request.headers.get("Authorization")[6:]
@@ -63,19 +90,3 @@ class TokenAndTwoFactorAuthentication(TokenAuthentication):
             two_fa.last_authenticated = None
             two_fa.save()
             raise AuthenticationFailed("2FA timeout, 2FA needs to be verified again.")
-        
-    # copied from restframework.authentication.SessionAuthentication
-    def enforce_csrf(self, request):
-        """
-        Enforce CSRF validation for session based authentication.
-        """
-        def dummy_get_response(request):  # pragma: no cover
-            return None
-
-        check = CSRFCheck(dummy_get_response)
-        # populates request.META['CSRF_COOKIE'], which is used in process_view()
-        check.process_request(request)
-        reason = check.process_view(request, None, (), {})
-        if reason:
-            # CSRF failed, bail with explicit error message
-            raise exceptions.PermissionDenied('CSRF Failed: %s' % reason)
