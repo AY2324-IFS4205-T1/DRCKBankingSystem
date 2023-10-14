@@ -1,4 +1,6 @@
 from django.contrib.auth import login
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import ensure_csrf_cookie
 from knox.views import LoginView as KnoxLoginView
 from rest_framework import permissions, status
 from rest_framework.response import Response
@@ -78,6 +80,7 @@ class StaffLoginView(KnoxLoginView):
     permission_classes = (permissions.AllowAny,)
     throttle_classes = [AnonRateThrottle]
 
+    @method_decorator(ensure_csrf_cookie)
     def post(self, request):
         serializer = LoginSerializer(User.user_type.STAFF, data=request.data)
 
