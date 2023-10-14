@@ -16,6 +16,7 @@ from log.logging import ConflictOfInterestLogger, LoginLogger
 from user.authentication import TokenAndTwoFactorAuthentication
 from user.models import User
 from user.serializers import LoginSerializer, UserRegisterSerializer
+from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 class CustomerRegistrationView(APIView):
@@ -83,7 +84,7 @@ class CustomerLoginView(KnoxLoginView):
     permission_classes = (permissions.AllowAny,)
     throttle_classes = [AnonRateThrottle]
 
-    @ensure_csrf_cookie
+    @method_decorator(ensure_csrf_cookie)
     def post(self, request):
         serializer = LoginSerializer(User.user_type.CUSTOMER, data=request.data)
 
