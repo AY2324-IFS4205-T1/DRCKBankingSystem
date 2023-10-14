@@ -16,7 +16,7 @@ from log.logging import ConflictOfInterestLogger, LoginLogger
 from user.authentication import TokenAndTwoFactorAuthentication
 from user.models import User
 from user.serializers import LoginSerializer, UserRegisterSerializer
-
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 class CustomerRegistrationView(APIView):
     """Post request
@@ -70,6 +70,7 @@ class CustomerRegistrationView(APIView):
         return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@ensure_csrf_cookie
 class CustomerLoginView(KnoxLoginView):
     """Post request
 
