@@ -14,7 +14,7 @@ def get_random_datetime():
     """
     now = datetime.utcnow()
 
-    start_year = 1990 # Assume we are a new-ish bank
+    start_year = 2017 # Assume we are a new-ish bank
     
     end_year = now.year
     year = secrets.randbelow(end_year - start_year + 1) + start_year
@@ -39,7 +39,7 @@ def get_random_datetime():
     return formatted_datetime
 
 def get_random_balance():
-    balance = secrets.randbelow(999999) + 1
+    balance = secrets.randbelow(5000) + 1
     return str(balance)
     
 

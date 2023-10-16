@@ -4,6 +4,7 @@ import string
 from datetime import datetime, timedelta
 from secrets import choice
 from uuid import UUID
+from tqdm import tqdm
 
 from django.contrib.auth.hashers import make_password
 from django.utils.timezone import make_aware
@@ -13,8 +14,8 @@ from customer.models import Accounts, AccountTypes
 from generate_data.utils.utility import get_random_datetime, load_data, execute_delete_sql, get_userids, get_random_balance
 
 # Define number of users and number of transactions you want to generate
-CUSTOMER_NUM = 50
-TRANSACTION_NUM = 100
+CUSTOMER_NUM = 150
+TRANSACTION_NUM = 300
 
 TRANSACTIONS_MODEL = "customer.Transactions"
 
@@ -36,7 +37,7 @@ class GenerateAuthUsers:
         Generates customers in auth_user table. Primary key is incremented automatically so it is excluded from function
         """
         data = []
-        for i in range(1, self.num_of_users + 1):
+        for i in tqdm(range(1, self.num_of_users + 1)):
             username = f"test{i}"
             hash_password = make_password(self.generate_random_password())
             user_data = {
@@ -75,7 +76,7 @@ class GenerateCustomers:
         user_ids = get_userids()
         data = []
 
-        for i, user_id in enumerate(user_ids):
+        for i, user_id in tqdm(enumerate(user_ids)):
             user_data = {
                 "pk": str(user_id), 
                 "model": "customer.Customer",
@@ -96,7 +97,8 @@ class GenerateCustomers:
             json.dump(data, json_file, indent=4, cls=UUIDEncoder)
     
     def get_random_birthdate(self):
-        start_date = datetime(1940, 1, 1)
+        start_date = datetime(1983, 1, 1)
+        # end_date = datetime(2004, 1, 1)
         end_date = datetime.now()
         random_date = start_date + timedelta(days=random.randint(0, (end_date - start_date).days))
         formatted_date = make_aware(random_date).strftime("%Y-%m-%d")
@@ -133,7 +135,7 @@ class GenerateAccounts:
     def generate_account(self):
         user_ids = get_userids()
         data = []
-        for _,user_id in enumerate(user_ids):
+        for _,user_id in tqdm(enumerate(user_ids)):
             user_data = {
                 "model": "customer.Accounts",
                 "fields": {
@@ -166,7 +168,7 @@ class GenerateTransactions:
     def generate_transaction(self):
         data = []
 
-        for _ in range(1, self.num_of_transactions + 1):
+        for _ in tqdm(range(1, self.num_of_transactions + 1)):
             transaction_type = self.get_random_transaction_type()
             
             if transaction_type == "Deposit":
@@ -180,7 +182,8 @@ class GenerateTransactions:
             json.dump(data, json_file, indent=4)
         
     def get_random_transaction_type(self):
-        transaction_types = ["Deposit", "Withdrawal", "Transfer"]
+        # transaction_types = ["Deposit", "Withdrawal", "Transfer"]
+        transaction_types = ["Withdrawal"]
         return choice(transaction_types)
 
 class TransactionEntryBase:
