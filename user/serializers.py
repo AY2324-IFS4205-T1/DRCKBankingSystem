@@ -5,14 +5,10 @@ from rest_framework import serializers
 from rest_framework.exceptions import AuthenticationFailed
 
 from staff.models import Staff
-from user.authentication import CSRFAndTokenAndTwoFactorAuthentication
+from user.authentication import TokenAndTwoFactorAuthentication
 from user.twofa import generate_qr, verify_otp
-from user.validations import (
-    validate_new_user,
-    validate_otp,
-    validate_page_type,
-    validate_user_2fa,
-)
+from user.validations import (validate_new_user, validate_otp,
+                              validate_page_type, validate_user_2fa)
 
 from .models import TwoFA, User
 
@@ -37,7 +33,7 @@ class AuthCheckSerializer(serializers.Serializer):
     def is_authenticated_and_forbidden(self):
         # enforces a check in the order login -> authorisation -> 2fa verified
         try:
-            authentication = CSRFAndTokenAndTwoFactorAuthentication().authenticate(
+            authentication = TokenAndTwoFactorAuthentication().authenticate(
                 self.request
             )
             if authentication == None:

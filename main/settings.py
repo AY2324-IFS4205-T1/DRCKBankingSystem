@@ -41,10 +41,6 @@ else:
     SECURE_HSTS_SECONDS = 31536000
     ATOMIC_REQUESTS = True
     X_FRAME_OPTIONS = "DENY"
-    SESSION_COOKIE_SECURE = True
-    SESSION_COOKIE_HTTPONLY = True
-    CSRF_COOKIE_SECURE = True
-    CSRF_COOKIE_HTTPONLY = True
     SECURE_REFERRER_POLICY = "same-origin"
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 
@@ -71,7 +67,6 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
-    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',

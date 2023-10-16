@@ -1,36 +1,12 @@
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 from knox.auth import TokenAuthentication
-from rest_framework import exceptions
-from rest_framework.authentication import CSRFCheck
 from rest_framework.exceptions import AuthenticationFailed
 
 from main.settings import REST_KNOX
 from user.models import TwoFA
 
 # https://reintech.io/blog/writing-custom-authentication-backend-django
-
-
-class CSRFAuthentication:
-    def authenticate(self, request):
-        self.enforce_csrf(request)
-
-    # copied from restframework.authentication.SessionAuthentication
-    def enforce_csrf(self, request):
-        """
-        Enforce CSRF validation for session based authentication.
-        """
-
-        def dummy_get_response(request):  # pragma: no cover
-            return None
-
-        check = CSRFCheck(dummy_get_response)
-        # populates request.META['CSRF_COOKIE'], which is used in process_view()
-        check.process_request(request)
-        reason = check.process_view(request, None, (), {})
-        if reason:
-            # CSRF failed, bail with explicit error message
-            raise exceptions.PermissionDenied("CSRF Failed: %s" % reason)
 
 
 class UserAuth:
@@ -52,13 +28,7 @@ class UserAuth:
             return None
 
 
-class CSRFAndTokenAuthentication(TokenAuthentication, CSRFAuthentication):
-    def authenticate(self, request):
-        self.enforce_csrf(request)
-        return super().authenticate(request)
-
-
-class CSRFAndTokenAndTwoFactorAuthentication(CSRFAndTokenAuthentication):
+class TokenAndTwoFactorAuthentication(TokenAuthentication):
     def authenticate(self, request):
         token_authenticated = super().authenticate(request)
         if token_authenticated == None:

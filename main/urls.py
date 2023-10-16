@@ -24,7 +24,7 @@ from log.views import AccessControlLoggingView, ConflictOfInterestLoggingView, L
 from staff.views import (AnonymisationView, ApproveView, GetClosedTicketsView, GetOpenTicketsView,
                          RejectView, StaffLoginView, StaffRegistrationView,
                          StaffTicketView, StaffWelcomeView)
-from user.views import (AuthenticationCheckView, CSRFView, LogoutView,
+from user.views import (AuthenticationCheckView, LogoutView,
                         SetupTwoFactorAuthenticationView,
                         VerifyTwoFactorAuthenticationView)
 
@@ -66,6 +66,4 @@ urlpatterns = [
     path("staff/access_control_logs", AccessControlLoggingView.as_view(), name="access_control_logs"),
     path("staff/conflict_interest_logs", ConflictOfInterestLoggingView.as_view(), name="conflict_interest_logs"),
 
-    # CSRF
-    path("csrf", CSRFView.as_view(), name="csrf")
 ]

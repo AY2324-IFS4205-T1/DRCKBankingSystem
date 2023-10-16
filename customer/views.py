@@ -1,7 +1,5 @@
 from django.contrib.auth import login
 from django.db.models import F
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import ensure_csrf_cookie
 from knox.views import LoginView as KnoxLoginView
 from rest_framework import permissions, status
 from rest_framework.response import Response
@@ -15,8 +13,7 @@ from customer.serializers import (CreateTicketSerializer, CustomerSerializer,
                                   TransactionsSerializer, TransferSerializer,
                                   WithdrawSerializer)
 from log.logging import ConflictOfInterestLogger, LoginLogger
-from user.authentication import (CSRFAndTokenAndTwoFactorAuthentication,
-                                 CSRFAuthentication)
+from user.authentication import TokenAndTwoFactorAuthentication
 from user.models import User
 from user.serializers import LoginSerializer, UserRegisterSerializer
 
@@ -56,7 +53,6 @@ class CustomerRegistrationView(APIView):
     """
 
     throttle_classes = [AnonRateThrottle]
-    authentication_classes = (CSRFAuthentication,)
 
     def post(self, request):
         user_serializer = UserRegisterSerializer(
@@ -92,10 +88,8 @@ class CustomerLoginView(KnoxLoginView):
     """
 
     permission_classes = (permissions.AllowAny,)
-    authentication_classes = (CSRFAuthentication,)
     throttle_classes = [AnonRateThrottle]
 
-    @method_decorator(ensure_csrf_cookie)
     def post(self, request):
         serializer = LoginSerializer(User.user_type.CUSTOMER, data=request.data)
 
@@ -119,7 +113,7 @@ class CustomerWelcomeView(APIView):
     """
 
     permission_classes = (permissions.IsAuthenticated, IsCustomer,)
-    authentication_classes = (CSRFAndTokenAndTwoFactorAuthentication,)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "non_sensitive_request"
 
     def get(self, request):
@@ -139,7 +133,7 @@ class AccountTypesView(APIView):
     """
 
     permission_classes = (permissions.IsAuthenticated, IsCustomer,)
-    authentication_classes = (CSRFAndTokenAndTwoFactorAuthentication,)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "non_sensitive_request"
 
     def get(self, request):
@@ -155,7 +149,7 @@ class AccountsView(APIView):
     """
 
     permission_classes = (permissions.IsAuthenticated, IsCustomer,)
-    authentication_classes = (CSRFAndTokenAndTwoFactorAuthentication,)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "non_sensitive_request"
 
     # Get all accounts of the user
@@ -177,7 +171,7 @@ class TransactionsView(APIView):
     """
 
     permission_classes = (permissions.IsAuthenticated, IsCustomer,)
-    authentication_classes = (CSRFAndTokenAndTwoFactorAuthentication,)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
 
     # Get all transactions of an account
     def post(self, request):
@@ -209,7 +203,7 @@ class CustomerTicketsView(APIView):
     """
 
     permission_classes = (permissions.IsAuthenticated, IsCustomer)
-    authentication_classes = (CSRFAndTokenAndTwoFactorAuthentication,)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "non_sensitive_request"
 
     def get(self, request):
@@ -242,7 +236,7 @@ class DepositView(APIView):
     """
 
     permission_classes = (permissions.IsAuthenticated, IsCustomer,)
-    authentication_classes = (CSRFAndTokenAndTwoFactorAuthentication,)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "sensitive_request"
 
     def post(self, request):
@@ -266,7 +260,7 @@ class WithdrawView(APIView):
     """
 
     permission_classes = (permissions.IsAuthenticated, IsCustomer,)
-    authentication_classes = (CSRFAndTokenAndTwoFactorAuthentication,)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "sensitive_request"
 
     def post(self, request):
@@ -291,7 +285,7 @@ class TransferView(APIView):
     """
 
     permission_classes = (permissions.IsAuthenticated, IsCustomer,)
-    authentication_classes = (CSRFAndTokenAndTwoFactorAuthentication,)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "sensitive_request"
 
     def post(self, request):

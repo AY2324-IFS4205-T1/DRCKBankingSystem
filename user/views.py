@@ -1,26 +1,15 @@
 from django.http import FileResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
+from knox.auth import TokenAuthentication
 from knox.views import LogoutAllView as KnoxLogoutView
 from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle
 from rest_framework.views import APIView
 
-from user.authentication import CSRFAndTokenAuthentication
 from user.serializers import (AuthCheckSerializer, GetTwoFASerializer,
                               RemoveTwoFASerializer, VerifyTwoFASerializer)
-
-
-class CSRFView(APIView):
-    """Get request for CSRF cookie
-    """
-    permission_classes = (permissions.AllowAny,)
-    throttle_classes = [AnonRateThrottle]
-
-    @method_decorator(ensure_csrf_cookie)
-    def get(self, request):
-        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class LogoutView(KnoxLogoutView):
@@ -37,7 +26,7 @@ class SetupTwoFactorAuthenticationView(APIView):
         FileReponse
     """
     permission_classes = (permissions.IsAuthenticated,)
-    authentication_classes = (CSRFAndTokenAuthentication,)
+    authentication_classes = (TokenAuthentication,)
     throttle_scope = "sensitive_request"
 
     def get(self, request):
@@ -56,7 +45,7 @@ class VerifyTwoFactorAuthenticationView(APIView):
         last_authenticated: timestamp
     """
     permission_classes = (permissions.IsAuthenticated,)
-    authentication_classes = (CSRFAndTokenAuthentication,)
+    authentication_classes = (TokenAuthentication,)
     throttle_scope = "non_sensitive_request"
 
     def post(self, request):
@@ -80,7 +69,7 @@ class AuthenticationCheckView(APIView):
         user_authorisation: string, options are ["Customer", "Ticket Reviewer", "Auditor", "Researcher"]
     """
     permission_classes = (permissions.AllowAny,)
-    authentication_classes = (CSRFAndTokenAuthentication,)
+    authentication_classes = (TokenAuthentication,)
     throttle_classes = [AnonRateThrottle]
 
     def post(self, request):

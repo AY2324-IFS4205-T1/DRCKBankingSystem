@@ -1,15 +1,13 @@
 from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from log.permissions import IsAuditor
-from log.serializers import (
-    AccessControlLoggingSerializer,
-    ConflictOfInterestLoggingSerializer,
-    LoginLoggingSerializer,
-)
 
+from log.permissions import IsAuditor
+from log.serializers import (AccessControlLoggingSerializer,
+                             ConflictOfInterestLoggingSerializer,
+                             LoginLoggingSerializer)
 from staff.permissions import IsStaff
-from user.authentication import CSRFAndTokenAndTwoFactorAuthentication
+from user.authentication import TokenAndTwoFactorAuthentication
 
 
 # Create your views here.
@@ -31,7 +29,7 @@ class LoginLoggingView(APIView):
     """
 
     permission_classes = (permissions.IsAuthenticated, IsStaff, IsAuditor)
-    authentication_classes = (CSRFAndTokenAndTwoFactorAuthentication,)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
 
     def post(self, request):
         serializer = LoginLoggingSerializer(
@@ -60,7 +58,7 @@ class AccessControlLoggingView(APIView):
     """
 
     permission_classes = (permissions.IsAuthenticated, IsStaff, IsAuditor)
-    authentication_classes = (CSRFAndTokenAndTwoFactorAuthentication,)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
 
     def post(self, request):
         serializer = AccessControlLoggingSerializer(
@@ -91,7 +89,7 @@ class ConflictOfInterestLoggingView(APIView):
     """
 
     permission_classes = (permissions.IsAuthenticated, IsStaff, IsAuditor)
-    authentication_classes = (CSRFAndTokenAndTwoFactorAuthentication,)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
 
     def post(self, request):
         serializer = ConflictOfInterestLoggingSerializer(

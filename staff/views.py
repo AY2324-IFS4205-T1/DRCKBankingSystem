@@ -1,6 +1,4 @@
 from django.contrib.auth import login
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import ensure_csrf_cookie
 from knox.views import LoginView as KnoxLoginView
 from rest_framework import permissions, status
 from rest_framework.response import Response
@@ -13,8 +11,7 @@ from staff.serializers import (AnonymisationSerializer, ApproveSerializer,
                                GetClosedTicketsSerializer,
                                GetOpenTicketsSerializer, RejectSerializer,
                                StaffSerializer, TicketDetailsSerializer)
-from user.authentication import (CSRFAndTokenAndTwoFactorAuthentication,
-                                 CSRFAuthentication)
+from user.authentication import TokenAndTwoFactorAuthentication
 from user.models import User
 from user.serializers import LoginSerializer, UserRegisterSerializer
 
@@ -53,7 +50,6 @@ class StaffRegistrationView(APIView):
     """
 
     throttle_classes = [AnonRateThrottle]
-    authentication_classes = (CSRFAuthentication,)
 
     def post(self, request):
         user_serializer = UserRegisterSerializer(
@@ -90,9 +86,7 @@ class StaffLoginView(KnoxLoginView):
 
     permission_classes = (permissions.AllowAny,)
     throttle_classes = [AnonRateThrottle]
-    authentication_classes = (CSRFAuthentication,)
 
-    @method_decorator(ensure_csrf_cookie)
     def post(self, request):
         serializer = LoginSerializer(User.user_type.STAFF, data=request.data)
 
@@ -116,7 +110,7 @@ class StaffWelcomeView(APIView):
     """
 
     permission_classes = (permissions.IsAuthenticated, IsStaff)
-    authentication_classes = (CSRFAndTokenAndTwoFactorAuthentication,)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
 
     # Displays the user's first name, last name, last login in Dashboard
     def get(self, request):
@@ -137,7 +131,7 @@ class GetOpenTicketsView(APIView):
     """
 
     permission_classes = (permissions.IsAuthenticated, IsStaff, IsTicketReviewer,)
-    authentication_classes = (CSRFAndTokenAndTwoFactorAuthentication,)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
 
     def get(self, request):
         serializer = GetOpenTicketsSerializer().get_open_tickets_list()
@@ -152,7 +146,7 @@ class GetClosedTicketsView(APIView):
     """
 
     permission_classes = (permissions.IsAuthenticated, IsStaff, IsTicketReviewer,)
-    authentication_classes = (CSRFAndTokenAndTwoFactorAuthentication,)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
 
     def get(self, request):
         serializer = GetClosedTicketsSerializer(request.user).get_closed_tickets_list()
@@ -172,7 +166,7 @@ class StaffTicketView(APIView):
     """
 
     permission_classes = (permissions.IsAuthenticated, IsStaff, IsTicketReviewer,)
-    authentication_classes = (CSRFAndTokenAndTwoFactorAuthentication,)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "non_sensitive_request"
 
     def post(self, request):
@@ -196,7 +190,7 @@ class ApproveView(APIView):
     """
 
     permission_classes = (permissions.IsAuthenticated, IsStaff, IsTicketReviewer,)
-    authentication_classes = (CSRFAndTokenAndTwoFactorAuthentication,)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "sensitive_request"
 
     def post(self, request):
@@ -221,7 +215,7 @@ class RejectView(APIView):
     """
 
     permission_classes = (permissions.IsAuthenticated, IsStaff, IsTicketReviewer,)
-    authentication_classes = (CSRFAndTokenAndTwoFactorAuthentication,)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "sensitive_request"
 
     def post(self, request):
@@ -246,7 +240,7 @@ class AnonymisationView(APIView):
     """
 
     permission_classes = (permissions.IsAuthenticated, IsStaff, IsResearcher)
-    authentication_classes = (CSRFAndTokenAndTwoFactorAuthentication,)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
 
     def post(self, request):
         serializer = AnonymisationSerializer(
