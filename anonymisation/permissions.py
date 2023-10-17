@@ -4,29 +4,20 @@ from staff.models import Staff
 from user.models import User
 
 
-class IsStaff(BasePermission):
-
-    def has_permission(self, request, view):
-        """
-        Return `True` if permission is granted, `False` otherwise.
-        """
-        return request.user.type == User.user_type.STAFF
-
-class IsTicketReviewer(BasePermission):
+class IsResearcher(BasePermission):
     
     def has_permission(self, request, view):
         """
         Return `True` if permission is granted, `False` otherwise.
         """
         user = Staff.objects.get(user=request.user)
-        return user.title == Staff.Title.REVIEWER
-
-class IsAuditor(BasePermission):
+        return user.title == Staff.Title.RESEARCHER
+    
+class IsAnonymiser(BasePermission):
     
     def has_permission(self, request, view):
         """
         Return `True` if permission is granted, `False` otherwise.
         """
         user = Staff.objects.get(user=request.user)
-        return user.title == Staff.Title.AUDITOR
-
+        return user.title == Staff.Title.ANONYMISER

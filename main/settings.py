@@ -53,7 +53,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'user',
     'customer',
-    'staff'
+    'staff',
+    'anonymisation'
 ]
 
 MIDDLEWARE = [

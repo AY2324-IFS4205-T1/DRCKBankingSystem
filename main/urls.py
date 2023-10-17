@@ -15,13 +15,12 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
-
+from anonymisation.views import (AnonymisationView, QueryView)
 from customer.views import (AccountsView, AccountTypesView, CustomerLoginView,
                             CustomerRegistrationView, CustomerTicketsView,
                             CustomerWelcomeView, DepositView, TransactionsView,
                             TransferView, WithdrawView)
-from staff.views import (AnonymisationView, ApproveView, GetClosedTicketsView, GetOpenTicketsView,
-                         QueryView,
+from staff.views import (ApproveView, GetClosedTicketsView, GetOpenTicketsView,
                          RejectView, StaffLoginView, StaffRegistrationView,
                          StaffTicketView, StaffWelcomeView)
 from user.views import (AuthenticationCheckView, LogoutView,
