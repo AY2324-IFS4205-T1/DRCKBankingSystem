@@ -202,77 +202,46 @@ def write_to_json_file(json_data, file_name):
     print(f"JSON data printed to {file_path}") 
 
 
-def anonymise_data(k_value, retriever):
-    transaction_info = retriever.retrieve_transactions()
-    account_info = retriever.retrieve_accounts()
-
-    formatted_str_withdrawals = retriever.format(transaction_info, account_info)
-
-    if not formatted_str_withdrawals:
-        return JsonResponse({}), 0, 0
-    
-    # Handles case when there is not enough data: raises error
-    if len(formatted_str_withdrawals) < k_value:
-        raise TooShortException("Not enough data for anonymisation.")
-    anon_data, eval_result = anonymise(formatted_str_withdrawals, k_value, retriever.type)
-    anonymised_formatter = AnonymisedDataFormatterBase()
-    
-    anon_json = anonymised_formatter.format_anon_data(anon_data)
-    save_to_database(anon_data)
-    
-    # TESTING PURPOSE: REMOVE
-    write_to_json_file(anon_json, f"anon_{retriever.type.lower()}.json")
-    
-    print(eval_result[0])
-    return anon_json, round(eval_result[0], 2), anon_data
-
-
-def first_query_wrapper():
+def first_query_wrapper(raw_data):
     anon_first_query = AnonymisedFirstQuery(TYPE_OF_CITIZEN1, NUM_YEARS1, TRANSACTION_TYPE1)
     anon_first_json, anon_list = anon_first_query.first_query()
+    
     write_to_json_file(anon_first_json, "anon_first.json")
-
-    # For unanonymised, have to do initial retrieval and then do the processing
-    retriever = WithdrawalRetriever('Withdrawal', NUM_YEARS1)
-    raw_data = retriever.retrieve_transactions()
-    queryset_list = list(raw_data)
-
-    with open('anonymisation/anonymise/data/output1.txt', 'w') as file:
-    # Iterate through the queryset and write each item to the file
-        for item in queryset_list:
-            file.write(str(item) + '\n')
 
     unanon_first_query = UnanonymisedFirstQuery(TYPE_OF_CITIZEN1, NUM_YEARS1, TRANSACTION_TYPE1)
     unanon_first_json, unanon_list = unanon_first_query.first_query(raw_data)
+    
     write_to_json_file(unanon_first_json, "unanon_first.json")
 
     utility = calculate_utility(anon_list, unanon_list)
     return anon_first_json, utility
 
-def second_query_wrapper():
+
+def second_query_wrapper(raw_data):
     anon_second_query = AnonymisedSecondQuery(TYPE_OF_CITIZEN2)
     anon_second_json, anon_second_list = anon_second_query.second_query()
+    
     write_to_json_file(anon_second_json, "anon_second.json")
-
-    retriever = WithdrawalRetriever('Withdrawal', NUM_YEARS1)
-    raw_data = retriever.retrieve_accounts()
 
     unanon_second_query = UnanonymisedSecondQuery(TYPE_OF_CITIZEN2)
     unanon_second_json, unanon_list = unanon_second_query.second_query(raw_data)
+    
     write_to_json_file(unanon_second_json, "unanon_second.json")
 
     utility = calculate_utility(anon_second_list, unanon_list)
     return anon_second_json, utility
 
+
 def perform_query(query_option):
-    # REMOVE THIS PART ONCE FIND OUT HOW TO SEND
-    # k_value = 3
-    # data = WithdrawalRetriever('Withdrawal', NUM_YEARS1)
-    # anon_json, _, anon_dict = anonymise_data(k_value, data)
+    
+    # For unanonymised, have to do initial retrieval and then do the processing
+    retriever = WithdrawalRetriever('Withdrawal', NUM_YEARS1)
+    raw_data = retriever.retrieve_accounts()
+
     if query_option == "1":
-        anon_json, utility = first_query_wrapper()
+        anon_json, utility = first_query_wrapper(raw_data)
     elif query_option == "2":
-        anon_json, utility = second_query_wrapper()
+        anon_json, utility = second_query_wrapper(raw_data)
     else:
         return {"json_result": None, "utility": 0}
     return {"json_results": anon_json, 
@@ -281,13 +250,38 @@ def perform_query(query_option):
     
 # Main Function  
 def anonymise_wrapper(k_value):
-    data = WithdrawalRetriever('Withdrawal', NUM_YEARS1)
-    anon_json, info_loss, _ = anonymise_data(k_value, data)
+    retriever = WithdrawalRetriever('Withdrawal', NUM_YEARS1)
+    
+    transaction_info = retriever.retrieve_transactions()
+    account_info = retriever.retrieve_accounts()
+    
+    formatted_str_withdrawals = retriever.format(transaction_info, account_info)
+
+    if not formatted_str_withdrawals:
+        return JsonResponse({"anon_json": None, "info_loss": None})
+    
+    if len(formatted_str_withdrawals) < k_value:
+        raise TooShortException("Not enough data for anonymisation.")
+    
+    anon_data, eval_result = anonymise(formatted_str_withdrawals, k_value, retriever.type)
+    anonymised_formatter = AnonymisedDataFormatterBase()
+    
+    anon_json = anonymised_formatter.format_anon_data(anon_data)
+    
+    # Need approval?
+    save_to_database(anon_data)
+    
+    # TESTING PURPOSE: REMOVE
+    write_to_json_file(anon_json, f"anon_{retriever.type.lower()}.json")
+    info_loss = round(eval_result[0], 2)
+    
+    print(eval_result[0])
+
     return {"anon_json": anon_json, "info_loss": info_loss}
 
 # Main Function
-# k_value = 5
-# anonymise_wrapper(k_value)
+k_value = 5
+anonymise_wrapper(k_value)
 # data = WithdrawalRetriever('Withdrawal', NUM_YEARS1)
 # anon_json, info_loss, anon_dict = anonymise_data(k_value, data)
 # perform_query("2")
