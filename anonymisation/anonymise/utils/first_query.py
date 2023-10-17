@@ -2,20 +2,48 @@ import json
 from datetime import datetime, date
 import statistics
 
-from staff.anonymise.utils.requirements import DecimalEncoder
+from anonymisation.models import Anonymisation
+from django.db.models import Sum, Count, Avg
+
+from anonymisation.anonymise.utils.requirements import DecimalEncoder
 
 
 def calculate_utility(anon_list, unanon_list):
     absolute_differences = [abs(anon_avg - actual_avg) for anon_avg, actual_avg in zip(anon_list, unanon_list)]
     mae = sum(absolute_differences) / len(absolute_differences)
     average_average = statistics.mean(anon_list)
-    print("MAE", mae)
+
     if average_average != 0:
         utility = 1 - (mae / average_average)
     else:
         utility = 0
-    print(utility)
-    return utility
+    print(round(utility * 100, 2))
+    return round(utility * 100, 2)
+
+def retrieve_data(citizenship):
+    
+    citizenship_status = citizenship.replace(" ","")
+    query = Anonymisation.objects.filter(citizenship=citizenship_status)
+
+    filtered_data = []
+    for q in query:
+        record = {
+            'age': q.age,
+            'gender': q.gender,
+            'postal_code': q.postal_code,
+            'citizenship': q.citizenship,
+            'first_sum': float(q.first_sum),
+            'second_sum': float(q.second_sum),
+            'third_sum': float(q.third_sum),
+            'fourth_sum': float(q.fourth_sum),
+            'fifth_sum': float(q.fifth_sum),
+            'first_balance': float(q.first_balance),
+            'second_balance': float(q.second_balance),
+            'third_balance': float(q.third_balance)
+        }
+        filtered_data.append(record)
+
+    return filtered_data
 
 class FirstQueryBase():
     def __init__(self, type_of_citizen, num_years, transaction_type):
@@ -25,25 +53,17 @@ class FirstQueryBase():
 
 
 class AnonymisedFirstQuery(FirstQueryBase):
-    def first_query(self, data):
-        current_year = date.today().year
-
-
-        citizenship_status = self.type_of_citizen
-        citizenship_status = citizenship_status.replace(" ","")
-
-        # Filter the transaction data for Singaporeans in the past 5 years
-        filtered_data = [
-            d for d in data if(
-                d['citizenship'] == citizenship_status
-            )
-        ]
+    def first_query(self):
+        filtered_data = retrieve_data(self.type_of_citizen)
+        
         sum_data, count_data = self.sum_of_transactions(filtered_data)
         all_averages = self.average_amount(sum_data, count_data)
         
         formatted_data = []
         results_list = list()
         
+        current_year = date.today().year
+
         for i in range(self.num_years):
             year = current_year - (self.num_years - i) + 1
             record = {
@@ -57,7 +77,7 @@ class AnonymisedFirstQuery(FirstQueryBase):
         return json_data, results_list
     
     def sum_of_transactions(self, data):
-
+        
         sum_withdrawals = [0,0,0,0,0]
         count = [0,0,0,0,0]
         withdrawal_key = ['first_sum', 'second_sum', 'third_sum', 'fourth_sum', 'fifth_sum']
@@ -138,14 +158,9 @@ class SecondQueryBase():
         self.type_of_citizen = type_of_citizen
 
 class AnonymisedSecondQuery(SecondQueryBase):
-    def second_query(self, data):
-        citizenship_status = self.type_of_citizen
-        citizenship_status = citizenship_status.replace(" ","")
-        filtered_data = [
-            d for d in data if(
-                d['citizenship'] == citizenship_status
-            )
-        ]
+    def second_query(self):
+        filtered_data = retrieve_data(self.type_of_citizen)
+
         sum_data, count_data = self.sum_of_transactions(filtered_data)
         all_averages = self.average_amount(sum_data, count_data)
 
@@ -169,8 +184,6 @@ class AnonymisedSecondQuery(SecondQueryBase):
         sum_balance = [0,0,0]
         count = [0,0,0]
         withdrawal_key = ['first_balance', 'second_balance', 'third_balance']
-
-        current_year = datetime.now().year
 
         # Sum of all transactions and total number of transactions
         for t in data:
@@ -216,7 +229,7 @@ class UnanonymisedSecondQuery(SecondQueryBase):
         for i in range(3):
             record = {
             'average_amount': all_averages[i],
-            'account_type': i
+            'account_type': i+1
             }
             formatted_data.append(record)
             results_list.append(all_averages[i])

@@ -1,3 +1,5 @@
+from enum import Enum
+
 from django.db.models import F, Q, Sum, Count
 from customer.models import Transactions, Accounts
 from django.db.models.functions import ExtractMonth, ExtractYear
@@ -6,22 +8,29 @@ from datetime import datetime
 
 from django.http import JsonResponse
 
-from staff.anonymise.utils.anonymiser import anonymise
-from staff.anonymise.utils.requirements import age_convert
+from anonymisation.anonymise.utils.anonymiser import anonymise
+from anonymisation.anonymise.utils.requirements import age_convert
+from anonymisation.anonymise.utils.first_query import calculate_utility
+from anonymisation.anonymise.utils.database import save_to_database
 
-from staff.anonymise.utils.format import AnonymisedDataFormatterBase
-from staff.anonymise.utils.first_query import AnonymisedFirstQuery, UnanonymisedFirstQuery, AnonymisedSecondQuery, UnanonymisedSecondQuery
-from staff.anonymise.utils.first_query import calculate_utility
+from anonymisation.anonymise.utils.format import AnonymisedDataFormatterBase
+from anonymisation.anonymise.utils.first_query import AnonymisedFirstQuery, UnanonymisedFirstQuery, AnonymisedSecondQuery, UnanonymisedSecondQuery
+
+# FIXED
+NUM_YEARS1 = 5
+TRANSACTION_TYPE1 = 'Withdrawal'
 
 # First Query Parameters
 TYPE_OF_CITIZEN1 = 'Singaporean Citizen'
-NUM_YEARS1 = 5 # FIXED!!!!
-TRANSACTION_TYPE1 = 'Withdrawal'
 
 # Second Query Parameters
 TYPE_OF_CITIZEN2 = 'Singaporean Citizen'
 
+MAXIMUM_K_VALUE = 10
 
+class QueryOptions(Enum):
+    FIRST = "1"
+    SECOND = "2"
 class TooShortException(Exception):
     pass
 
@@ -33,7 +42,7 @@ class TransactionRetrieverBase:
 
     # REMOVE! FOR TESTING PURPOSE: Prints a string into a file
     def testing_print(self, testing_data, file_name):
-        file_path = "staff/anonymise/data/" + file_name
+        file_path = "anonymisation/anonymise/data/" + file_name
         # TESTING PURPOSES: Prints transaction history into file
         with open(file_path, "w") as file:
             for r in testing_data:
@@ -55,6 +64,7 @@ class TransactionRetrieverBase:
         current_date = datetime.now().year
         end_target_year = current_date
         start_target_year = end_target_year - self.num_years + 1
+        # print(start_target_year)
         grouped_transactions = transactions.values(
             'sender__user__user', 'year', 'sender__user__gender', 'sender__user__postal_code',
             'sender__user__birth_date', 'sender__user__citizenship').filter(
@@ -63,6 +73,8 @@ class TransactionRetrieverBase:
             ).annotate(
             total_amount=Sum('amount')
         )
+        # for data in grouped_transactions:
+        #     print(data)
 
         return grouped_transactions
     
@@ -103,7 +115,8 @@ class WithdrawalRetriever(TransactionRetrieverBase):
                 str(record.get('postal_code', '')),
                 str(record.get('citizenship', '')),
             ]
-            years = range(datetime.now().year - self.num_years, datetime.now().year)
+
+            years = range(datetime.now().year - self.num_years+1, datetime.now().year+1)
             total_amount = [str(record['total_amount'].get(year, 0)) for year in years]
             
             balances = record.get('balances', {})
@@ -182,7 +195,7 @@ class WithdrawalRetriever(TransactionRetrieverBase):
 
 # TESTING PURPOSES: Get rid of this printing to json file
 def write_to_json_file(json_data, file_name):
-    file_path = "staff/anonymise/data/" + file_name
+    file_path = "anonymisation/anonymise/data/" + file_name
 
     with open(file_path, "w") as json_file:
         json_file.write(json_data)
@@ -205,6 +218,7 @@ def anonymise_data(k_value, retriever):
     anonymised_formatter = AnonymisedDataFormatterBase()
     
     anon_json = anonymised_formatter.format_anon_data(anon_data)
+    save_to_database(anon_data)
     
     # TESTING PURPOSE: REMOVE
     write_to_json_file(anon_json, f"anon_{retriever.type.lower()}.json")
@@ -212,9 +226,10 @@ def anonymise_data(k_value, retriever):
     print(eval_result[0])
     return anon_json, round(eval_result[0], 2), anon_data
 
-def first_query_wrapper(anon_data):
+
+def first_query_wrapper():
     anon_first_query = AnonymisedFirstQuery(TYPE_OF_CITIZEN1, NUM_YEARS1, TRANSACTION_TYPE1)
-    anon_first_json, anon_list = anon_first_query.first_query(anon_data)
+    anon_first_json, anon_list = anon_first_query.first_query()
     write_to_json_file(anon_first_json, "anon_first.json")
 
     # For unanonymised, have to do initial retrieval and then do the processing
@@ -222,7 +237,7 @@ def first_query_wrapper(anon_data):
     raw_data = retriever.retrieve_transactions()
     queryset_list = list(raw_data)
 
-    with open('staff/anonymise/data/output1.txt', 'w') as file:
+    with open('anonymisation/anonymise/data/output1.txt', 'w') as file:
     # Iterate through the queryset and write each item to the file
         for item in queryset_list:
             file.write(str(item) + '\n')
@@ -234,9 +249,9 @@ def first_query_wrapper(anon_data):
     utility = calculate_utility(anon_list, unanon_list)
     return anon_first_json, utility
 
-def second_query_wrapper(anon_data):
+def second_query_wrapper():
     anon_second_query = AnonymisedSecondQuery(TYPE_OF_CITIZEN2)
-    anon_second_json, anon_second_list = anon_second_query.second_query(anon_data)
+    anon_second_json, anon_second_list = anon_second_query.second_query()
     write_to_json_file(anon_second_json, "anon_second.json")
 
     retriever = WithdrawalRetriever('Withdrawal', NUM_YEARS1)
@@ -251,14 +266,13 @@ def second_query_wrapper(anon_data):
 
 def perform_query(query_option):
     # REMOVE THIS PART ONCE FIND OUT HOW TO SEND
-    k_value = 3
-    data = WithdrawalRetriever('Withdrawal', NUM_YEARS1)
-    anon_json, info_loss, anon_dict = anonymise_data(k_value, data)
+    # k_value = 3
+    # data = WithdrawalRetriever('Withdrawal', NUM_YEARS1)
+    # anon_json, _, anon_dict = anonymise_data(k_value, data)
     if query_option == "1":
-        anon_json, utility = first_query_wrapper(anon_dict)
+        anon_json, utility = first_query_wrapper()
     elif query_option == "2":
-        second_query_wrapper(anon_dict)
-        anon_json, utility = second_query_wrapper(anon_dict)
+        anon_json, utility = second_query_wrapper()
     else:
         return {"json_result": None, "utility": 0}
     return {"json_results": anon_json, 
@@ -272,7 +286,8 @@ def anonymise_wrapper(k_value):
     return {"anon_json": anon_json, "info_loss": info_loss}
 
 # Main Function
-# k_value = 3
+# k_value = 5
+# anonymise_wrapper(k_value)
 # data = WithdrawalRetriever('Withdrawal', NUM_YEARS1)
 # anon_json, info_loss, anon_dict = anonymise_data(k_value, data)
-# perform_query(anon_dict, "2")
+# perform_query("2")

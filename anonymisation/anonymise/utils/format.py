@@ -2,7 +2,7 @@ import json
 
 from datetime import datetime
 
-from staff.anonymise.utils.requirements import DecimalEncoder
+from anonymisation.anonymise.utils.requirements import DecimalEncoder
     
 class AnonymisedDataFormatterBase:
     def format_attributes(self, range):

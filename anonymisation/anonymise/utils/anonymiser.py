@@ -1,8 +1,6 @@
-import copy
-from staff.anonymise.utils.mondrian import mondrian
-from staff.anonymise.utils.read_data import read_data
-# from staff.anonymise.utils.read_withdrawal_data import read_data as read_withdrawal_deposit
-# from staff.anonymise.utils.read_transfer_data import read_data as read_transfer
+from anonymisation.anonymise.utils.mondrian import mondrian
+from anonymisation.anonymise.utils.read_data import read_data
+
 import json
 
 # Read my test record
@@ -89,7 +87,7 @@ def write_to_file(result, file_name):
     TESTING PURPOSES: Write the anonymized transaction data to anonymized.data 
     for testing
     """
-    file_path = "staff/anonymise/data/" + file_name
+    file_path = "anonymisation/anonymise/data/" + file_name
     with open(file_path, "w") as output:
         for r in result:
             output.write(';'.join(r) + '\n')
