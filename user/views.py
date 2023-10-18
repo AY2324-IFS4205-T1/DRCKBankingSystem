@@ -1,6 +1,8 @@
 from django.http import FileResponse
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import ensure_csrf_cookie
 from knox.auth import TokenAuthentication
-from knox.views import LogoutView as KnoxLogoutView
+from knox.views import LogoutAllView as KnoxLogoutView
 from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle
@@ -58,20 +60,24 @@ class AuthenticationCheckView(APIView):
     """Post Request
 
     Args:
-        page_type: ["Customer", "Ticket Reviewer", "Auditor", "Researcher"]
+        page_type: string, options are: ["Customer", "Staff", "Ticket Reviewer", "Auditor", "Researcher"]
 
     Returns:
         authenticated: True/False
-        authenticated_message: ["User not logged in.", "The session has changed, 2FA needs to be verified again.", "2FA has not been verified.", "2FA timeout, 2FA needs to be verified again."]
+        authenticated_message: string, options are ["User not logged in.", "The session has changed, 2FA needs to be verified again.", "2FA has not been verified.", "2FA timeout, 2FA needs to be verified again."]
         authorised: True/False
-        user_authorisation: ["Customer", "Ticket Reviewer", "Auditor", "Researcher"]
+        user_authorisation: string, options are ["Customer", "Staff"]
     """
     permission_classes = (permissions.AllowAny,)
+    authentication_classes = (TokenAuthentication,)
     throttle_classes = [AnonRateThrottle]
 
     def post(self, request):
         serialiser = AuthCheckSerializer(request, data=request.data)
         if serialiser.is_valid():
             response = serialiser.get_response()
-            return Response(response, status=status.HTTP_200_OK)
+            if response["authenticated"] and response["authorised"]:
+                return Response(response, status=status.HTTP_200_OK)
+            else:
+                return Response(response, status=status.HTTP_403_FORBIDDEN)
         return Response(serialiser.errors, status=status.HTTP_400_BAD_REQUEST)

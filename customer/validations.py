@@ -49,7 +49,11 @@ def validate_ticket_input(json_dict):
 
 def validate_account_type(value):
     try:
-        account_type = AccountTypes.objects.get(name=value)
+        value = int(value)
+    except ValueError:
+        raise ValidationError("Account type should be a number.")
+    try:
+        account_type = AccountTypes.objects.get(type=value)
     except ObjectDoesNotExist:
         raise ValidationError("Account type given does not exist.")
     return account_type
@@ -69,6 +73,8 @@ def validate_account(json_dict, id_type="account_id"):
             raise ValidationError("Account ID does not exist.")
         else:
             raise validation_error
+    except ObjectDoesNotExist:
+        raise ValidationError("Account ID does not exist.")
     return account
 
 
@@ -102,13 +108,12 @@ def validate_amount(json_dict):
         amount = float(amount)
     except Exception:
         raise ValidationError("Amount is not a number.")
-    rounded = round(amount)
+    rounded = round(amount, 2)
     if rounded != amount:
         raise ValidationError("Amount can only have a maximum of 2 decimal places.")
     if amount == 0:
         raise ValidationError("Amount cannot be 0.")
-    decimal.getcontext().prec = 2
-    return decimal.Decimal(amount)
+    return decimal.Decimal(str(amount))
 
 
 def validate_description(json_dict):

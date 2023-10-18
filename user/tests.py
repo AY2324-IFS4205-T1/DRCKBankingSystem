@@ -164,6 +164,11 @@ class TestCreateTwoFA(TestAuthentication):
         self.login_customer_1()
         response = self.client.get(reverse("setup_2fa"), **self.header)
         return response
+    
+    def create_two_fa_customer2(self):
+        self.login_customer_2()
+        response = self.client.get(reverse("setup_2fa"), **self.header)
+        return response
 
     def create_two_fa_staff1(self):
         self.login_staff_1()
@@ -229,6 +234,17 @@ class TestVerifyTwoFA(TestCreateTwoFA):
         response = self.client.post(reverse("verify_2fa"), sample_otp, **self.header)
         return response
 
+    def two_fa_customer_2(self):
+        self.create_two_fa_customer2()
+
+        user = User.objects.get(username="test2")
+        two_fa = TwoFA.objects.get(user=user)
+        otp = pyotp.totp.TOTP(two_fa.key, digest=sha512, digits=8).now()
+        sample_otp = {"otp": otp}
+
+        response = self.client.post(reverse("verify_2fa"), sample_otp, **self.header)
+        return response
+    
     def two_fa_staff1(self):
         self.create_two_fa_staff1()
 
@@ -317,28 +333,28 @@ class TestAuthCheck(TestLogout):
 
         sample_auth_check = sample_ticket_auth_check
         response = self.client.post(reverse("auth_check"), sample_auth_check)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         expected = {'authenticated': False, 'authenticated_message': 'User not logged in.', 'authorised': False, 'user_authorisation': ''}
         self.assertEqual(response.json(), expected)
         
         # login but unauthorised and no 2FA
         self.login_customer_1()
         response = self.client.post(reverse("auth_check"), sample_auth_check, **self.header)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        expected = {'authenticated': False, 'authenticated_message': 'User does not have 2FA set up.', 'authorised': False, 'user_authorisation': 'Customer'}
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        expected = {'authenticated': False, 'authenticated_message': '', 'authorised': False, 'user_authorisation': 'Customer'}
         self.assertEqual(response.json(), expected)
         
         # login, authorised, but no 2FA
         sample_auth_check = sample_customer_auth_check
         response = self.client.post(reverse("auth_check"), sample_auth_check, **self.header)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         expected = {'authenticated': False, 'authenticated_message': 'User does not have 2FA set up.', 'authorised': True, 'user_authorisation': ''}
         self.assertEqual(response.json(), expected)
         
         # login, authorised, 2FA set up but not verified
         self.create_two_fa_customer1()
         response = self.client.post(reverse("auth_check"), sample_auth_check, **self.header)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         expected = {'authenticated': False, 'authenticated_message': 'The session has changed, 2FA needs to be verified again.', 'authorised': True, 'user_authorisation': ''}
         self.assertEqual(response.json(), expected)
         
@@ -346,11 +362,11 @@ class TestAuthCheck(TestLogout):
         self.two_fa_customer_1()
         sample_auth_check = sample_ticket_auth_check
         response = self.client.post(reverse("auth_check"), sample_auth_check, **self.header)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         expected = {'authenticated': True, 'authenticated_message': '', 'authorised': False, 'user_authorisation': 'Customer'}
         self.assertEqual(response.json(), expected)
         
-        # login, authorised, and 2FAt
+        # login, authorised, and 2FA
         sample_auth_check = sample_customer_auth_check
         response = self.client.post(reverse("auth_check"), sample_auth_check, **self.header)
         self.assertEqual(response.status_code, status.HTTP_200_OK)

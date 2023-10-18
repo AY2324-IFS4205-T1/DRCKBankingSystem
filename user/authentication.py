@@ -1,5 +1,3 @@
-from datetime import timedelta
-
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 from knox.auth import TokenAuthentication
@@ -9,6 +7,7 @@ from main.settings import REST_KNOX
 from user.models import TwoFA
 
 # https://reintech.io/blog/writing-custom-authentication-backend-django
+
 
 class UserAuth:
     def authenticate(self, _, username=None, password=None, type=None):
@@ -20,13 +19,14 @@ class UserAuth:
         else:
             if user.check_password(password):
                 return user
-            
+
     def get_user(self, user_id):
         user_model = get_user_model()
         try:
             return user_model.objects.get(pk=user_id)
         except user_model.DoesNotExist:
             return None
+
 
 class TokenAndTwoFactorAuthentication(TokenAuthentication):
     def authenticate(self, request):

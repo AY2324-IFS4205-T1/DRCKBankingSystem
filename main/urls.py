@@ -20,6 +20,8 @@ from customer.views import (AccountsView, AccountTypesView, CustomerLoginView,
                             CustomerRegistrationView, CustomerTicketsView,
                             CustomerWelcomeView, DepositView, TransactionsView,
                             TransferView, WithdrawView)
+
+from log.views import AccessControlLoggingView, ConflictOfInterestLoggingView, LoginLoggingView
 from staff.views import (ApproveView, GetClosedTicketsView, GetOpenTicketsView,
                          RejectView, StaffLoginView, StaffRegistrationView,
                          StaffTicketView, StaffWelcomeView)
@@ -60,4 +62,10 @@ urlpatterns = [
     # 2 Factor Authentication
     path("setup_2FA", SetupTwoFactorAuthenticationView.as_view(), name="setup_2fa"),
     path("verify_2FA", VerifyTwoFactorAuthenticationView.as_view(), name="verify_2fa"),
+
+    # Logging
+    path("staff/login_logs", LoginLoggingView.as_view(), name="login_logs"),
+    path("staff/access_control_logs", AccessControlLoggingView.as_view(), name="access_control_logs"),
+    path("staff/conflict_interest_logs", ConflictOfInterestLoggingView.as_view(), name="conflict_interest_logs"),
+
 ]

@@ -8,6 +8,7 @@ on:
       types: [opened, synchronize, reopened]
 env:
   DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+  DJANGO_DEBUG: ${{ secrets.DJANGO_DEBUG }}
   POSTGRES_HOST_AUTH: "postgres"
   POSTGRES_PORT_AUTH: "5432"
   POSTGRES_DBNAME_AUTH: "test_drck_banking"
@@ -48,9 +49,11 @@ jobs:
           psql -h postgres -d test_drck_banking -U ${{ secrets.POSTGRES_USER }} -c 'CREATE SCHEMA django;'
           psql -h postgres -d test_drck_banking -U ${{ secrets.POSTGRES_USER }} -c 'CREATE SCHEMA customer;'
           psql -h postgres -d test_drck_banking -U ${{ secrets.POSTGRES_USER }} -c 'CREATE SCHEMA staff;'
+          psql -h postgres -d test_drck_banking -U ${{ secrets.POSTGRES_USER }} -c 'CREATE SCHEMA log;'
           psql -h postgres -d test_drck_banking -U ${{ secrets.POSTGRES_USER }} -c 'GRANT ALL ON SCHEMA django to ${{ secrets.POSTGRES_USER }};'
           psql -h postgres -d test_drck_banking -U ${{ secrets.POSTGRES_USER }} -c 'GRANT ALL ON SCHEMA customer to ${{ secrets.POSTGRES_USER }};'
           psql -h postgres -d test_drck_banking -U ${{ secrets.POSTGRES_USER }} -c 'GRANT ALL ON SCHEMA staff to ${{ secrets.POSTGRES_USER }};'
+          psql -h postgres -d test_drck_banking -U ${{ secrets.POSTGRES_USER }} -c 'GRANT ALL ON SCHEMA log to ${{ secrets.POSTGRES_USER }};'
           psql -h postgres -d test_drck_banking -U ${{ secrets.POSTGRES_USER }} -c 'SET SEARCH_PATH TO django;'
         env:
           PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
