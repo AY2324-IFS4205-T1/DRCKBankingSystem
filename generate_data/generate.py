@@ -14,8 +14,8 @@ from customer.models import Accounts, AccountTypes
 from generate_data.utils.utility import get_random_datetime, load_data, execute_delete_sql, get_userids, get_random_balance
 
 # Define number of users and number of transactions you want to generate
-CUSTOMER_NUM = 150
-TRANSACTION_NUM = 300
+CUSTOMER_NUM = 1500
+TRANSACTION_NUM = 5000
 
 TRANSACTIONS_MODEL = "customer.Transactions"
 

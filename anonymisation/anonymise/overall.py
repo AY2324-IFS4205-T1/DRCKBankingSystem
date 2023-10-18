@@ -11,7 +11,6 @@ from django.http import JsonResponse
 from anonymisation.anonymise.utils.anonymiser import anonymise
 from anonymisation.anonymise.utils.requirements import age_convert
 from anonymisation.anonymise.utils.first_query import calculate_utility
-from anonymisation.anonymise.utils.database import save_to_database
 
 from anonymisation.anonymise.utils.format import AnonymisedDataFormatterBase
 from anonymisation.anonymise.utils.first_query import AnonymisedFirstQuery, UnanonymisedFirstQuery, AnonymisedSecondQuery, UnanonymisedSecondQuery
@@ -202,9 +201,9 @@ def write_to_json_file(json_data, file_name):
     print(f"JSON data printed to {file_path}") 
 
 
-def first_query_wrapper(raw_data):
+def first_query_wrapper(anon_data, raw_data):
     anon_first_query = AnonymisedFirstQuery(TYPE_OF_CITIZEN1, NUM_YEARS1, TRANSACTION_TYPE1)
-    anon_first_json, anon_list = anon_first_query.first_query()
+    anon_first_json, anon_list = anon_first_query.first_query(anon_data)
     
     write_to_json_file(anon_first_json, "anon_first.json")
 
@@ -214,12 +213,12 @@ def first_query_wrapper(raw_data):
     write_to_json_file(unanon_first_json, "unanon_first.json")
 
     utility = calculate_utility(anon_list, unanon_list)
-    return anon_first_json, utility
+    return anon_list, utility, anon_first_json
 
 
-def second_query_wrapper(raw_data):
+def second_query_wrapper(anon_data, raw_data):
     anon_second_query = AnonymisedSecondQuery(TYPE_OF_CITIZEN2)
-    anon_second_json, anon_second_list = anon_second_query.second_query()
+    anon_second_json, anon_list = anon_second_query.second_query(anon_data)
     
     write_to_json_file(anon_second_json, "anon_second.json")
 
@@ -228,24 +227,25 @@ def second_query_wrapper(raw_data):
     
     write_to_json_file(unanon_second_json, "unanon_second.json")
 
-    utility = calculate_utility(anon_second_list, unanon_list)
-    return anon_second_json, utility
+    utility = calculate_utility(anon_list, unanon_list)
+    return anon_list, utility, anon_second_json
 
 
-def perform_query(query_option):
+def perform_query(query_option, anon_data):
     
     # For unanonymised, have to do initial retrieval and then do the processing
     retriever = WithdrawalRetriever('Withdrawal', NUM_YEARS1)
-    raw_data = retriever.retrieve_accounts()
+    
 
     if query_option == "1":
-        anon_json, utility = first_query_wrapper(raw_data)
+        raw_data = retriever.retrieve_transactions()
+        anon_list, utility = first_query_wrapper(anon_data, raw_data)
     elif query_option == "2":
-        anon_json, utility = second_query_wrapper(raw_data)
+        raw_data = retriever.retrieve_accounts()
+        anon_list, utility = second_query_wrapper(anon_data, raw_data)
     else:
-        return {"json_result": None, "utility": 0}
-    return {"json_results": anon_json, 
-            "utility": utility}
+        return None, 0
+    return anon_list, utility
 
     
 # Main Function  
@@ -268,20 +268,19 @@ def anonymise_wrapper(k_value):
     
     anon_json = anonymised_formatter.format_anon_data(anon_data)
     
-    # Need approval?
-    save_to_database(anon_data)
     
     # TESTING PURPOSE: REMOVE
     write_to_json_file(anon_json, f"anon_{retriever.type.lower()}.json")
-    info_loss = round(eval_result[0], 2)
     
-    print(eval_result[0])
+    info_loss = round(eval_result[0], 2)
+    # rtime = eval[1]
+    # print("Running time %0.2f" % rtime + " seconds")
+    
+    # print(eval_result[0])
 
-    return {"anon_json": anon_json, "info_loss": info_loss}
+    return anon_json, info_loss, anon_data
 
 # Main Function
-k_value = 5
-anonymise_wrapper(k_value)
-# data = WithdrawalRetriever('Withdrawal', NUM_YEARS1)
-# anon_json, info_loss, anon_dict = anonymise_data(k_value, data)
-# perform_query("2")
+# k_value = 5
+# _, _, anon_data = anonymise_wrapper(k_value)
+# perform_query("1", anon_data)
