@@ -41,6 +41,10 @@ class Statistics(models.Model):
     third_balance_average = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal(0))
 
     def set_k_value_to_true(self, k_value):
+        for instance in Statistics.objects.all():
+            instance.set_k_value = False
+            instance.save()
+            
         try:
             instance = Statistics.objects.get(k_value=k_value)
             instance.set_k_value = True
