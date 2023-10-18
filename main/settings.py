@@ -59,8 +59,8 @@ INSTALLED_APPS = [
     'user',
     'customer',
     'staff',
-    'anonymisation'
-    'log'
+    'log',
+    'anonymisation',
 ]
 
 MIDDLEWARE = [
