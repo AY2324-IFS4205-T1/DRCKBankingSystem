@@ -1,5 +1,19 @@
 # DRCKBankingSystem
 
+## Account Information
+
+Each member of each team is given 4 staff accounts.
+The username is in the format `group<group_number>_user<user_number>_<title>`.
+For example:
+
+* `group1_user1_Ticket_Reviewer`
+* `group3_user2_Auditor`
+* `group2_user4_Researcher`
+* `group3_user4_Anonymity_Officer`
+
+The password for all sample accounts is `G00dP@55word`.
+Note that you will be required to set up two-factor authentication upon login.
+
 ## Setup Instructions
 
 * Log in to Postgres
