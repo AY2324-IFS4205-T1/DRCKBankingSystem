@@ -27,9 +27,9 @@ class Statistics(models.Model):
         db_table = 'anonymisation"."stats'
     
     k_value = models.IntegerField(primary_key=True)
-    utility_query1 = models.DecimalField(decimal_places=2, default=Decimal(0))
-    utility_query2 = models.DecimalField(decimal_places=2, default=Decimal(0))
-    info_loss = models.DecimalField(decimal_places=2, default=Decimal(0))
+    utility_query1 = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal(0))
+    utility_query2 = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal(0))
+    info_loss = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal(0))
     set_k_value = models.BooleanField(default=False)
     first_average = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal(0))
     second_average = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal(0))
