@@ -17,6 +17,7 @@ class CalculateAnonView(APIView):
 
     permission_classes = (permissions.IsAuthenticated, IsStaff, IsAnonymiser)
     authentication_classes = (TokenAndTwoFactorAuthentication,)
+    throttle_scope = "sensitive_request"
 
     def get(self, request):
         try:
@@ -35,6 +36,7 @@ class ViewAnonStatsView(APIView):
 
     permission_classes = (permissions.IsAuthenticated, IsStaff, IsAnonymiser)
     authentication_classes = (TokenAndTwoFactorAuthentication,)
+    throttle_scope = "non_sensitive_request"
 
     def get(self, request):
         graph = ViewAnonStatsSerializer().get_graph()
@@ -54,6 +56,7 @@ class SetKValueView(APIView):
 
     permission_classes = (permissions.IsAuthenticated, IsStaff, IsAnonymiser)
     authentication_classes = (TokenAndTwoFactorAuthentication,)
+    throttle_scope = "sensitive_request"
 
     def post(self, request):
         serialiser = SetKValueSerializer(request.data, data=request.data)
@@ -77,6 +80,7 @@ class QueryAnonView(APIView):
 
     permission_classes = (permissions.IsAuthenticated, IsStaff, IsResearcher)
     authentication_classes = (TokenAndTwoFactorAuthentication,)
+    throttle_scope = "non_sensitive_request"
 
     def post(self, request):
         serialiser = QueryAnonSerializer(request.data, data=request.data)
