@@ -1,6 +1,4 @@
 from django.http import FileResponse
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import ensure_csrf_cookie
 from knox.auth import TokenAuthentication
 from knox.views import LogoutAllView as KnoxLogoutView
 from rest_framework import permissions, status

@@ -15,7 +15,8 @@ class IsResearcher(BasePermission):
         if not permission_granted:
             AccessControlLogger(request, Staff.Title.RESEARCHER, view.get_view_name())
         return permission_granted
-    
+
+
 class IsAnonymiser(BasePermission):
     
     def has_permission(self, request, view):

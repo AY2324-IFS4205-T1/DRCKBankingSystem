@@ -39,16 +39,13 @@ class Statistics(models.Model):
     first_balance_average = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal(0))
     second_balance_average = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal(0))
     third_balance_average = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal(0))
+    last_updated = models.DateTimeField(auto_now_add=True)
 
     def set_k_value_to_true(self, k_value):
         for instance in Statistics.objects.all():
             instance.set_k_value = False
             instance.save()
-            
-        try:
-            instance = Statistics.objects.get(k_value=k_value)
-            instance.set_k_value = True
-            instance.save()
-            return True
-        except Statistics.DoesNotExist:
-            return False
+
+        instance = Statistics.objects.get(k_value=k_value)
+        instance.set_k_value = True
+        instance.save()

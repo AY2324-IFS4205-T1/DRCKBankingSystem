@@ -25,8 +25,6 @@ TYPE_OF_CITIZEN1 = 'Singaporean Citizen'
 # Second Query Parameters
 TYPE_OF_CITIZEN2 = 'Singaporean Citizen'
 
-MAXIMUM_K_VALUE = 10
-
 class QueryOptions(Enum):
     FIRST = "1"
     SECOND = "2"

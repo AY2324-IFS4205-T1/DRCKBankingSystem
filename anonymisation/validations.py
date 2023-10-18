@@ -1,6 +1,7 @@
 from rest_framework.serializers import ValidationError
 
-from anonymisation.anonymise.overall import MAXIMUM_K_VALUE, QueryOptions
+from anonymisation.anonymise.overall import QueryOptions
+from anonymisation.models import Statistics
 
 
 def validate_k_value(json_dict):
@@ -11,10 +12,13 @@ def validate_k_value(json_dict):
     except ValueError:
         raise ValidationError("K-value provided is not an integer")
     
-    if k not in range(1, MAXIMUM_K_VALUE+1):
+    try:
+        Statistics.objects.get(k_value=k)
+    except Statistics.DoesNotExist:
         raise ValidationError("K-value provided is not within the acceptable k-value range")
     
     return k
+
 
 def validate_query(json_dict):
     try:
@@ -26,3 +30,11 @@ def validate_query(json_dict):
         raise ValidationError("Value in 'query' field is not a recognised option")
     
     return query
+
+
+def validate_k_is_set():
+    try:
+        statistic = Statistics.objects.get(set_k_value=True)
+    except Statistics.DoesNotExist:
+        raise ValidationError("K-value has not been set by DRCK Banking's Anonymisation Officer.")
+    return statistic
