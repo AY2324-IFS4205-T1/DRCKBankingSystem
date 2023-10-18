@@ -102,6 +102,23 @@
         }
     },
     {
+        "model": "user.user",
+        "pk": "f7b62f7f-e4b2-4d44-b85c-256d44aeafa3",
+        "fields": {
+            "is_superuser": false,
+            "username": "staff5",
+            "password": "pbkdf2_sha256$600000$QdkxiE6LZmVhEmfQk89WVt$G7ronfBDVHMm4dM8ZJBSvt82CINNENnFG6tCnVOiEbQ=",
+            "email": "staff5@gmail.com",
+            "phone_no": "12345678",
+            "type": "Staff",
+            "date_joined": "2023-10-18T18:36:12.929Z",
+            "last_login": "2023-10-18T18:36:12.929Z",
+            "is_active": true,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
         "model": "customer.customer",
         "pk": "476e8652-b696-43f7-8be7-7992e2289404",
         "fields": {
@@ -253,6 +270,17 @@
         }
     },
     {
+        "model": "staff.staff",
+        "pk": "f7b62f7f-e4b2-4d44-b85c-256d44aeafa3",
+        "fields": {
+            "first_name": "anonimity_officer",
+            "last_name": "staff5",
+            "title": "Anonymity Officer",
+            "birth_date": "1990-01-01",
+            "gender": "Male"
+        }
+    },
+    {
         "model": "staff.tickets",
         "pk": "367bffbc-87dd-4d6b-b060-5747d6509b54",
         "fields": {
@@ -326,6 +354,25 @@
         "pk": "cd6eaa63-d9ee-440b-a1cf-8eba1a1feec4",
         "fields": {
             "account_type": 1
+        }
+    },
+    {
+        "model": "anonymisation.statistics",
+        "pk": 3,
+        "fields": {
+            "utility_query1": "90.00",
+            "utility_query2": "95.00",
+            "info_loss": "10.00",
+            "set_k_value": true,
+            "first_average": "0.00",
+            "second_average": "0.00",
+            "third_average": "0.00",
+            "fourth_average": "0.00",
+            "fifth_average": "0.00",
+            "first_balance_average": "0.00",
+            "second_balance_average": "0.00",
+            "third_balance_average": "0.00",
+            "last_updated": "2023-10-18T16:19:46.918Z"
         }
     }
 ]

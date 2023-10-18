@@ -2,6 +2,7 @@ from django.http import FileResponse
 from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from anonymisation.anonymise.overall import TooShortException
 
 from anonymisation.permissions import IsAnonymiser, IsResearcher
 from anonymisation.serializers import QueryAnonSerializer, SetKValueSerializer, ViewAnonStatsSerializer
@@ -23,6 +24,8 @@ class CalculateAnonView(APIView):
         try:
             generate_statistics()
             return Response(status=status.HTTP_200_OK)
+        except TooShortException as error:
+            return Response(error.__str__(), status=status.HTTP_200_OK)
         except Exception as error:
             return Response(error.__str__(), status=status.HTTP_400_BAD_REQUEST)
 
