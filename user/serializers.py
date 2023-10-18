@@ -49,13 +49,13 @@ class AuthCheckSerializer(serializers.Serializer):
 
     def is_authorised(self):
         user_type = self.user.type
+        self.response["user_authorisation"] = user_type
         title = user_type
         if user_type == "Staff":
             title = Staff.objects.get(user=self.user).title
         if self.page_type in [user_type, title]:
             self.response["authorised"] = True
             return True
-        self.response["user_authorisation"] = user_type
         return False
 
     def get_response(self):
