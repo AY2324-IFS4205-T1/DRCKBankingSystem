@@ -53,8 +53,14 @@ class FirstQueryBase():
 
 
 class AnonymisedFirstQuery(FirstQueryBase):
-    def first_query(self):
-        filtered_data = retrieve_data(self.type_of_citizen)
+    def first_query(self, data):
+        citizenship_status = self.type_of_citizen.replace(" ","")
+        
+        filtered_data = [
+            d for d in data if(
+                d['citizenship'] == citizenship_status
+            )
+        ]
         
         sum_data, count_data = self.sum_of_transactions(filtered_data)
         all_averages = self.average_amount(sum_data, count_data)
@@ -73,7 +79,7 @@ class AnonymisedFirstQuery(FirstQueryBase):
             formatted_data.append(record)
             results_list.append(all_averages[i])
         json_data = json.dumps(formatted_data, indent=4, cls=DecimalEncoder)
-        
+        print(results_list)
         return json_data, results_list
     
     def sum_of_transactions(self, data):
@@ -158,8 +164,14 @@ class SecondQueryBase():
         self.type_of_citizen = type_of_citizen
 
 class AnonymisedSecondQuery(SecondQueryBase):
-    def second_query(self):
-        filtered_data = retrieve_data(self.type_of_citizen)
+    def second_query(self, data):
+        citizenship_status = self.type_of_citizen.replace(" ","")
+        
+        filtered_data = [
+            d for d in data if(
+                d['citizenship'] == citizenship_status
+            )
+        ]
 
         sum_data, count_data = self.sum_of_transactions(filtered_data)
         all_averages = self.average_amount(sum_data, count_data)
