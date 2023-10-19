@@ -40,14 +40,3 @@ class IsAuditor(BasePermission):
             AccessControlLogger(request, Staff.Title.AUDITOR, view.get_view_name())
         return permission_granted
 
-class IsResearcher(BasePermission):
-    
-    def has_permission(self, request, view):
-        """
-        Return `True` if permission is granted, `False` otherwise.
-        """
-        staff = Staff.objects.get(user=request.user)
-        permission_granted = staff.title == Staff.Title.RESEARCHER
-        if not permission_granted:
-            AccessControlLogger(request, Staff.Title.RESEARCHER, view.get_view_name())
-        return permission_granted

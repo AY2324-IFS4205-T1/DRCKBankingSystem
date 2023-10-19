@@ -146,6 +146,11 @@ class TestAuthentication(APITestCase):
         response = self.client.post(reverse("staffLogin"), login)
         self.header = {"HTTP_AUTHORIZATION": f"Token {response.data['token']}"}
 
+    def login_staff_5(self):
+        login = {"username": "staff5", "password": good_pass}
+        response = self.client.post(reverse("staffLogin"), login)
+        self.header = {"HTTP_AUTHORIZATION": f"Token {response.data['token']}"}
+
     def test_logins(self):
         self.login_customer_1()
         self.login_customer_2()
@@ -153,6 +158,7 @@ class TestAuthentication(APITestCase):
         self.login_staff_2()
         self.login_staff_3()
         self.login_staff_4()
+        self.login_staff_5()
 
 
 class TestCreateTwoFA(TestAuthentication):
@@ -187,6 +193,11 @@ class TestCreateTwoFA(TestAuthentication):
 
     def create_two_fa_staff4(self):
         self.login_staff_4()
+        response = self.client.get(reverse("setup_2fa"), **self.header)
+        return response
+
+    def create_two_fa_staff5(self):
+        self.login_staff_5()
         response = self.client.get(reverse("setup_2fa"), **self.header)
         return response
 
@@ -282,6 +293,17 @@ class TestVerifyTwoFA(TestCreateTwoFA):
         self.create_two_fa_staff4()
 
         user = User.objects.get(username="staff4")
+        two_fa = TwoFA.objects.get(user=user)
+        otp = pyotp.totp.TOTP(two_fa.key, digest=sha512, digits=8).now()
+        sample_otp = {"otp": otp}
+
+        response = self.client.post(reverse("verify_2fa"), sample_otp, **self.header)
+        return response
+
+    def two_fa_staff5(self):
+        self.create_two_fa_staff5()
+
+        user = User.objects.get(username="staff5")
         two_fa = TwoFA.objects.get(user=user)
         otp = pyotp.totp.TOTP(two_fa.key, digest=sha512, digits=8).now()
         sample_otp = {"otp": otp}

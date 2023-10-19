@@ -20,6 +20,7 @@ class Staff(models.Model):
         REVIEWER = "Ticket Reviewer"
         AUDITOR = "Auditor"
         RESEARCHER = "Researcher"
+        ANONYMISER = "Anonymity Officer"
 
     user = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=100)
