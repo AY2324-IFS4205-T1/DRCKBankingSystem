@@ -170,3 +170,6 @@ user/migrations/
 staff/migrations/
 log/migrations/
 anonymisation/migrations/
+
+# Fixtures
+generate_data/fixtures/
