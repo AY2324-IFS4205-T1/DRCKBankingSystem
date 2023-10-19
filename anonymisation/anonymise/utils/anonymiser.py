@@ -82,18 +82,6 @@ def write_first_anon(result):
         json.dump(anonymised_data, json_file, indent=4)
 
 
-def write_to_file(result, file_name):
-    """
-    TESTING PURPOSES: Write the anonymized transaction data to anonymized.data 
-    for testing
-    """
-    file_path = "anonymisation/anonymise/data/" + file_name
-    with open(file_path, "w") as output:
-        for r in result:
-            output.write(';'.join(r) + '\n')
-    print(f"Anonymised data written to {file_name}")
-
-
 def prepare_output(result):
     """
     Stores results into a dictionary for to prepare for query 
@@ -140,7 +128,5 @@ def anonymise(transaction_data, k_value, transaction_type):
     DATA, intuitive_order, qi_num, sa_num = read_data(transaction_data)
     
     result, eval_result = get_result_one(DATA, intuitive_order, qi_num, sa_num, k_value)
-    file_name = f"anon_{transaction_type.lower()}.data"
-    write_to_file(result, file_name)
     output = prepare_output(result)
     return output, eval_result

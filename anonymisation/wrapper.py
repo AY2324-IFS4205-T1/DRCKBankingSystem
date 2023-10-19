@@ -33,9 +33,3 @@ def save_anon(anon_data):
 
 def set_k(k_value):
     Statistics().set_k_value_to_true(k_value)
-
-generate_statistics()
-anon_data = generate_k_anon(3)
-save_anon(anon_data)
-
-get_utility("1", anon_data)

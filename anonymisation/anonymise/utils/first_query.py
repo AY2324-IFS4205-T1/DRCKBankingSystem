@@ -17,7 +17,6 @@ def calculate_utility(anon_list, unanon_list):
         utility = 1 - (mae / average_average)
     else:
         utility = 0
-    print(round(utility * 100, 2))
     return round(utility * 100, 2)
 
 def retrieve_data(citizenship):
@@ -78,7 +77,6 @@ class AnonymisedFirstQuery(FirstQueryBase):
             formatted_data.append(record)
             results_list.append(all_averages[i])
         json_data = json.dumps(formatted_data, indent=4, cls=DecimalEncoder)
-        print(results_list)
         return json_data, results_list
     
     def sum_of_transactions(self, data):
@@ -92,7 +90,6 @@ class AnonymisedFirstQuery(FirstQueryBase):
         # Sum of all transactions and total number of transactions
         for t in data:
             for i in range(5):
-                year = current_year - (self.num_years - i) + 1
                 key = withdrawal_key[i]
                 if key in t and float(t[key]) != 0:
                     sum_withdrawals[i] += float(t[key])
