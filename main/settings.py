@@ -120,13 +120,17 @@ else:
             'default': {
                 'ENGINE': 'django.db.backends.postgresql_psycopg2',
                 'OPTIONS': {
-                    'options': '-c search_path=django'   
+                    'options': '-c search_path=django',
+                    'sslmode': 'verify-ca',
+                    'sslcert': os.environ["CLIENT_CERT"],
+                    'sslkey': os.environ["CLIENT_KEY"],
+                    'sslrootcert': os.environ["CA_CERT"],    
                 },
-            'NAME': os.environ["POSTGRES_DBNAME_AUTH"], 
-            'USER': os.environ["POSTGRES_USER_AUTH"], 
-            'PASSWORD': os.environ["POSTGRES_PASSWORD_AUTH"], 
-            'HOST': os.environ["POSTGRES_HOST_AUTH"], 
-            'PORT': os.environ["POSTGRES_PORT_AUTH"], 
+                'NAME': os.environ["POSTGRES_DBNAME_AUTH"],
+                'USER': os.environ["POSTGRES_USERMIGRATE_AUTH"],
+                'PASSWORD': os.environ["POSTGRES_USERMIGRATE_PASSWORD_AUTH"],
+                'HOST': os.environ["POSTGRES_HOST_AUTH"],
+                'PORT': os.environ["POSTGRES_PORT_AUTH"],
                 'TEST': {
                     'NAME': 'test_drck_banking',
                 }
@@ -138,7 +142,11 @@ else:
             'default': {
                 'ENGINE': 'django.db.backends.postgresql_psycopg2',
                 'OPTIONS': {
-                    'options': '-c search_path=django'  
+                    'options': '-c search_path=django',
+                    'sslmode': 'verify-ca',
+                    'sslcert': os.environ["CLIENT_CERT"],
+                    'sslkey': os.environ["CLIENT_KEY"],
+                    'sslrootcert': os.environ["CA_CERT"],    
                 },
                 'NAME': os.environ["POSTGRES_DBNAME_AUTH"],
                 'USER': os.environ["POSTGRES_USER_AUTH"],
@@ -150,7 +158,7 @@ else:
                 }
             },
         }
-        print("Using database config for application")  
+        print("Using database config for application")
 
 
 # Password validation
