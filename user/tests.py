@@ -329,7 +329,6 @@ class TestAuthCheck(TestLogout):
         # no login
         sample_customer_auth_check = {"page_type": "Customer"}
         sample_ticket_auth_check = {"page_type": "Ticket Reviewer"}
-        sample_anon_auth_check = {"page_type": "Anonymity Officer"}
 
         sample_auth_check = sample_ticket_auth_check
         response = self.client.post(reverse("auth_check"), sample_auth_check)
