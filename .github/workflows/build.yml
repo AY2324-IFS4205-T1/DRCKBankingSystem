@@ -83,7 +83,7 @@ jobs:
 
       - name: Run Coverage on Application
         run: |
-          coverage run manage.py test --keepdb
+          coverage run --omit="main/manage.py","main/settings.py" manage.py test --keepdb
           
       - name: Export Coverage to xml
         run: coverage xml -o coverage-reports/coverage-report.xml

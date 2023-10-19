@@ -83,6 +83,9 @@ class TestRegistration(APITestCase):
         registration_details["password"] = good_pass
         response = self.client.post(reverse("customerRegister"), registration_details)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        
+        response = self.client.post(reverse("customerRegister"), registration_details)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 
 class TestAuthentication(APITestCase):
@@ -326,6 +329,7 @@ class TestAuthCheck(TestLogout):
         # no login
         sample_customer_auth_check = {"page_type": "Customer"}
         sample_ticket_auth_check = {"page_type": "Ticket Reviewer"}
+        sample_anon_auth_check = {"page_type": "Anonymity Officer"}
 
         sample_auth_check = sample_ticket_auth_check
         response = self.client.post(reverse("auth_check"), sample_auth_check)
@@ -353,7 +357,7 @@ class TestAuthCheck(TestLogout):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         expected = {'authenticated': False, 'authenticated_message': 'The session has changed, 2FA needs to be verified again.', 'authorised': True, 'user_authorisation': 'Customer', 'user_role': 'Customer'}
         self.assertEqual(response.json(), expected)
-        
+
         # login, 2FA, but unauthorised
         self.two_fa_customer_1()
         sample_auth_check = sample_ticket_auth_check
@@ -363,8 +367,8 @@ class TestAuthCheck(TestLogout):
         self.assertEqual(response.json(), expected)
         
         # login, authorised, and 2FA
-        sample_auth_check = sample_customer_auth_check
+        self.two_fa_staff1()
         response = self.client.post(reverse("auth_check"), sample_auth_check, **self.header)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        expected = {'authenticated': True, 'authenticated_message': '', 'authorised': True, 'user_authorisation': 'Customer', 'user_role': 'Customer'}
+        expected = {'authenticated': True, 'authenticated_message': '', 'authorised': True, 'user_authorisation': 'Staff', 'user_role': 'Ticket Reviewer'}
         self.assertEqual(response.json(), expected)

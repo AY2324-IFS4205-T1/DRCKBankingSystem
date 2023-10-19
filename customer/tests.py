@@ -130,13 +130,17 @@ class TestCustomerTickets(TestLogout):  # customer action
         response = self.client.post(reverse("customerTickets"), bad_value_close_account, **self.header)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_should_open_without_repeat(self):
+    def open_account(self):
         sample_open_ticket = {"ticket_type": "Opening Account", "value": "1"}
         self.two_fa_customer_1()
         response = self.client.post(reverse("customerTickets"), sample_open_ticket, **self.header)
+        return response
+
+    def test_should_open_without_repeat(self):
+        response = self.open_account()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        response = self.client.post(reverse("customerTickets"), sample_open_ticket, **self.header)
+        response = self.open_account()
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_should_close(self):
