@@ -55,7 +55,7 @@ class TestAccessControlLogging(TestLogout): # staff action
 
         self.two_fa_staff1()
         self.client.get(reverse("customerWelcome"), **self.header)
-        self.client.get(reverse("anonymisation"), **self.header)
+        self.client.get(reverse("view_anon_stats"), **self.header)
         self.client.get(reverse("login_logs"), **self.header)
 
         self.two_fa_staff3()

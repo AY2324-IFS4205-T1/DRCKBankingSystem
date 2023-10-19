@@ -54,7 +54,7 @@ class Partition(object):
         self.member = data[:]
         self.allow = [1] * QI_LEN
 
-    def add_record(self, record, dim):
+    def add_record(self, record, _):
         """
         add one record to member
         """
@@ -336,8 +336,8 @@ def mondrian(data, k, relax=False, qi_num=-1):
     rtime = float(time.time() - start_time)
     # generalization result and
     # evaluation information loss
-    ncp = 0.0
     dp = 0.0
+    ncp = dp
     for partition in RESULT:
         rncp = 0.0
         for index in range(QI_LEN):

@@ -3,7 +3,6 @@ from log.logging import AccessControlLogger
 from staff.models import Staff
 
 
-
 class IsAuditor(BasePermission):
     
     def has_permission(self, request, view):
