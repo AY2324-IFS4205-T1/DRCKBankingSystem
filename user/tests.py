@@ -82,287 +82,286 @@ class TestRegistration(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
-# class TestAuthentication(APITestCase):
-#     fixtures = ["user/tests.json"]
+class TestAuthentication(APITestCase):
+    fixtures = ["user/tests.json"]
 
-#     def login_customer_1(self):
-#         login = {"username": "test1", "password": good_pass}
-#         response = self.client.post(reverse("customerLogin"), login)
-#         self.assertEqual(response.status_code, status.HTTP_200_OK)
-#         self.header = {"HTTP_AUTHORIZATION": f"Token {response.data['token']}"}
+    def login_customer_1(self):
+        login = {"username": "test1", "password": good_pass}
+        response = self.client.post(reverse("customerLogin"), login)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.header = {"HTTP_AUTHORIZATION": f"Token {response.data['token']}"}
 
-#     def login_customer_2(self):
-#         login = {"username": "test2", "password": good_pass}
-#         response = self.client.post(reverse("customerLogin"), login)
-#         self.header = {"HTTP_AUTHORIZATION": f"Token {response.data['token']}"}
+    def login_customer_2(self):
+        login = {"username": "test2", "password": good_pass}
+        response = self.client.post(reverse("customerLogin"), login)
+        self.header = {"HTTP_AUTHORIZATION": f"Token {response.data['token']}"}
 
-#     def login_staff_1(self):
-#         login = {"username": "staff1", "password": good_pass}
-#         response = self.client.post(reverse("staffLogin"), login)
-#         self.assertEqual(response.status_code, status.HTTP_200_OK)
-#         self.header = {"HTTP_AUTHORIZATION": f"Token {response.data['token']}"}
+    def login_staff_1(self):
+        login = {"username": "staff1", "password": good_pass}
+        response = self.client.post(reverse("staffLogin"), login)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.header = {"HTTP_AUTHORIZATION": f"Token {response.data['token']}"}
 
-#     def login_staff_2(self):
-#         login = {"username": "staff2", "password": good_pass}
-#         response = self.client.post(reverse("staffLogin"), login)
-#         self.header = {"HTTP_AUTHORIZATION": f"Token {response.data['token']}"}
+    def login_staff_2(self):
+        login = {"username": "staff2", "password": good_pass}
+        response = self.client.post(reverse("staffLogin"), login)
+        self.header = {"HTTP_AUTHORIZATION": f"Token {response.data['token']}"}
 
-#     def login_staff_3(self):
-#         login = {"username": "staff3", "password": good_pass}
-#         response = self.client.post(reverse("staffLogin"), login)
-#         self.header = {"HTTP_AUTHORIZATION": f"Token {response.data['token']}"}
+    def login_staff_3(self):
+        login = {"username": "staff3", "password": good_pass}
+        response = self.client.post(reverse("staffLogin"), login)
+        self.header = {"HTTP_AUTHORIZATION": f"Token {response.data['token']}"}
 
-#     def login_staff_4(self):
-#         login = {"username": "staff4", "password": good_pass}
-#         response = self.client.post(reverse("staffLogin"), login)
-#         self.header = {"HTTP_AUTHORIZATION": f"Token {response.data['token']}"}
+    def login_staff_4(self):
+        login = {"username": "staff4", "password": good_pass}
+        response = self.client.post(reverse("staffLogin"), login)
+        self.header = {"HTTP_AUTHORIZATION": f"Token {response.data['token']}"}
 
-#     def login_staff_5(self):
-#         login = {"username": "staff5", "password": good_pass}
-#         response = self.client.post(reverse("staffLogin"), login)
-#         self.header = {"HTTP_AUTHORIZATION": f"Token {response.data['token']}"}
+    def login_staff_5(self):
+        login = {"username": "staff5", "password": good_pass}
+        response = self.client.post(reverse("staffLogin"), login)
+        self.header = {"HTTP_AUTHORIZATION": f"Token {response.data['token']}"}
 
-#     def test_logins(self):
-#         self.login_customer_1()
-#         self.login_customer_2()
-#         self.login_staff_1()
-#         self.login_staff_2()
-#         self.login_staff_3()
-#         self.login_staff_4()
-#         self.login_staff_5()
+    def test_logins(self):
+        self.login_customer_1()
+        self.login_customer_2()
+        self.login_staff_1()
+        self.login_staff_2()
+        self.login_staff_3()
+        self.login_staff_4()
+        self.login_staff_5()
 
 
-# class TestCreateTwoFA(TestAuthentication):
-#     def test_should_not_create_two_fa(self):
-#         response = self.client.get(reverse("setup_2fa"))
-#         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+class TestCreateTwoFA(TestAuthentication):
+    def test_should_not_create_two_fa(self):
+        response = self.client.get(reverse("setup_2fa"))
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-#     def create_two_fa_customer1(self):
-#         self.login_customer_1()
-#         response = self.client.get(reverse("setup_2fa"), **self.header)
-#         return response
+    def create_two_fa_customer1(self):
+        self.login_customer_1()
+        response = self.client.get(reverse("setup_2fa"), **self.header)
+        return response
     
-#     def create_two_fa_customer2(self):
-#         self.login_customer_2()
-#         response = self.client.get(reverse("setup_2fa"), **self.header)
-#         return response
+    def create_two_fa_customer2(self):
+        self.login_customer_2()
+        response = self.client.get(reverse("setup_2fa"), **self.header)
+        return response
 
-#     def create_two_fa_staff1(self):
-#         self.login_staff_1()
-#         response = self.client.get(reverse("setup_2fa"), **self.header)
-#         return response
+    def create_two_fa_staff1(self):
+        self.login_staff_1()
+        response = self.client.get(reverse("setup_2fa"), **self.header)
+        return response
 
-#     def create_two_fa_staff2(self):
-#         self.login_staff_2()
-#         response = self.client.get(reverse("setup_2fa"), **self.header)
-#         return response
+    def create_two_fa_staff2(self):
+        self.login_staff_2()
+        response = self.client.get(reverse("setup_2fa"), **self.header)
+        return response
 
-#     def create_two_fa_staff3(self):
-#         self.login_staff_3()
-#         response = self.client.get(reverse("setup_2fa"), **self.header)
-#         return response
+    def create_two_fa_staff3(self):
+        self.login_staff_3()
+        response = self.client.get(reverse("setup_2fa"), **self.header)
+        return response
 
-#     def create_two_fa_staff4(self):
-#         self.login_staff_4()
-#         response = self.client.get(reverse("setup_2fa"), **self.header)
-#         return response
+    def create_two_fa_staff4(self):
+        self.login_staff_4()
+        response = self.client.get(reverse("setup_2fa"), **self.header)
+        return response
 
-#     def create_two_fa_staff5(self):
-#         self.login_staff_5()
-#         response = self.client.get(reverse("setup_2fa"), **self.header)
-#         return response
+    def create_two_fa_staff5(self):
+        self.login_staff_5()
+        response = self.client.get(reverse("setup_2fa"), **self.header)
+        return response
 
-#     def test_should_create_two_fa(self):
-#         response = self.create_two_fa_customer1()
-#         self.assertEqual(response.status_code, status.HTTP_200_OK)
+    def test_should_create_two_fa(self):
+        response = self.create_two_fa_customer1()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
-# class TestVerifyTwoFA(TestCreateTwoFA):
-#     def test_should_not_verify_two_fa(self):
-#         bad_field = {"otppp": "123"}
-#         bad_length = {"otp": "123"}
-#         bad_type = {"otp": "abcdefgh"}
-#         wrong_otp = {"otp": "12345678"}
+class TestVerifyTwoFA(TestCreateTwoFA):
+    def test_should_not_verify_two_fa(self):
+        bad_field = {"otppp": "123"}
+        bad_length = {"otp": "123"}
+        bad_type = {"otp": "abcdefgh"}
+        wrong_otp = {"otp": "12345678"}
 
-#         response = self.client.post(reverse("verify_2fa"), bad_field)
-#         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        response = self.client.post(reverse("verify_2fa"), bad_field)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-#         self.login_customer_1()
-#         response = self.client.post(reverse("verify_2fa"), wrong_otp, **self.header)
-#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.login_customer_1()
+        response = self.client.post(reverse("verify_2fa"), wrong_otp, **self.header)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-#         self.client.get(reverse("setup_2fa"), **self.header)
-#         response = self.client.post(reverse("verify_2fa"), bad_field, **self.header)
-#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.client.get(reverse("setup_2fa"), **self.header)
+        response = self.client.post(reverse("verify_2fa"), bad_field, **self.header)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-#         response = self.client.post(reverse("verify_2fa"), bad_length, **self.header)
-#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        response = self.client.post(reverse("verify_2fa"), bad_length, **self.header)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-#         response = self.client.post(reverse("verify_2fa"), bad_type, **self.header)
-#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        response = self.client.post(reverse("verify_2fa"), bad_type, **self.header)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-#         response = self.client.post(reverse("verify_2fa"), wrong_otp, **self.header)
-#         self.assertEqual(response.status_code, status.HTTP_200_OK)
-#         self.assertEqual(response.json(), {"2FA success": False, "last_authenticated": None})
+        response = self.client.post(reverse("verify_2fa"), wrong_otp, **self.header)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.json(), {"2FA success": False, "last_authenticated": None})
 
-#     def two_fa_customer_1(self):
-#         self.create_two_fa_customer1()
+    def two_fa_customer_1(self):
+        self.create_two_fa_customer1()
 
-#         user = User.objects.get(username="test1")
-#         two_fa = TwoFA.objects.get(user=user)
-#         otp = pyotp.totp.TOTP(two_fa.key, digest=sha512, digits=8).now()
-#         sample_otp = {"otp": otp}
+        user = User.objects.get(username="test1")
+        two_fa = TwoFA.objects.get(user=user)
+        otp = pyotp.totp.TOTP(two_fa.key, digest=sha512, digits=8).now()
+        sample_otp = {"otp": otp}
 
-#         response = self.client.post(reverse("verify_2fa"), sample_otp, **self.header)
-#         return response
+        response = self.client.post(reverse("verify_2fa"), sample_otp, **self.header)
+        return response
 
-#     def two_fa_customer_2(self):
-#         self.create_two_fa_customer2()
+    def two_fa_customer_2(self):
+        self.create_two_fa_customer2()
 
-#         user = User.objects.get(username="test2")
-#         two_fa = TwoFA.objects.get(user=user)
-#         otp = pyotp.totp.TOTP(two_fa.key, digest=sha512, digits=8).now()
-#         sample_otp = {"otp": otp}
+        user = User.objects.get(username="test2")
+        two_fa = TwoFA.objects.get(user=user)
+        otp = pyotp.totp.TOTP(two_fa.key, digest=sha512, digits=8).now()
+        sample_otp = {"otp": otp}
 
-#         response = self.client.post(reverse("verify_2fa"), sample_otp, **self.header)
-#         return response
+        response = self.client.post(reverse("verify_2fa"), sample_otp, **self.header)
+        return response
     
-#     def two_fa_staff1(self):
-#         self.create_two_fa_staff1()
+    def two_fa_staff1(self):
+        self.create_two_fa_staff1()
 
-#         user = User.objects.get(username="staff1")
-#         two_fa = TwoFA.objects.get(user=user)
-#         otp = pyotp.totp.TOTP(two_fa.key, digest=sha512, digits=8).now()
-#         sample_otp = {"otp": otp}
+        user = User.objects.get(username="staff1")
+        two_fa = TwoFA.objects.get(user=user)
+        otp = pyotp.totp.TOTP(two_fa.key, digest=sha512, digits=8).now()
+        sample_otp = {"otp": otp}
 
-#         response = self.client.post(reverse("verify_2fa"), sample_otp, **self.header)
-#         return response
+        response = self.client.post(reverse("verify_2fa"), sample_otp, **self.header)
+        return response
 
-#     def two_fa_staff2(self):
-#         self.create_two_fa_staff2()
+    def two_fa_staff2(self):
+        self.create_two_fa_staff2()
 
-#         user = User.objects.get(username="staff2")
-#         two_fa = TwoFA.objects.get(user=user)
-#         otp = pyotp.totp.TOTP(two_fa.key, digest=sha512, digits=8).now()
-#         sample_otp = {"otp": otp}
+        user = User.objects.get(username="staff2")
+        two_fa = TwoFA.objects.get(user=user)
+        otp = pyotp.totp.TOTP(two_fa.key, digest=sha512, digits=8).now()
+        sample_otp = {"otp": otp}
 
-#         response = self.client.post(reverse("verify_2fa"), sample_otp, **self.header)
-#         return response
+        response = self.client.post(reverse("verify_2fa"), sample_otp, **self.header)
+        return response
 
-#     def two_fa_staff3(self):
-#         self.create_two_fa_staff3()
+    def two_fa_staff3(self):
+        self.create_two_fa_staff3()
 
-#         user = User.objects.get(username="staff3")
-#         two_fa = TwoFA.objects.get(user=user)
-#         otp = pyotp.totp.TOTP(two_fa.key, digest=sha512, digits=8).now()
-#         sample_otp = {"otp": otp}
+        user = User.objects.get(username="staff3")
+        two_fa = TwoFA.objects.get(user=user)
+        otp = pyotp.totp.TOTP(two_fa.key, digest=sha512, digits=8).now()
+        sample_otp = {"otp": otp}
 
-#         response = self.client.post(reverse("verify_2fa"), sample_otp, **self.header)
-#         return response
+        response = self.client.post(reverse("verify_2fa"), sample_otp, **self.header)
+        return response
 
-#     def two_fa_staff4(self):
-#         self.create_two_fa_staff4()
+    def two_fa_staff4(self):
+        self.create_two_fa_staff4()
 
-#         user = User.objects.get(username="staff4")
-#         two_fa = TwoFA.objects.get(user=user)
-#         otp = pyotp.totp.TOTP(two_fa.key, digest=sha512, digits=8).now()
-#         sample_otp = {"otp": otp}
+        user = User.objects.get(username="staff4")
+        two_fa = TwoFA.objects.get(user=user)
+        otp = pyotp.totp.TOTP(two_fa.key, digest=sha512, digits=8).now()
+        sample_otp = {"otp": otp}
 
-#         response = self.client.post(reverse("verify_2fa"), sample_otp, **self.header)
-#         return response
+        response = self.client.post(reverse("verify_2fa"), sample_otp, **self.header)
+        return response
 
-#     def two_fa_staff5(self):
-#         self.create_two_fa_staff5()
+    def two_fa_staff5(self):
+        self.create_two_fa_staff5()
 
-#         user = User.objects.get(username="staff5")
-#         two_fa = TwoFA.objects.get(user=user)
-#         otp = pyotp.totp.TOTP(two_fa.key, digest=sha512, digits=8).now()
-#         sample_otp = {"otp": otp}
+        user = User.objects.get(username="staff5")
+        two_fa = TwoFA.objects.get(user=user)
+        otp = pyotp.totp.TOTP(two_fa.key, digest=sha512, digits=8).now()
+        sample_otp = {"otp": otp}
 
-#         response = self.client.post(reverse("verify_2fa"), sample_otp, **self.header)
-#         return response
+        response = self.client.post(reverse("verify_2fa"), sample_otp, **self.header)
+        return response
 
-#     def test_should_verify_two_fa(self):
-#         response = self.two_fa_customer_1()
-#         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-
-# class TestLogout(TestVerifyTwoFA):
-#     def logout_customer1(self):
-#         self.two_fa_customer_1()
-#         response = self.client.post(reverse("logout"), **self.header)
-#         return response
-
-#     def logout_staff1(self):
-#         self.two_fa_staff1()
-#         response = self.client.post(reverse("logout"), **self.header)
-#         return response
-
-#     def test_logout(self):
-#         response = self.logout_customer1()
-#         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-#         user = User.objects.get(username="test1")
-#         two_fa = TwoFA.objects.get(user=user)
-#         self.assertEqual(two_fa.last_authenticated, None)
+    def test_should_verify_two_fa(self):
+        response = self.two_fa_customer_1()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
-# class TestAuthCheck(TestLogout):
+class TestLogout(TestVerifyTwoFA):
+    def logout_customer1(self):
+        self.two_fa_customer_1()
+        response = self.client.post(reverse("logout"), **self.header)
+        return response
 
-#     def test_should_not_auth_check(self):
-#         self.two_fa_customer_1()
-#         bad_field = {"paaaage_type": "Ticket Reviewer"}
-#         bad_value = {"page_type": "Tiiiicket Reviewer"}
+    def logout_staff1(self):
+        self.two_fa_staff1()
+        response = self.client.post(reverse("logout"), **self.header)
+        return response
+
+    def test_logout(self):
+        response = self.logout_customer1()
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        user = User.objects.get(username="test1")
+        two_fa = TwoFA.objects.get(user=user)
+        self.assertEqual(two_fa.last_authenticated, None)
+
+
+class TestAuthCheck(TestLogout):
+
+    def test_should_not_auth_check(self):
+        self.two_fa_customer_1()
+        bad_field = {"paaaage_type": "Ticket Reviewer"}
+        bad_value = {"page_type": "Tiiiicket Reviewer"}
         
-#         response = self.client.post(reverse("auth_check"), bad_field, **self.header)
-#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        response = self.client.post(reverse("auth_check"), bad_field, **self.header)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-#         response = self.client.post(reverse("auth_check"), bad_value, **self.header)
-#         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        response = self.client.post(reverse("auth_check"), bad_value, **self.header)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-#     def test_should_auth_check(self):
-#         # no login
-#         sample_customer_auth_check = {"page_type": "Customer"}
-#         sample_ticket_auth_check = {"page_type": "Ticket Reviewer"}
+    def test_should_auth_check(self):
+        # no login
+        sample_customer_auth_check = {"page_type": "Customer"}
+        sample_ticket_auth_check = {"page_type": "Ticket Reviewer"}
 
-#         sample_auth_check = sample_ticket_auth_check
-#         response = self.client.post(reverse("auth_check"), sample_auth_check)
-#         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-#         expected = {'authenticated': False, 'authenticated_message': 'User not logged in.', 'authorised': False, 'user_authorisation': ''}
-#         self.assertEqual(response.json(), expected)
+        sample_auth_check = sample_ticket_auth_check
+        response = self.client.post(reverse("auth_check"), sample_auth_check)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        expected = {'authenticated': False, 'authenticated_message': 'User not logged in.', 'authorised': False, 'user_authorisation': ''}
+        self.assertEqual(response.json(), expected)
         
-#         # login but unauthorised and no 2FA
-#         self.login_customer_1()
-#         response = self.client.post(reverse("auth_check"), sample_auth_check, **self.header)
-#         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-#         expected = {'authenticated': False, 'authenticated_message': '', 'authorised': False, 'user_authorisation': 'Customer', 'user_role': 'Customer'}
-#         self.assertEqual(response.json(), expected)
+        # login but unauthorised and no 2FA
+        self.login_customer_1()
+        response = self.client.post(reverse("auth_check"), sample_auth_check, **self.header)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        expected = {'authenticated': False, 'authenticated_message': '', 'authorised': False, 'user_authorisation': 'Customer', 'user_role': 'Customer'}
+        self.assertEqual(response.json(), expected)
         
-#         # login, authorised, but no 2FA
-#         sample_auth_check = sample_customer_auth_check
-#         response = self.client.post(reverse("auth_check"), sample_auth_check, **self.header)
-#         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-#         expected = {'authenticated': False, 'authenticated_message': 'User does not have 2FA set up.', 'authorised': True, 'user_authorisation': 'Customer', 'user_role': 'Customer'}
-#         self.assertEqual(response.json(), expected)
+        # login, authorised, but no 2FA
+        sample_auth_check = sample_customer_auth_check
+        response = self.client.post(reverse("auth_check"), sample_auth_check, **self.header)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        expected = {'authenticated': False, 'authenticated_message': 'User does not have 2FA set up.', 'authorised': True, 'user_authorisation': 'Customer', 'user_role': 'Customer'}
+        self.assertEqual(response.json(), expected)
         
-#         # login, authorised, 2FA set up but not verified
-#         self.create_two_fa_customer1()
-#         response = self.client.post(reverse("auth_check"), sample_auth_check, **self.header)
-#         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-#         expected = {'authenticated': False, 'authenticated_message': 'The session has changed, 2FA needs to be verified again.', 'authorised': True, 'user_authorisation': 'Customer', 'user_role': 'Customer'}
-#         self.assertEqual(response.json(), expected)
+        # login, authorised, 2FA set up but not verified
+        self.create_two_fa_customer1()
+        response = self.client.post(reverse("auth_check"), sample_auth_check, **self.header)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        expected = {'authenticated': False, 'authenticated_message': 'The session has changed, 2FA needs to be verified again.', 'authorised': True, 'user_authorisation': 'Customer', 'user_role': 'Customer'}
+        self.assertEqual(response.json(), expected)
         
-#         # login, 2FA, but unauthorised
-#         self.two_fa_customer_1()
-#         sample_auth_check = sample_ticket_auth_check
-#         response = self.client.post(reverse("auth_check"), sample_auth_check, **self.header)
-#         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-#         expected = {'authenticated': True, 'authenticated_message': '', 'authorised': False, 'user_authorisation': 'Customer', 'user_role': 'Customer'}
-#         self.assertEqual(response.json(), expected)
+        # login, 2FA, but unauthorised
+        self.two_fa_customer_1()
+        sample_auth_check = sample_ticket_auth_check
+        response = self.client.post(reverse("auth_check"), sample_auth_check, **self.header)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        expected = {'authenticated': True, 'authenticated_message': '', 'authorised': False, 'user_authorisation': 'Customer', 'user_role': 'Customer'}
+        self.assertEqual(response.json(), expected)
         
-#         # login, authorised, and 2FA
-#         sample_auth_check = sample_customer_auth_check
-#         response = self.client.post(reverse("auth_check"), sample_auth_check, **self.header)
-#         self.assertEqual(response.status_code, status.HTTP_200_OK)
-#         expected = {'authenticated': True, 'authenticated_message': '', 'authorised': True, 'user_authorisation': 'Customer', 'user_role': 'Customer'}
-#         self.assertEqual(response.json(), expected)
-        
+        # login, authorised, and 2FA
+        sample_auth_check = sample_customer_auth_check
+        response = self.client.post(reverse("auth_check"), sample_auth_check, **self.header)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        expected = {'authenticated': True, 'authenticated_message': '', 'authorised': True, 'user_authorisation': 'Customer', 'user_role': 'Customer'}
+        self.assertEqual(response.json(), expected)
