@@ -1,10 +1,10 @@
-from django.http import FileResponse
+from django.http import FileResponse, HttpResponse
 from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from anonymisation.anonymise.overall import TooShortException
-from anonymisation.permissions import IsAnonymiser, IsResearcher
+from anonymisation.permissions import IsAnonymiser, IsResearcher, IsResearcherOrAnonymiser
 from anonymisation.serializers import (QueryAnonSerializer,
                                        SetKValueSerializer,
                                        ViewAnonStatsSerializer)
@@ -15,7 +15,6 @@ from user.authentication import TokenAndTwoFactorAuthentication
 
 class CalculateAnonView(APIView):
     """Get request
-    TODO: @rebecca, API works but generate_statistics() does not work
     """
 
     permission_classes = (permissions.IsAuthenticated, IsStaff, IsAnonymiser)
@@ -50,7 +49,6 @@ class ViewAnonStatsView(APIView):
 
 class SetKValueView(APIView):
     """Post request
-    TODO: @rebecca, API works but generate_statistics() does not work
 
     Args:
         k_value: integer
@@ -78,9 +76,32 @@ class QueryAnonView(APIView):
         query: integer
 
     Returns:
-        anon_data: dict of the anonymous data set
         utility: utility of dataset for query
         results: query results
+
+    Sample for query 1:
+    {
+    "utility": 0.0,
+    "results":
+        {
+            "first_average": 0.0,
+            "second_average": 0.0,
+            "third_average": 0.0,
+            "fourth_average": 0.0,
+            "fifth_average": 0.0
+        }
+    }
+
+    Sample for query 2:
+    {
+    "utility": 0.0,
+    "results":
+        {
+            "first_balance_average": 0.0,
+            "second_balance_average": 0.0,
+            "third_balance_average": 0.0
+        }
+    }
     """
 
     permission_classes = (permissions.IsAuthenticated, IsStaff, IsResearcher)
@@ -92,4 +113,30 @@ class QueryAnonView(APIView):
         if serialiser.is_valid():
             response = serialiser.get_query_results()
             return Response(response, status=status.HTTP_200_OK)
+        return Response(serialiser.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class GetAnonDataView(APIView):
+    """Post request
+
+    Args:
+        query: integer
+
+    Returns:
+        CSV file with anonymous data
+    """
+
+    permission_classes = (permissions.IsAuthenticated, IsStaff, IsResearcherOrAnonymiser)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
+    throttle_scope = "sensitive_request"
+
+    def post(self, request):
+        serialiser = QueryAnonSerializer(request.data, data=request.data)
+        if serialiser.is_valid():
+            response = HttpResponse(
+                content_type="text/csv",
+                headers={"Content-Disposition": 'attachment; filename="drck_banking_anon_data.csv"'},
+            )
+            response = serialiser.get_anon_data(response)
+            return response
         return Response(serialiser.errors, status=status.HTTP_400_BAD_REQUEST)

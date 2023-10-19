@@ -2,6 +2,7 @@ from rest_framework.serializers import ValidationError
 
 from anonymisation.anonymise.overall import QueryOptions
 from anonymisation.models import Statistics
+from anonymisation.wrapper import MINIMUM_K_VALUE, MAXIMUM_K_VALUE
 
 
 def validate_k_value(json_dict):
@@ -10,12 +11,10 @@ def validate_k_value(json_dict):
     except KeyError:
         raise ValidationError("Field 'k_value' missing.")
     except ValueError:
-        raise ValidationError("K-value provided is not an integer")
-    try:
-        Statistics.objects.get(k_value=k)
-    except Statistics.DoesNotExist:
-        raise ValidationError("K-value provided is not within the acceptable k-value range")
+        raise ValidationError("K-value provided is not an integer.")
     
+    if k < MINIMUM_K_VALUE or k > MAXIMUM_K_VALUE:
+        raise ValidationError("K-value provided is not within the acceptable k-value range.")
     return k
 
 

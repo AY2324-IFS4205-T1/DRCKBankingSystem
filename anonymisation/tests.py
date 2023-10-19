@@ -93,31 +93,67 @@ class TestQueryAnon(TestSetKValue): # staff action
         bad_value_non_integer = {"query": "vea"}
         bad_value_non_valid = {"query": "4"}
 
-        response = self.client.post(reverse("query_anon"), bad_field)
+        response = self.client.post(reverse("query_results"), bad_field)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
         
         self.two_fa_customer_1()
-        response = self.client.post(reverse("query_anon"), bad_field, **self.header)
+        response = self.client.post(reverse("query_results"), bad_field, **self.header)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         
         self.two_fa_staff5()
-        response = self.client.post(reverse("query_anon"), bad_field, **self.header)
+        response = self.client.post(reverse("query_results"), bad_field, **self.header)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
         self.two_fa_staff4()
-        response = self.client.post(reverse("query_anon"), bad_field, **self.header)
+        response = self.client.post(reverse("query_results"), bad_field, **self.header)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-        response = self.client.post(reverse("query_anon"), bad_value_non_integer, **self.header)
+        response = self.client.post(reverse("query_results"), bad_value_non_integer, **self.header)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-        response = self.client.post(reverse("query_anon"), bad_value_non_valid, **self.header)
+        response = self.client.post(reverse("query_results"), bad_value_non_valid, **self.header)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_should_query_anon(self):
         self.set_k_value()
         sample_set_k = {"query": "1"}
         self.two_fa_staff4()
-        response = self.client.post(reverse("query_anon"), sample_set_k, **self.header)
+        response = self.client.post(reverse("query_results"), sample_set_k, **self.header)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+
+class TestGetAnonData(TestQueryAnon): # staff action
+    def test_should_not_query_anon(self):
+        bad_field = {"qqquery": "1"}
+        bad_value_non_integer = {"query": "vea"}
+        bad_value_non_valid = {"query": "4"}
+
+        response = self.client.post(reverse("get_anon_data"), bad_field)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        
+        self.two_fa_customer_1()
+        response = self.client.post(reverse("get_anon_data"), bad_field, **self.header)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        self.two_fa_staff4()
+        response = self.client.post(reverse("get_anon_data"), bad_field, **self.header)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        response = self.client.post(reverse("get_anon_data"), bad_value_non_integer, **self.header)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        response = self.client.post(reverse("get_anon_data"), bad_value_non_valid, **self.header)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_should_query_anon(self):
+        self.set_k_value()
+        sample_set_k = {"query": "1"}
+
+        self.two_fa_staff4()
+        response = self.client.post(reverse("get_anon_data"), sample_set_k, **self.header)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+        self.two_fa_staff5()
+        response = self.client.post(reverse("get_anon_data"), sample_set_k, **self.header)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)

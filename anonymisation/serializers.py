@@ -1,8 +1,8 @@
+import csv
 import io
 
 import matplotlib.pyplot as plt
 import numpy as np
-from django.core.serializers import serialize
 from django.utils import timezone
 from rest_framework import serializers
 from rest_framework.serializers import ValidationError
@@ -42,7 +42,7 @@ class ViewAnonStatsSerializer(serializers.Serializer):
         self.text = "Last updated: " + self.last_updated.__str__()
     
     def plot_graph(self):
-        axis1 = plt.figure().add_axes((0.1,0.15,0.8,0.7))
+        axis1 = plt.figure().add_axes((0.15,0.15,0.7,0.7))
         axis2 = axis1.twinx()
 
         axis1.plot(self.k_values, self.info_losses, "r", label="Information Loss")
@@ -96,7 +96,6 @@ class QueryAnonSerializer(serializers.Serializer):
     def get_query_results(self):
         results = dict()
         if self.query == "1":
-            anon_fields = ["id", "age", "gender", "postal_code", "citizenship", "first_sum", "second_sum", "third_sum", "fourth_sum", "fifth_sum"]
             utility = self.statistic.utility_query1
             results["first_average"] = self.statistic.first_average
             results["second_average"] = self.statistic.second_average
@@ -104,14 +103,26 @@ class QueryAnonSerializer(serializers.Serializer):
             results["fourth_average"] = self.statistic.fourth_average
             results["fifth_average"] = self.statistic.fifth_average
         else:
-            anon_fields = ["id", "age", "gender", "postal_code", "citizenship", "first_balance_average", "second_balance_average", "third_balance_average"]
             utility = self.statistic.utility_query2
             results["first_balance_average"] = self.statistic.first_balance_average
             results["second_balance_average"] = self.statistic.second_balance_average
             results["third_balance_average"] = self.statistic.third_balance_average
         
         response = dict()
-        response["anon_data"] = serialize("json", Anonymisation.objects.all(), fields=anon_fields)
         response["utility"] = utility
         response["results"] = results
         return response
+    
+    def get_anon_data(self, response):
+        anon_fields = ["id", "age", "gender", "postal_code", "citizenship"]
+        if self.query == "1":
+            anon_fields.extend(["first_sum", "second_sum", "third_sum", "fourth_sum", "fifth_sum"])
+        else:
+            anon_fields.extend(["first_balance", "second_balance", "third_balance"])
+        
+        writer = csv.writer(response)
+        writer.writerow(anon_fields)
+        for obj in Anonymisation.objects.all():
+            writer.writerow([getattr(obj, field) for field in anon_fields])
+        return response
+

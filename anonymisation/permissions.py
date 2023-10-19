@@ -28,3 +28,17 @@ class IsAnonymiser(BasePermission):
         if not permission_granted:
             AccessControlLogger(request, Staff.Title.ANONYMISER, view.get_view_name())
         return permission_granted
+
+
+class IsResearcherOrAnonymiser(BasePermission):
+    
+    def has_permission(self, request, view):
+        """
+        Return `True` if permission is granted, `False` otherwise.
+        """
+        staff = Staff.objects.get(user=request.user)
+        permission_granted = staff.title in [Staff.Title.RESEARCHER, Staff.Title.ANONYMISER]
+        if not permission_granted:
+            AccessControlLogger(request, Staff.Title.RESEARCHER, view.get_view_name())
+            AccessControlLogger(request, Staff.Title.ANONYMISER, view.get_view_name())
+        return permission_granted

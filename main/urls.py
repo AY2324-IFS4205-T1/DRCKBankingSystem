@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
-from anonymisation.views import (CalculateAnonView, QueryAnonView, SetKValueView, ViewAnonStatsView)
+from anonymisation.views import (CalculateAnonView, GetAnonDataView, QueryAnonView, SetKValueView, ViewAnonStatsView)
 from customer.views import (AccountsView, AccountTypesView, CustomerLoginView,
                             CustomerRegistrationView, CustomerTicketsView,
                             CustomerWelcomeView, DepositView, TransactionsView,
@@ -65,7 +65,8 @@ urlpatterns = [
     path("staff/calculate_anon", CalculateAnonView.as_view(), name="calculate_anon"),
     path("staff/view_anon_stats", ViewAnonStatsView.as_view(), name="view_anon_stats"),
     path("staff/set_k", SetKValueView.as_view(), name="set_k"),
-    path("staff/query_anon", QueryAnonView.as_view(), name="query_anon"),
+    path("staff/query_results", QueryAnonView.as_view(), name="query_results"),
+    path("staff/get_anon_data", GetAnonDataView.as_view(), name="get_anon_data"),
 
     # Logging
     path("staff/login_logs", LoginLoggingView.as_view(), name="login_logs"),
