@@ -14,8 +14,8 @@ from customer.models import Accounts, AccountTypes
 from generate_data.utils.utility import get_random_datetime, load_data, execute_delete_sql, get_userids, get_random_balance
 
 # Define number of users and number of transactions you want to generate
-CUSTOMER_NUM = 1500
-TRANSACTION_NUM = 5000
+CUSTOMER_NUM = 200
+TRANSACTION_NUM = 10000
 
 TRANSACTIONS_MODEL = "customer.Transactions"
 
@@ -38,7 +38,7 @@ class GenerateAuthUsers:
         """
         data = []
         for i in tqdm(range(1, self.num_of_users + 1)):
-            username = f"test{i}"
+            username = f"customer{i}"
             hash_password = make_password(self.generate_random_password())
             user_data = {
                 # "pk": i,
@@ -98,7 +98,6 @@ class GenerateCustomers:
     
     def get_random_birthdate(self):
         start_date = datetime(1983, 1, 1)
-        # end_date = datetime(2004, 1, 1)
         end_date = datetime.now()
         random_date = start_date + timedelta(days=random.randint(0, (end_date - start_date).days))
         formatted_date = make_aware(random_date).strftime("%Y-%m-%d")

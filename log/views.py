@@ -30,6 +30,7 @@ class LoginLoggingView(APIView):
 
     permission_classes = (permissions.IsAuthenticated, IsStaff, IsAuditor)
     authentication_classes = (TokenAndTwoFactorAuthentication,)
+    throttle_scope = "sensitive_request"
 
     def post(self, request):
         serializer = LoginLoggingSerializer(
@@ -59,6 +60,7 @@ class AccessControlLoggingView(APIView):
 
     permission_classes = (permissions.IsAuthenticated, IsStaff, IsAuditor)
     authentication_classes = (TokenAndTwoFactorAuthentication,)
+    throttle_scope = "sensitive_request"
 
     def post(self, request):
         serializer = AccessControlLoggingSerializer(
@@ -90,6 +92,7 @@ class ConflictOfInterestLoggingView(APIView):
 
     permission_classes = (permissions.IsAuthenticated, IsStaff, IsAuditor)
     authentication_classes = (TokenAndTwoFactorAuthentication,)
+    throttle_scope = "sensitive_request"
 
     def post(self, request):
         serializer = ConflictOfInterestLoggingSerializer(

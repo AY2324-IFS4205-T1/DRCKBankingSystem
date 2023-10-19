@@ -1,5 +1,19 @@
 # DRCKBankingSystem
 
+## Account Information
+
+Each member of each team is given 4 staff accounts.
+The username is in the format `group<group_number>_user<user_number>_<title>`.
+For example:
+
+* `group1_user1_Ticket_Reviewer`
+* `group3_user2_Auditor`
+* `group2_user4_Researcher`
+* `group3_user4_Anonymity_Officer`
+
+The password for all sample accounts is `G00dP@55word`.
+Note that you will be required to set up two-factor authentication upon login.
+
 ## Setup Instructions
 
 * Log in to Postgres
@@ -21,10 +35,12 @@ drck_banking=# CREATE SCHEMA django;
 drck_banking=# CREATE SCHEMA customer;
 drck_banking=# CREATE SCHEMA staff;
 drck_banking=# CREATE SCHEMA log;
+drck_banking=# CREATE SCHEMA anonymisation;
 drck_banking=# GRANT ALL ON SCHEMA django to django;
 drck_banking=# GRANT ALL ON SCHEMA customer to django;
 drck_banking=# GRANT ALL ON SCHEMA staff to django;
 drck_banking=# GRANT ALL ON SCHEMA log to django;
+drck_banking=# GRANT ALL ON SCHEMA anonymisation to django;
 drck_banking=# exit
 ```
 
@@ -45,10 +61,12 @@ drck_banking=# CREATE SCHEMA django;
 drck_banking=# CREATE SCHEMA customer;
 drck_banking=# CREATE SCHEMA staff;
 drck_banking=# CREATE SCHEMA log;
+drck_banking=# CREATE SCHEMA anonymisation;
 drck_banking=# GRANT ALL ON SCHEMA django to django;
 drck_banking=# GRANT ALL ON SCHEMA customer to django;
 drck_banking=# GRANT ALL ON SCHEMA staff to django;
 drck_banking=# GRANT ALL ON SCHEMA log to django;
+drck_banking=# GRANT ALL ON SCHEMA anonymisation to django;
 drck_banking=# exit
 ```
 

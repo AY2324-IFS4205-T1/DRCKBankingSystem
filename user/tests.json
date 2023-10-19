@@ -102,6 +102,23 @@
         }
     },
     {
+        "model": "user.user",
+        "pk": "f7b62f7f-e4b2-4d44-b85c-256d44aeafa3",
+        "fields": {
+            "is_superuser": false,
+            "username": "staff5",
+            "password": "pbkdf2_sha256$600000$QdkxiE6LZmVhEmfQk89WVt$G7ronfBDVHMm4dM8ZJBSvt82CINNENnFG6tCnVOiEbQ=",
+            "email": "staff5@gmail.com",
+            "phone_no": "12345678",
+            "type": "Staff",
+            "date_joined": "2023-10-18T18:36:12.929Z",
+            "last_login": "2023-10-18T18:36:12.929Z",
+            "is_active": true,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
         "model": "customer.customer",
         "pk": "476e8652-b696-43f7-8be7-7992e2289404",
         "fields": {
@@ -253,6 +270,17 @@
         }
     },
     {
+        "model": "staff.staff",
+        "pk": "f7b62f7f-e4b2-4d44-b85c-256d44aeafa3",
+        "fields": {
+            "first_name": "anonimity_officer",
+            "last_name": "staff5",
+            "title": "Anonymity Officer",
+            "birth_date": "1990-01-01",
+            "gender": "Male"
+        }
+    },
+    {
         "model": "staff.tickets",
         "pk": "367bffbc-87dd-4d6b-b060-5747d6509b54",
         "fields": {
@@ -326,6 +354,1026 @@
         "pk": "cd6eaa63-d9ee-440b-a1cf-8eba1a1feec4",
         "fields": {
             "account_type": 1
+        }
+    },
+    {
+        "model": "user.user",
+        "pk": "20aafff0-8d09-4a5a-9d8a-8d214feb63b9",
+        "fields": {
+            "is_superuser": false,
+            "username": "customer8",
+            "password": "pbkdf2_sha256$600000$hj5cBorsxGbUartcXdTqbk$wnrtfXiT6fBnb3olFEjOBYI4PN/i42i9bY7vqb/AumU=",
+            "email": "customer8@gmail.com",
+            "phone_no": "12345678",
+            "type": "Customer",
+            "date_joined": "2021-06-15T18:01:42.753Z",
+            "last_login": "2017-07-14T14:16:44.753Z",
+            "is_active": true,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "user.user",
+        "pk": "222437d2-6046-4b6a-98a4-d95a060aeab3",
+        "fields": {
+            "is_superuser": false,
+            "username": "customer7",
+            "password": "pbkdf2_sha256$600000$h7wrVFmG3UgVZeNTPBIdmH$ZWjA5PXl2MXzaM38L5zv4S0irU2qvKWTfacTH0MmACc=",
+            "email": "customer7@gmail.com",
+            "phone_no": "12345678",
+            "type": "Customer",
+            "date_joined": "2020-12-19T15:03:51.450Z",
+            "last_login": "2023-08-18T15:50:07.451Z",
+            "is_active": true,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "user.user",
+        "pk": "494fa584-3afb-4103-b926-3931c7cf9d79",
+        "fields": {
+            "is_superuser": false,
+            "username": "customer2",
+            "password": "pbkdf2_sha256$600000$3CAdiBhETId4CFBBaHnYHh$HQt/q+j0wmpW8jPdd+IIfP0Zb5r9/vljyHs/BgCtMOI=",
+            "email": "customer2@gmail.com",
+            "phone_no": "12345678",
+            "type": "Customer",
+            "date_joined": "2018-10-08T14:53:27.889Z",
+            "last_login": "2020-05-18T13:18:23.889Z",
+            "is_active": true,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "user.user",
+        "pk": "627d4444-f1e3-44fd-af9e-5f8ca63e9520",
+        "fields": {
+            "is_superuser": false,
+            "username": "customer9",
+            "password": "pbkdf2_sha256$600000$UPfAh444v8emOmA7lDQddo$t61Ekvi8IBhyyHnsKn8ILdeJ+5GQQ0yr7LortVSqhL4=",
+            "email": "customer9@gmail.com",
+            "phone_no": "12345678",
+            "type": "Customer",
+            "date_joined": "2021-11-03T10:53:56.054Z",
+            "last_login": "2022-10-10T11:59:29.054Z",
+            "is_active": true,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "user.user",
+        "pk": "6ac01d2d-0c9c-455d-b367-a8f1065a0644",
+        "fields": {
+            "is_superuser": false,
+            "username": "customer6",
+            "password": "pbkdf2_sha256$600000$595QVwvPilSaNSIWMe87Yb$0f2fyTVqqyRZrukm1yhhmXy9Oab5CVnOlIGqTV6N860=",
+            "email": "customer6@gmail.com",
+            "phone_no": "12345678",
+            "type": "Customer",
+            "date_joined": "2020-03-18T18:45:20.135Z",
+            "last_login": "2018-03-08T07:40:25.135Z",
+            "is_active": true,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "user.user",
+        "pk": "7f21f716-eca4-4f36-9087-0daa1bad5aef",
+        "fields": {
+            "is_superuser": false,
+            "username": "customer1",
+            "password": "pbkdf2_sha256$600000$pzy90NYWUwfj5HNuC8VE5p$8uwLfwF7R7Kjtyp19rVmoBCUopq8uXatSDoGt9LiGqo=",
+            "email": "customer1@gmail.com",
+            "phone_no": "12345678",
+            "type": "Customer",
+            "date_joined": "2017-08-13T21:43:48.585Z",
+            "last_login": "2018-09-12T04:59:23.585Z",
+            "is_active": true,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "user.user",
+        "pk": "a352eeb6-8294-4265-b6a9-5a7b4ac1875d",
+        "fields": {
+            "is_superuser": false,
+            "username": "customer3",
+            "password": "pbkdf2_sha256$600000$a0iGSxQabzwKMH7Spp5DL2$3Im9zBl6WIFRNtbI7bNw+zF6Sxr9IPvIO+Hu1qZSK+0=",
+            "email": "customer3@gmail.com",
+            "phone_no": "12345678",
+            "type": "Customer",
+            "date_joined": "2019-06-15T16:22:12.206Z",
+            "last_login": "2019-07-10T08:38:33.206Z",
+            "is_active": true,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "user.user",
+        "pk": "cd3eae16-94ee-4226-8fc1-fcf9f0595976",
+        "fields": {
+            "is_superuser": false,
+            "username": "customer5",
+            "password": "pbkdf2_sha256$600000$afnM2ArfvXFZP7XVLshKVQ$qfRZ3zGnUTMbiICCyYXReJwWmpegGCL9PBw4ZU+0jlQ=",
+            "email": "customer5@gmail.com",
+            "phone_no": "12345678",
+            "type": "Customer",
+            "date_joined": "2019-01-14T02:13:06.831Z",
+            "last_login": "2019-09-29T14:37:06.831Z",
+            "is_active": true,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "user.user",
+        "pk": "d9679dd9-b049-4989-bb62-9d969cd56302",
+        "fields": {
+            "is_superuser": false,
+            "username": "customer10",
+            "password": "pbkdf2_sha256$600000$IGMJEw2TzTxwiMMGKonMOx$e1kTwLmX3EJSYT1t2nU2lhDjLklIwTgNxoDqidcJiCE=",
+            "email": "customer10@gmail.com",
+            "phone_no": "12345678",
+            "type": "Customer",
+            "date_joined": "2020-11-30T11:13:47.362Z",
+            "last_login": "2018-10-13T06:49:02.362Z",
+            "is_active": true,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "user.user",
+        "pk": "f806da66-a849-4dc7-90d3-556b3d5099a1",
+        "fields": {
+            "is_superuser": false,
+            "username": "customer4",
+            "password": "pbkdf2_sha256$600000$4Arpqy3IZ4WhEuKokussVj$DzCwtcXkErCXvMuWWUukB4WlO7y+TkTpBEkBB1eVmpc=",
+            "email": "customer4@gmail.com",
+            "phone_no": "12345678",
+            "type": "Customer",
+            "date_joined": "2017-10-16T22:09:01.517Z",
+            "last_login": "2020-08-08T07:36:08.517Z",
+            "is_active": true,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "customer.customer",
+        "pk": "20aafff0-8d09-4a5a-9d8a-8d214feb63b9",
+        "fields": {
+            "first_name": "test8",
+            "last_name": "lastname8",
+            "birth_date": "2016-05-06",
+            "identity_no": "S0428291N",
+            "address": "address",
+            "postal_code": "388303",
+            "citizenship": "Singaporean Citizen",
+            "gender": "Male"
+        }
+    },
+    {
+        "model": "customer.customer",
+        "pk": "222437d2-6046-4b6a-98a4-d95a060aeab3",
+        "fields": {
+            "first_name": "test7",
+            "last_name": "lastname7",
+            "birth_date": "2000-10-29",
+            "identity_no": "M5128173M",
+            "address": "address",
+            "postal_code": "479780",
+            "citizenship": "Non-Singaporean",
+            "gender": "Male"
+        }
+    },
+    {
+        "model": "customer.customer",
+        "pk": "494fa584-3afb-4103-b926-3931c7cf9d79",
+        "fields": {
+            "first_name": "test2",
+            "last_name": "lastname2",
+            "birth_date": "2004-11-02",
+            "identity_no": "M7712454D",
+            "address": "address",
+            "postal_code": "307709",
+            "citizenship": "Singaporean PR",
+            "gender": "Female"
+        }
+    },
+    {
+        "model": "customer.customer",
+        "pk": "627d4444-f1e3-44fd-af9e-5f8ca63e9520",
+        "fields": {
+            "first_name": "test9",
+            "last_name": "lastname9",
+            "birth_date": "2012-07-28",
+            "identity_no": "G2664521V",
+            "address": "address",
+            "postal_code": "461311",
+            "citizenship": "Singaporean PR",
+            "gender": "Female"
+        }
+    },
+    {
+        "model": "customer.customer",
+        "pk": "6ac01d2d-0c9c-455d-b367-a8f1065a0644",
+        "fields": {
+            "first_name": "test6",
+            "last_name": "lastname6",
+            "birth_date": "2015-05-11",
+            "identity_no": "M8655956G",
+            "address": "address",
+            "postal_code": "288366",
+            "citizenship": "Singaporean Citizen",
+            "gender": "Female"
+        }
+    },
+    {
+        "model": "customer.customer",
+        "pk": "7f21f716-eca4-4f36-9087-0daa1bad5aef",
+        "fields": {
+            "first_name": "test1",
+            "last_name": "lastname1",
+            "birth_date": "2001-06-27",
+            "identity_no": "F0398708R",
+            "address": "address",
+            "postal_code": "558707",
+            "citizenship": "Non-Singaporean",
+            "gender": "Female"
+        }
+    },
+    {
+        "model": "customer.customer",
+        "pk": "a352eeb6-8294-4265-b6a9-5a7b4ac1875d",
+        "fields": {
+            "first_name": "test3",
+            "last_name": "lastname3",
+            "birth_date": "1986-09-27",
+            "identity_no": "T9925935L",
+            "address": "address",
+            "postal_code": "491893",
+            "citizenship": "Non-Singaporean",
+            "gender": "Male"
+        }
+    },
+    {
+        "model": "customer.customer",
+        "pk": "cd3eae16-94ee-4226-8fc1-fcf9f0595976",
+        "fields": {
+            "first_name": "test5",
+            "last_name": "lastname5",
+            "birth_date": "1998-06-20",
+            "identity_no": "M3181711Z",
+            "address": "address",
+            "postal_code": "354235",
+            "citizenship": "Singaporean PR",
+            "gender": "Female"
+        }
+    },
+    {
+        "model": "customer.customer",
+        "pk": "d9679dd9-b049-4989-bb62-9d969cd56302",
+        "fields": {
+            "first_name": "test10",
+            "last_name": "lastname10",
+            "birth_date": "1992-04-30",
+            "identity_no": "G9441811E",
+            "address": "address",
+            "postal_code": "663317",
+            "citizenship": "Singaporean PR",
+            "gender": "Female"
+        }
+    },
+    {
+        "model": "customer.customer",
+        "pk": "f806da66-a849-4dc7-90d3-556b3d5099a1",
+        "fields": {
+            "first_name": "test4",
+            "last_name": "lastname4",
+            "birth_date": "2009-09-08",
+            "identity_no": "M0848451L",
+            "address": "address",
+            "postal_code": "634543",
+            "citizenship": "Singaporean PR",
+            "gender": "Female"
+        }
+    },
+    {
+        "model": "customer.accounts",
+        "pk": "27354e6a-7321-44d1-9734-3775a8ebba82",
+        "fields": {
+            "user": "7f21f716-eca4-4f36-9087-0daa1bad5aef",
+            "type": 3,
+            "balance": "2044.00",
+            "status": "Active",
+            "date_created": "2018-11-15T21:40:44.794Z"
+        }
+    },
+    {
+        "model": "customer.accounts",
+        "pk": "2e4233ac-f994-4f73-b70a-37ece04ea575",
+        "fields": {
+            "user": "20aafff0-8d09-4a5a-9d8a-8d214feb63b9",
+            "type": 1,
+            "balance": "2559.00",
+            "status": "Active",
+            "date_created": "2019-06-20T07:38:18.798Z"
+        }
+    },
+    {
+        "model": "customer.accounts",
+        "pk": "47956c55-9389-4597-b860-164cb6a4da34",
+        "fields": {
+            "user": "a352eeb6-8294-4265-b6a9-5a7b4ac1875d",
+            "type": 3,
+            "balance": "128.00",
+            "status": "Active",
+            "date_created": "2021-09-07T14:54:40.795Z"
+        }
+    },
+    {
+        "model": "customer.accounts",
+        "pk": "5667d0d9-61cf-4bda-a0c4-e0af18040cda",
+        "fields": {
+            "user": "222437d2-6046-4b6a-98a4-d95a060aeab3",
+            "type": 1,
+            "balance": "1778.00",
+            "status": "Active",
+            "date_created": "2017-08-17T16:57:58.798Z"
+        }
+    },
+    {
+        "model": "customer.accounts",
+        "pk": "a2ae7cd6-61e4-4328-a866-68eaf511f898",
+        "fields": {
+            "user": "6ac01d2d-0c9c-455d-b367-a8f1065a0644",
+            "type": 3,
+            "balance": "4332.00",
+            "status": "Active",
+            "date_created": "2022-09-29T08:02:25.797Z"
+        }
+    },
+    {
+        "model": "customer.accounts",
+        "pk": "ad756e77-29b5-4436-830b-6cce62691b7c",
+        "fields": {
+            "user": "494fa584-3afb-4103-b926-3931c7cf9d79",
+            "type": 1,
+            "balance": "2738.00",
+            "status": "Active",
+            "date_created": "2019-03-01T01:04:17.795Z"
+        }
+    },
+    {
+        "model": "customer.accounts",
+        "pk": "b478998f-878d-43f1-8fac-7c21c54a31d9",
+        "fields": {
+            "user": "cd3eae16-94ee-4226-8fc1-fcf9f0595976",
+            "type": 3,
+            "balance": "2664.00",
+            "status": "Active",
+            "date_created": "2023-09-19T08:08:59.796Z"
+        }
+    },
+    {
+        "model": "customer.accounts",
+        "pk": "cfbbff53-4b8c-4e77-a6dd-25c81ebc7545",
+        "fields": {
+            "user": "d9679dd9-b049-4989-bb62-9d969cd56302",
+            "type": 2,
+            "balance": "4706.00",
+            "status": "Active",
+            "date_created": "2021-07-02T16:47:03.799Z"
+        }
+    },
+    {
+        "model": "customer.accounts",
+        "pk": "ec44b3f9-267d-4773-b0a6-8eb21ec6c036",
+        "fields": {
+            "user": "f806da66-a849-4dc7-90d3-556b3d5099a1",
+            "type": 1,
+            "balance": "4136.00",
+            "status": "Active",
+            "date_created": "2020-09-27T23:11:02.796Z"
+        }
+    },
+    {
+        "model": "customer.accounts",
+        "pk": "f017a7c9-408e-484a-84f6-0f730844f174",
+        "fields": {
+            "user": "627d4444-f1e3-44fd-af9e-5f8ca63e9520",
+            "type": 1,
+            "balance": "2926.00",
+            "status": "Active",
+            "date_created": "2023-01-11T03:41:38.799Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "03875f53-4fd6-4d1c-80fd-67264a215e51",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "cfbbff53-4b8c-4e77-a6dd-25c81ebc7545",
+            "recipient": null,
+            "description": "NA",
+            "amount": "3937.00",
+            "date": "2021-06-26T03:36:24.105Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "03a5bf5f-a24f-4388-9832-02b659d7101b",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "5667d0d9-61cf-4bda-a0c4-e0af18040cda",
+            "recipient": null,
+            "description": "NA",
+            "amount": "717.00",
+            "date": "2018-06-23T01:43:34.113Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "08d26229-b2bb-4fe2-b8a5-29d6bbd17d92",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "f017a7c9-408e-484a-84f6-0f730844f174",
+            "recipient": null,
+            "description": "NA",
+            "amount": "1607.00",
+            "date": "2023-08-23T06:34:11.110Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "09129579-05b7-4cf4-96d3-c9071cf9fdfd",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "f017a7c9-408e-484a-84f6-0f730844f174",
+            "recipient": null,
+            "description": "NA",
+            "amount": "3066.00",
+            "date": "2019-12-27T13:28:43.092Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "0fb80219-62b2-4097-86d6-6b96c0448b4b",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "2e4233ac-f994-4f73-b70a-37ece04ea575",
+            "recipient": null,
+            "description": "NA",
+            "amount": "303.00",
+            "date": "2019-02-26T03:37:51.113Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "102f4d74-13ee-4302-a8a6-5ea982d625ad",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "47956c55-9389-4597-b860-164cb6a4da34",
+            "recipient": null,
+            "description": "NA",
+            "amount": "1677.00",
+            "date": "2022-12-13T18:06:16.114Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "108840d1-b77f-46b7-9baa-dc7daae47aa1",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "ec44b3f9-267d-4773-b0a6-8eb21ec6c036",
+            "recipient": null,
+            "description": "NA",
+            "amount": "1937.00",
+            "date": "2019-12-24T16:53:02.117Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "1334900c-e2bf-4ad5-b730-7864fc068339",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "b478998f-878d-43f1-8fac-7c21c54a31d9",
+            "recipient": null,
+            "description": "NA",
+            "amount": "1931.00",
+            "date": "2018-01-05T11:46:44.103Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "1d88c530-a5b4-4d43-ae15-202c1d6fafe4",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "f017a7c9-408e-484a-84f6-0f730844f174",
+            "recipient": null,
+            "description": "NA",
+            "amount": "2113.00",
+            "date": "2017-07-18T18:33:40.099Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "3190b4d3-9d01-470b-8aa8-922fc04fc906",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "2e4233ac-f994-4f73-b70a-37ece04ea575",
+            "recipient": null,
+            "description": "NA",
+            "amount": "2716.00",
+            "date": "2021-12-04T15:48:10.092Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "33254bef-b53b-48d5-b64c-30c8007adf8e",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "b478998f-878d-43f1-8fac-7c21c54a31d9",
+            "recipient": null,
+            "description": "NA",
+            "amount": "280.00",
+            "date": "2019-06-05T22:08:26.119Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "3495dba3-e88f-4e81-bbd4-8365c7657739",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "27354e6a-7321-44d1-9734-3775a8ebba82",
+            "recipient": null,
+            "description": "NA",
+            "amount": "862.00",
+            "date": "2018-08-30T21:07:48.116Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "36827e64-66e4-497c-a977-0fd24edf117b",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "cfbbff53-4b8c-4e77-a6dd-25c81ebc7545",
+            "recipient": null,
+            "description": "NA",
+            "amount": "1076.00",
+            "date": "2019-02-25T11:55:40.098Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "37db4c5e-8974-4210-b35d-2b0ecc2263c6",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "a2ae7cd6-61e4-4328-a866-68eaf511f898",
+            "recipient": null,
+            "description": "NA",
+            "amount": "4023.00",
+            "date": "2020-01-16T14:46:30.094Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "3c85a7df-0c88-41fd-aa39-927f1ba0e86a",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "2e4233ac-f994-4f73-b70a-37ece04ea575",
+            "recipient": null,
+            "description": "NA",
+            "amount": "477.00",
+            "date": "2023-10-19T12:04:56.109Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "3ce3e65e-6d0c-4ea4-a489-f7194ca85500",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "ec44b3f9-267d-4773-b0a6-8eb21ec6c036",
+            "recipient": null,
+            "description": "NA",
+            "amount": "2849.00",
+            "date": "2017-09-03T18:01:16.112Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "419a49f0-02f8-4574-9118-42a939b01a78",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "cfbbff53-4b8c-4e77-a6dd-25c81ebc7545",
+            "recipient": null,
+            "description": "NA",
+            "amount": "3540.00",
+            "date": "2020-08-11T01:23:54.101Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "46089515-9af4-4f11-b120-60d2a2402498",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "b478998f-878d-43f1-8fac-7c21c54a31d9",
+            "recipient": null,
+            "description": "NA",
+            "amount": "4951.00",
+            "date": "2020-01-22T13:38:32.111Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "486d95fb-f5f0-48a4-a9ca-90af9345a305",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "f017a7c9-408e-484a-84f6-0f730844f174",
+            "recipient": null,
+            "description": "NA",
+            "amount": "3685.00",
+            "date": "2021-11-02T12:31:11.115Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "4d4cf21f-062d-4e30-9c6d-d0fd1e3ec332",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "ec44b3f9-267d-4773-b0a6-8eb21ec6c036",
+            "recipient": null,
+            "description": "NA",
+            "amount": "3916.00",
+            "date": "2020-04-20T11:34:10.117Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "4d63138c-77b5-49b6-8779-a33d15b298c4",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "cfbbff53-4b8c-4e77-a6dd-25c81ebc7545",
+            "recipient": null,
+            "description": "NA",
+            "amount": "4839.00",
+            "date": "2017-12-16T17:31:27.093Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "549e8280-3e55-4253-b74d-97025583fb98",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "ec44b3f9-267d-4773-b0a6-8eb21ec6c036",
+            "recipient": null,
+            "description": "NA",
+            "amount": "4312.00",
+            "date": "2023-10-19T12:04:56.095Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "56bb1f08-03e5-48a5-9939-77059016bb52",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "27354e6a-7321-44d1-9734-3775a8ebba82",
+            "recipient": null,
+            "description": "NA",
+            "amount": "2659.00",
+            "date": "2018-01-14T14:24:57.101Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "585b80c3-e60d-4818-ad71-d8940134a935",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "ec44b3f9-267d-4773-b0a6-8eb21ec6c036",
+            "recipient": null,
+            "description": "NA",
+            "amount": "2902.00",
+            "date": "2020-08-28T03:43:17.112Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "594bf196-3653-46a3-8169-edad88a8375e",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "a2ae7cd6-61e4-4328-a866-68eaf511f898",
+            "recipient": null,
+            "description": "NA",
+            "amount": "4083.00",
+            "date": "2018-03-29T19:11:39.113Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "5d96d269-e259-44de-90dc-21239d6cdd52",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "27354e6a-7321-44d1-9734-3775a8ebba82",
+            "recipient": null,
+            "description": "NA",
+            "amount": "694.00",
+            "date": "2019-03-29T20:25:04.118Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "5e1ebd86-abdc-4d5a-8853-d2be36edb88f",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "ec44b3f9-267d-4773-b0a6-8eb21ec6c036",
+            "recipient": null,
+            "description": "NA",
+            "amount": "2169.00",
+            "date": "2017-02-26T10:15:34.107Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "665b5913-b5c6-45cf-9c1d-7d4bf9f9021c",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "27354e6a-7321-44d1-9734-3775a8ebba82",
+            "recipient": null,
+            "description": "NA",
+            "amount": "4285.00",
+            "date": "2017-02-02T20:05:35.118Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "698cb2f3-1fd5-4eff-bc94-e851449e65ea",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "cfbbff53-4b8c-4e77-a6dd-25c81ebc7545",
+            "recipient": null,
+            "description": "NA",
+            "amount": "3618.00",
+            "date": "2021-08-10T05:02:55.116Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "71b81b57-313d-41fd-b6d0-a655028bff39",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "ec44b3f9-267d-4773-b0a6-8eb21ec6c036",
+            "recipient": null,
+            "description": "NA",
+            "amount": "3589.00",
+            "date": "2023-05-10T13:52:44.093Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "7693b576-a90d-4dbf-b8d5-6e45f75e8307",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "ad756e77-29b5-4436-830b-6cce62691b7c",
+            "recipient": null,
+            "description": "NA",
+            "amount": "3293.00",
+            "date": "2017-09-24T05:59:10.098Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "7cbc0aa8-9871-4833-8b3e-8473bd25f0f7",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "ec44b3f9-267d-4773-b0a6-8eb21ec6c036",
+            "recipient": null,
+            "description": "NA",
+            "amount": "952.00",
+            "date": "2017-02-24T11:46:51.095Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "84fd3c63-59e6-4a6b-93c2-761c099502fc",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "27354e6a-7321-44d1-9734-3775a8ebba82",
+            "recipient": null,
+            "description": "NA",
+            "amount": "1010.00",
+            "date": "2022-03-29T19:27:14.100Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "85970e4a-6e25-484e-9a40-58b2d0d80e16",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "2e4233ac-f994-4f73-b70a-37ece04ea575",
+            "recipient": null,
+            "description": "NA",
+            "amount": "1320.00",
+            "date": "2021-05-01T16:21:18.119Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "8af3bd92-aeb8-4687-a54e-63d297ffc239",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "b478998f-878d-43f1-8fac-7c21c54a31d9",
+            "recipient": null,
+            "description": "NA",
+            "amount": "1130.00",
+            "date": "2019-02-23T05:56:20.104Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "8fa45f20-8e06-45a4-9696-854aff75681c",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "5667d0d9-61cf-4bda-a0c4-e0af18040cda",
+            "recipient": null,
+            "description": "NA",
+            "amount": "1022.00",
+            "date": "2023-02-23T13:43:34.106Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "90bfa665-ad4f-48d1-b195-be71b7c54e6d",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "2e4233ac-f994-4f73-b70a-37ece04ea575",
+            "recipient": null,
+            "description": "NA",
+            "amount": "872.00",
+            "date": "2023-10-01T16:39:16.111Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "a148253e-e22f-4395-94ef-b0984ca87705",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "cfbbff53-4b8c-4e77-a6dd-25c81ebc7545",
+            "recipient": null,
+            "description": "NA",
+            "amount": "783.00",
+            "date": "2018-05-29T04:29:40.115Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "a86580fd-ebcf-44b7-aefa-9227e44c9e83",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "47956c55-9389-4597-b860-164cb6a4da34",
+            "recipient": null,
+            "description": "NA",
+            "amount": "2441.00",
+            "date": "2019-12-16T14:41:54.108Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "af546453-83b7-4e1c-bce6-f6cd9a720520",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "ad756e77-29b5-4436-830b-6cce62691b7c",
+            "recipient": null,
+            "description": "NA",
+            "amount": "4676.00",
+            "date": "2023-02-26T17:43:52.106Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "b1a130aa-6351-4376-9063-54959dfca3ba",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "47956c55-9389-4597-b860-164cb6a4da34",
+            "recipient": null,
+            "description": "NA",
+            "amount": "1399.00",
+            "date": "2018-08-26T01:52:35.109Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "ba819c35-1cb1-4c28-8005-3cab1364d4d3",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "ad756e77-29b5-4436-830b-6cce62691b7c",
+            "recipient": null,
+            "description": "NA",
+            "amount": "1628.00",
+            "date": "2021-08-14T16:39:52.109Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "c8c0d576-42fc-464f-831d-5d465fc911d0",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "cfbbff53-4b8c-4e77-a6dd-25c81ebc7545",
+            "recipient": null,
+            "description": "NA",
+            "amount": "1543.00",
+            "date": "2023-01-05T14:29:46.107Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "ccb0ba40-3268-4857-a25e-f651147711fd",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "cfbbff53-4b8c-4e77-a6dd-25c81ebc7545",
+            "recipient": null,
+            "description": "NA",
+            "amount": "4431.00",
+            "date": "2021-03-05T05:38:32.116Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "ce88f2e2-6a9e-49ce-a842-ed007617499c",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "b478998f-878d-43f1-8fac-7c21c54a31d9",
+            "recipient": null,
+            "description": "NA",
+            "amount": "2461.00",
+            "date": "2020-01-29T18:48:19.114Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "eaa38f54-f93e-4222-a359-23146b4a0317",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "f017a7c9-408e-484a-84f6-0f730844f174",
+            "recipient": null,
+            "description": "NA",
+            "amount": "1170.00",
+            "date": "2019-12-22T18:46:06.114Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "eac83eeb-3f5e-45a1-be20-029deb35ea41",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "cfbbff53-4b8c-4e77-a6dd-25c81ebc7545",
+            "recipient": null,
+            "description": "NA",
+            "amount": "1603.00",
+            "date": "2023-02-25T15:28:57.096Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "ec780cf5-ff5f-4dd8-aded-bb2bf7b5d88b",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "b478998f-878d-43f1-8fac-7c21c54a31d9",
+            "recipient": null,
+            "description": "NA",
+            "amount": "4169.00",
+            "date": "2020-09-16T14:17:31.110Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "ee5c794d-32df-4a8f-af76-d1b9f1a062d8",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "a2ae7cd6-61e4-4328-a866-68eaf511f898",
+            "recipient": null,
+            "description": "NA",
+            "amount": "4118.00",
+            "date": "2023-10-19T12:04:56.094Z"
+        }
+    },
+    {
+        "model": "customer.transactions",
+        "pk": "f36a14f6-6fce-426d-95ba-26540e99da6f",
+        "fields": {
+            "transaction_type": "Withdrawal",
+            "sender": "a2ae7cd6-61e4-4328-a866-68eaf511f898",
+            "recipient": null,
+            "description": "NA",
+            "amount": "3068.00",
+            "date": "2023-10-19T12:04:56.115Z"
         }
     }
 ]

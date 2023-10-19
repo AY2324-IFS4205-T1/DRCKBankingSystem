@@ -1,5 +1,8 @@
-from anonymisation.models import Anonymisation, Statistics
 from django.db import connections
+from django.utils import timezone
+
+from anonymisation.models import Anonymisation, Statistics
+
 
 def reset_sequence():
     with connections['default'].cursor() as cursor:
@@ -8,6 +11,8 @@ def reset_sequence():
 def store_anon_database(anon_data):
     Anonymisation.objects.all().delete()
     reset_sequence()
+    if anon_data is None:
+        return
     for data in anon_data:
         anon_instance = Anonymisation(
             age=data['age'],
@@ -38,6 +43,7 @@ def store_stats_database(k_value, info_loss, first_list, second_list, first_util
         fifth_average=first_list[4],
         first_balance_average=second_list[0],
         second_balance_average=second_list[1],
-        third_balance_average=second_list[2]
+        third_balance_average=second_list[2],
+        last_updated=timezone.now()
     )
     anon_instance.save()

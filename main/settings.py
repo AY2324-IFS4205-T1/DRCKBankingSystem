@@ -59,8 +59,8 @@ INSTALLED_APPS = [
     'user',
     'customer',
     'staff',
-    'anonymisation'
-    'log'
+    'log',
+    'anonymisation',
 ]
 
 MIDDLEWARE = [
@@ -158,7 +158,7 @@ else:
                 }
             },
         }
-        print("Using database config for application")  
+        print("Using database config for application")
 
 
 # Password validation

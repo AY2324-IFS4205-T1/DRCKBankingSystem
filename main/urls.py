@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
-from anonymisation.views import (AnonymisationView, QueryView)
+from anonymisation.views import (CalculateAnonView, GetAnonDataView, QueryAnonView, SetKValueView, ViewAnonStatsView)
 from customer.views import (AccountsView, AccountTypesView, CustomerLoginView,
                             CustomerRegistrationView, CustomerTicketsView,
                             CustomerWelcomeView, DepositView, TransactionsView,
@@ -52,16 +52,21 @@ urlpatterns = [
     path("staff/ticket_details", StaffTicketView.as_view(), name="ticketDetails"),
     path("staff/approve", ApproveView.as_view(), name="ticketApprove"),
     path("staff/reject", RejectView.as_view(), name="ticketReject"),
-    path("staff/anonymisation", AnonymisationView.as_view(), name="anonymisation"),
-    path("staff/query", QueryView.as_view(), name="query"),
 
-    #In logout, header key: Authorization, Value: Token 3510ff361b..
+    # Token Authentication
     path('logout', LogoutView.as_view(), name='logout'),
     path('auth_check', AuthenticationCheckView.as_view(), name='auth_check'),
     
     # 2 Factor Authentication
     path("setup_2FA", SetupTwoFactorAuthenticationView.as_view(), name="setup_2fa"),
     path("verify_2FA", VerifyTwoFactorAuthenticationView.as_view(), name="verify_2fa"),
+
+    # Anonymisation
+    path("staff/calculate_anon", CalculateAnonView.as_view(), name="calculate_anon"),
+    path("staff/view_anon_stats", ViewAnonStatsView.as_view(), name="view_anon_stats"),
+    path("staff/set_k", SetKValueView.as_view(), name="set_k"),
+    path("staff/query_results", QueryAnonView.as_view(), name="query_results"),
+    path("staff/get_anon_data", GetAnonDataView.as_view(), name="get_anon_data"),
 
     # Logging
     path("staff/login_logs", LoginLoggingView.as_view(), name="login_logs"),
