@@ -2,10 +2,12 @@ from django.http import FileResponse
 from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from anonymisation.anonymise.overall import TooShortException
 
+from anonymisation.anonymise.overall import TooShortException
 from anonymisation.permissions import IsAnonymiser, IsResearcher
-from anonymisation.serializers import QueryAnonSerializer, SetKValueSerializer, ViewAnonStatsSerializer
+from anonymisation.serializers import (QueryAnonSerializer,
+                                       SetKValueSerializer,
+                                       ViewAnonStatsSerializer)
 from anonymisation.wrapper import generate_statistics
 from staff.permissions import IsStaff
 from user.authentication import TokenAndTwoFactorAuthentication
