@@ -54,11 +54,10 @@ class FirstQueryBase():
 
 class AnonymisedFirstQuery(FirstQueryBase):
     def first_query(self, data):
-        citizenship_status = self.type_of_citizen.replace(" ","")
         
         filtered_data = [
             d for d in data if(
-                d['citizenship'] == citizenship_status
+                d['citizenship'] == self.type_of_citizen
             )
         ]
         
@@ -165,11 +164,10 @@ class SecondQueryBase():
 
 class AnonymisedSecondQuery(SecondQueryBase):
     def second_query(self, data):
-        citizenship_status = self.type_of_citizen.replace(" ","")
         
         filtered_data = [
             d for d in data if(
-                d['citizenship'] == citizenship_status
+                d['citizenship'] == self.type_of_citizen
             )
         ]
 

@@ -265,11 +265,7 @@ def anonymise_wrapper(k_value):
     anon_data, eval_result = anonymise(formatted_str_withdrawals, k_value, retriever.type)
     anonymised_formatter = AnonymisedDataFormatterBase()
     
-    anon_json = anonymised_formatter.format_anon_data(anon_data)
-    
-    
-    # TESTING PURPOSE: REMOVE
-    write_to_json_file(anon_json, f"anon_{retriever.type.lower()}.json")
+    new_anon_data = anonymised_formatter.format_anon_data(anon_data)
     
     info_loss = round(eval_result[0], 2)
     # rtime = eval[1]
@@ -277,7 +273,7 @@ def anonymise_wrapper(k_value):
     
     # print(eval_result[0])
 
-    return anon_json, info_loss, anon_data
+    return info_loss, new_anon_data
 
 # Main Function
 # k_value = 5

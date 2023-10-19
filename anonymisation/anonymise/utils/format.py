@@ -27,7 +27,6 @@ class AnonymisedDataFormatterBase:
         return formatted_string
     
     def format_anon_data(self, anon_data):
-        formatted_data = []
 
         for d in anon_data:
             age_range = self.format_attributes(d['age'])
@@ -37,24 +36,10 @@ class AnonymisedDataFormatterBase:
             citizenship = self.format_attributes(d['citizenship'])
             spaced_citizenship = self.format_citizenship(citizenship)
 
-            today_year = datetime.now().year
-            
-            record = {
-                'age': age_range,
-                'gender': gender_range,
-                'postal_code': anon_postal_code,
-                'citizenship': spaced_citizenship,
-                f'{today_year-4}_sum': d['first_sum'],
-                f'{today_year-3}_sum': d['second_sum'],
-                f'{today_year-2}_sum': d['third_sum'],
-                f'{today_year-1}_sum': d['fourth_sum'],
-                f'{today_year}_sum': d['fifth_sum'],
-                'savings_balance': d['first_balance'],
-                'credit_card_balance': d['second_balance'],
-                'investment_balance': d['third_balance']
-            }
-            formatted_data.append(record)
+            d['age'] = age_range
+            d['gender'] = gender_range
+            d['postal_code'] = anon_postal_code
+            d['citizenship'] = spaced_citizenship
 
             # For TESTING PURPOSE: will form a dict with the formatted info and print
-        json_data = json.dumps(formatted_data, indent=4, cls=DecimalEncoder)
-        return json_data
+        return anon_data

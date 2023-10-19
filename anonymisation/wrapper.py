@@ -10,7 +10,7 @@ MAXIMUM_K_VALUE = 5
 def generate_statistics():
     Statistics.objects.all().delete()
     for i in range(MINIMUM_K_VALUE, MAXIMUM_K_VALUE+1):
-        _, info_loss, anon_data = anonymise_wrapper(i)
+        info_loss, anon_data = anonymise_wrapper(i)
         
         # Handles case of empty database
         if anon_data is None:
@@ -21,7 +21,7 @@ def generate_statistics():
         store_stats_database(i, info_loss, first_list, second_list, first_utility, second_utility)
 
 def generate_k_anon(k_value):
-    _, _, anon_data = anonymise_wrapper(k_value)
+    _, anon_data = anonymise_wrapper(k_value)
     return anon_data
 
 def get_utility(query_number, anon_data):
@@ -33,3 +33,9 @@ def save_anon(anon_data):
 
 def set_k(k_value):
     Statistics().set_k_value_to_true(k_value)
+
+generate_statistics()
+anon_data = generate_k_anon(3)
+save_anon(anon_data)
+
+get_utility("1", anon_data)
