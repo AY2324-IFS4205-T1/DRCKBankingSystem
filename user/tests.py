@@ -1,8 +1,11 @@
+from hashlib import sha512
+
+import pyotp
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from user.models import User
+from user.models import TwoFA, User
 
 good_pass = "G00dP@55word"
 good_registration_details = {
