@@ -21,8 +21,8 @@ def generate_statistics():
         store_stats_database(i, info_loss, first_list, second_list, first_utility, second_utility)
 
 def generate_k_anon(k_value):
-    anon_json, _, _ = anonymise_wrapper(k_value)
-    return anon_json
+    _, _, anon_data = anonymise_wrapper(k_value)
+    return anon_data
 
 def get_utility(query_number, anon_data):
     _, utility, result_json = perform_query(query_number, anon_data)
@@ -33,5 +33,3 @@ def save_anon(anon_data):
 
 def set_k(k_value):
     Statistics().set_k_value_to_true(k_value)
-    
-set_k(3)

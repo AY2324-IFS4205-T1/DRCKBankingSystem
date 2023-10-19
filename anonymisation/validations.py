@@ -11,7 +11,6 @@ def validate_k_value(json_dict):
         raise ValidationError("Field 'k_value' missing.")
     except ValueError:
         raise ValidationError("K-value provided is not an integer")
-    
     try:
         Statistics.objects.get(k_value=k)
     except Statistics.DoesNotExist:
