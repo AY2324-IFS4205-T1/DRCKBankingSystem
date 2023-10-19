@@ -67,6 +67,7 @@ class AuthenticationCheckView(APIView):
         authenticated_message: string, options are ["User not logged in.", "The session has changed, 2FA needs to be verified again.", "2FA has not been verified.", "2FA timeout, 2FA needs to be verified again."]
         authorised: True/False
         user_authorisation: string, options are ["Customer", "Staff"]
+        user_role: ["Customer", "Ticket Reviewer", "Auditor", "Researcher"]
     """
     permission_classes = (permissions.AllowAny,)
     authentication_classes = (TokenAuthentication,)
