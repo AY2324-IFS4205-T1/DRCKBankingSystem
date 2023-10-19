@@ -114,7 +114,7 @@ def get_result_one(data, intuitive_order, qi_num, sa_num, k=10):
 
 
 
-def anonymise(transaction_data, k_value, transaction_type):
+def anonymise(transaction_data, k_value, _):
     """
     Main function for calling anonymising based on the different transaction types of data.
     Reads input value of k from user and anonymises transaction data that is parsed in.

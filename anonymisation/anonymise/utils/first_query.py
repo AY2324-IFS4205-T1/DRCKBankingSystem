@@ -85,8 +85,6 @@ class AnonymisedFirstQuery(FirstQueryBase):
         count = [0,0,0,0,0]
         withdrawal_key = ['first_sum', 'second_sum', 'third_sum', 'fourth_sum', 'fifth_sum']
 
-        current_year = datetime.now().year
-
         # Sum of all transactions and total number of transactions
         for t in data:
             for i in range(5):

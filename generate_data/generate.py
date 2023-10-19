@@ -181,7 +181,6 @@ class GenerateTransactions:
             json.dump(data, json_file, indent=4)
         
     def get_random_transaction_type(self):
-        # transaction_types = ["Deposit", "Withdrawal", "Transfer"]
         transaction_types = ["Withdrawal"]
         return choice(transaction_types)
 

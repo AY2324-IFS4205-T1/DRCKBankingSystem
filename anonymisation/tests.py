@@ -2,7 +2,6 @@ from django.urls import reverse
 from rest_framework import status
 
 from user.tests import TestLogout
-from anonymisation.models import Statistics
 
 
 class TestCalculateAnon(TestLogout): # staff action
