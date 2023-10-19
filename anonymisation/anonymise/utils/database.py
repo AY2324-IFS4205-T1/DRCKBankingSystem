@@ -8,6 +8,8 @@ def reset_sequence():
 def store_anon_database(anon_data):
     Anonymisation.objects.all().delete()
     reset_sequence()
+    if anon_data is None:
+        return
     for data in anon_data:
         anon_instance = Anonymisation(
             age=data['age'],

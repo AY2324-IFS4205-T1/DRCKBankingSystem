@@ -234,16 +234,17 @@ def perform_query(query_option, anon_data):
     # For unanonymised, have to do initial retrieval and then do the processing
     retriever = WithdrawalRetriever('Withdrawal', NUM_YEARS1)
     
-
+    if anon_data is None:
+        return None, 0, None
     if query_option == "1":
         raw_data = retriever.retrieve_transactions()
-        anon_list, utility = first_query_wrapper(anon_data, raw_data)
+        anon_list, utility, result_json = first_query_wrapper(anon_data, raw_data)
     elif query_option == "2":
         raw_data = retriever.retrieve_accounts()
-        anon_list, utility = second_query_wrapper(anon_data, raw_data)
+        anon_list, utility, result_json = second_query_wrapper(anon_data, raw_data)
     else:
-        return None, 0
-    return anon_list, utility
+        return None, 0, None
+    return anon_list, utility, result_json
 
     
 # Main Function  
@@ -256,7 +257,7 @@ def anonymise_wrapper(k_value):
     formatted_str_withdrawals = retriever.format(transaction_info, account_info)
 
     if not formatted_str_withdrawals:
-        return JsonResponse({"anon_json": None, "info_loss": None})
+        return None, 0, None
     
     if len(formatted_str_withdrawals) < k_value:
         raise TooShortException("Not enough data for anonymisation.")
