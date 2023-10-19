@@ -23,14 +23,12 @@ from customer.views import (AccountsView, AccountTypesView, CustomerLoginView,
 
 from log.views import AccessControlLoggingView, ConflictOfInterestLoggingView, LoginLoggingView
 from staff.views import (ApproveView, GetClosedTicketsView, GetOpenTicketsView,
-                         RejectView, StaffLoginView, StaffRegistrationView,
-                         StaffTicketView, StaffWelcomeView)
+                         RejectView, StaffLoginView, StaffTicketView, StaffWelcomeView)
 from user.views import (AuthenticationCheckView, LogoutView,
                         SetupTwoFactorAuthenticationView,
                         VerifyTwoFactorAuthenticationView)
 
 urlpatterns = [
-    # path('admin/', admin.site.urls),
     # Customer
     path("customer/register", CustomerRegistrationView.as_view(), name="customerRegister"),
     path("customer/login", CustomerLoginView.as_view(), name="customerLogin"),
@@ -44,7 +42,6 @@ urlpatterns = [
     path("customer/transfer", TransferView.as_view(), name="transfer"),
 
     # Staff
-    path("staff/register", StaffRegistrationView.as_view(), name="staffRegister"),
     path("staff/login", StaffLoginView.as_view(), name="staffLogin"),
     path("staff/welcome", StaffWelcomeView.as_view(), name="staffWelcome"),
     path("staff/get_open_tickets", GetOpenTicketsView.as_view(), name="getOpenTickets"),

@@ -11,67 +11,10 @@ from staff.permissions import IsStaff, IsTicketReviewer
 from staff.serializers import (ApproveSerializer, GetClosedTicketsSerializer,
                                GetClosedTicketsSerializer,
                                GetOpenTicketsSerializer, RejectSerializer,
-                               StaffSerializer, TicketDetailsSerializer)
+                               TicketDetailsSerializer)
 from user.authentication import TokenAndTwoFactorAuthentication
 from user.models import User
-from user.serializers import LoginSerializer, UserRegisterSerializer
-
-
-# Create your views here.
-class StaffRegistrationView(APIView):
-    """TO BE DELETED IN PRODUCTION
-    Post request
-
-    Args:
-        username: staff1
-        email: staff1@gmail.com
-        phone_no: 12345678
-        password: G00dP@55word
-        first_name: first
-        last_name: last
-        birth_date: 1999-01-01
-        title: string, options are ["Ticket Reviewer", "Security Engineer", "Researcher"]
-        gender: string, options are ["Male", "Female", "Others"]
-
-    Returns:
-        success: "Staff is successfully registered."
-
-    password:
-        - must be at least maximum 0.7 similarity to username and email
-        - has a minimum length of 8 characters
-        - cannot be a common password
-        - cannot be fully numeric
-        - has a maximum length of 64 characters
-        - must have at least 2 uppercase characters
-        - must have at least 2 lowercase characters
-        - must have at least 1 numeric character
-        - must have at least 1 special character
-
-    identity_no needs to be valid with respect to citizenship and birth_date
-    """
-
-    throttle_classes = [AnonRateThrottle]
-
-    def post(self, request):
-        user_serializer = UserRegisterSerializer(
-            User.user_type.STAFF, data=request.data
-        )
-
-        if user_serializer.is_valid():
-            user = user_serializer.save(type=User.user_type.STAFF)
-            staff_serializer = StaffSerializer(data=request.data, user=user)
-            if staff_serializer.is_valid():
-                staff_serializer.save(user=user)
-                return Response(
-                    {"success": "Staff is successfully registered."},
-                    status=status.HTTP_201_CREATED,
-                )
-            else:
-                user.delete()
-                return Response(
-                    staff_serializer.errors, status=status.HTTP_400_BAD_REQUEST
-                )
-        return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+from user.serializers import LoginSerializer
 
 
 class StaffLoginView(KnoxLoginView):
