@@ -1,16 +1,17 @@
+from tqdm import tqdm
 from anonymisation.anonymise.overall import anonymise_wrapper, perform_query
 
 from anonymisation.anonymise.utils.database import store_stats_database, store_anon_database
 from anonymisation.models import Statistics
 
 MINIMUM_K_VALUE = 3
-MAXIMUM_K_VALUE = 5
+MAXIMUM_K_VALUE = 10
 
 
 def generate_statistics():
     Statistics.objects.all().delete()
     anon_data = None
-    for i in range(MINIMUM_K_VALUE, MAXIMUM_K_VALUE+1):
+    for i in tqdm(range(MINIMUM_K_VALUE, MAXIMUM_K_VALUE+1)):
         info_loss, anon_data = anonymise_wrapper(i)
         # Handles case of empty database
         if anon_data is None:
