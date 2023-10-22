@@ -111,8 +111,8 @@ def validate_amount(json_dict):
     rounded = round(amount, 2)
     if rounded != amount:
         raise ValidationError("Amount can only have a maximum of 2 decimal places.")
-    if amount == 0:
-        raise ValidationError("Amount cannot be 0.")
+    if amount <= 0:
+        raise ValidationError("Amount must be greater than 0.")
     return decimal.Decimal(str(amount))
 
 
