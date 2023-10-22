@@ -117,9 +117,9 @@ jobs:
       working-directory: /home/sadm/DRCK-Ansible
       run: |
         ansible-playbook playbooks/cleanup_postgres.yaml -i inventory.yaml -e "ansible_become_pass=$SUDO_PASSWORD"
-        ansible-playbook playbooks/cleanup_django.yaml -i inventory.yaml -e "ansible_sudo_pass=$SUDO_PASSWORD"
-        ansible-playbook playbooks/deploy_postgres.yaml -i inventory.yaml -e "ansible_sudo_pass=$SUDO_PASSWORD"
-        ansible-playbook playbooks/deploy_django.yaml -i inventory.yaml -e "ansible_sudo_pass=$SUDO_PASSWORD"
+        ansible-playbook playbooks/cleanup_django.yaml -i inventory.yaml -e "ansible_become_pass=$SUDO_PASSWORD"
+        ansible-playbook playbooks/deploy_postgres.yaml -i inventory.yaml -e "ansible_become_pass=$SUDO_PASSWORD"
+        ansible-playbook playbooks/deploy_django.yaml -i inventory.yaml -e "ansible_become_pass=$SUDO_PASSWORD"
      
       
           
