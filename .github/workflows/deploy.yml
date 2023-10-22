@@ -1,0 +1,20 @@
+name: Deploy to Production
+
+on:
+  workflow_run:
+    workflows: ["DRCK Backend Workflow CI"]
+    types:
+      - completed
+  
+jobs:
+  deploy:
+    runs-on: self-hosted
+    name: Deploy Backend and Postgresql
+    steps:
+    - name: Change directory and run Ansible playbooks
+      working-directory: /home/sadm/DRCK-Ansible
+      run: |
+        ansible-playbook playbooks/cleanup_postgres.yaml -i inventory.yaml -e "ansible_sudo_pass=$sudo"
+        ansible-playbook playbooks/cleanup_django.yaml -i inventory.yaml -e "ansible_sudo_pass=$sudo"
+        ansible-playbook playbooks/deploy_postgres.yaml -i inventory.yaml -e "ansible_sudo_pass=$sudo"
+        ansible-playbook playbooks/deploy_django.yaml -i inventory.yaml -e "ansible_sudo_pass=$sudo"
