@@ -14,7 +14,7 @@ jobs:
     - name: Change directory and run Ansible playbooks
       working-directory: /home/sadm/DRCK-Ansible
       run: |
-        ansible-playbook playbooks/cleanup_postgres.yaml -i inventory.yaml -e "ansible_become_pass={{ secrets.SUDO_PASS }}"
-        ansible-playbook playbooks/cleanup_django.yaml -i inventory.yaml -e "ansible_sudo_pass={{ secrets.SUDO_PASS }}"
-        ansible-playbook playbooks/deploy_postgres.yaml -i inventory.yaml -e "ansible_sudo_pass={{ secrets.SUDO_PASS }}"
-        ansible-playbook playbooks/deploy_django.yaml -i inventory.yaml -e "ansible_sudo_pass={{ secrets.SUDO_PASS }}"
+        ansible-playbook playbooks/cleanup_postgres.yaml -i inventory.yaml -e "ansible_become_pass=$sudo"
+        ansible-playbook playbooks/cleanup_django.yaml -i inventory.yaml -e "ansible_sudo_pass=$sudo"
+        ansible-playbook playbooks/deploy_postgres.yaml -i inventory.yaml -e "ansible_sudo_pass=$sudo"
+        ansible-playbook playbooks/deploy_django.yaml -i inventory.yaml -e "ansible_sudo_pass=$sudo"
