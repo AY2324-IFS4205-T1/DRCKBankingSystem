@@ -113,7 +113,7 @@ jobs:
       SUDO_PASSWORD: ${{ secrets.SUDO_PASS }}
       
     steps:
-    - name: Change directory and run Ansible playbooks
+    - name: Run Ansible playbooks
       working-directory: /home/sadm/DRCK-Ansible
       run: |
         ansible-playbook playbooks/cleanup_postgres.yaml -i inventory.yaml -e "ansible_become_pass=$SUDO_PASSWORD"
