@@ -1,4 +1,4 @@
-name: DRCK Backend Workflow CI
+name: DRCK Backend Workflow CICD
 
 on:
   push:
