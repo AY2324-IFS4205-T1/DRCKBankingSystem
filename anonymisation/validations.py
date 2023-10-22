@@ -7,7 +7,7 @@ from anonymisation.wrapper import MINIMUM_K_VALUE, MAXIMUM_K_VALUE
 
 def validate_k_value(json_dict):
     try:
-        k = int(json_dict["k_value"]).strip()
+        k = int(json_dict["k_value"])
     except KeyError:
         raise ValidationError("Field 'k_value' missing.")
     except ValueError:
