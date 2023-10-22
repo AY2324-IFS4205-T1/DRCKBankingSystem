@@ -6,7 +6,7 @@ from staff.models import Tickets
 
 def validate_ticket_id(json_dict):
     try:
-        ticket_id = json_dict["ticket_id"]
+        ticket_id = json_dict["ticket_id"].strip()
     except KeyError:
         raise ValidationError("Field 'ticket_id' missing.")
 

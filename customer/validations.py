@@ -32,7 +32,7 @@ def validate_nric_and_citizenship(nric, citizenship, birth_date):
 
 def validate_ticket_input(json_dict):
     try:
-        ticket_type = json_dict["ticket_type"]
+        ticket_type = json_dict["ticket_type"].strip()
     except KeyError:
         raise ValidationError("Field 'ticket_type' missing.")
     
@@ -40,7 +40,7 @@ def validate_ticket_input(json_dict):
         raise ValidationError("Ticket type given does not exist.")
 
     try:
-        value = json_dict["value"]
+        value = json_dict["value"].strip()
     except KeyError:
         raise ValidationError("Field 'value' missing.")
     
@@ -62,7 +62,7 @@ def validate_account_type(value):
 
 def validate_account(json_dict, id_type="account_id"):
     try:
-        account_id = json_dict[id_type]
+        account_id = json_dict[id_type].strip()
     except KeyError:
         raise ValidationError("Field '" + id_type + "' is missing.")
 
@@ -100,7 +100,7 @@ def validate_no_repeated_ticket(customer, ticket_type, value):
 
 def validate_amount(json_dict):
     try:
-        amount = json_dict["amount"]
+        amount = json_dict["amount"].strip()
     except KeyError:
         raise ValidationError("Field 'amount' missing.")
 
@@ -118,7 +118,7 @@ def validate_amount(json_dict):
 
 def validate_description(json_dict):
     try:
-        description = json_dict["description"]
+        description = json_dict["description"].strip()
     except KeyError:
         raise ValidationError("Field 'description' missing.")
 

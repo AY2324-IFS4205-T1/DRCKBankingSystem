@@ -119,7 +119,7 @@ class SpecialCharacterValidator:
 
 def validate_page_type(json_dict):
     try:
-        page_type = json_dict["page_type"]
+        page_type = json_dict["page_type"].strip()
     except KeyError:
         raise ValidationError("Field 'page_type' missing.")
 
@@ -140,7 +140,7 @@ def validate_new_user(username, user_type):
 
 def validate_otp(json_dict):
     try:
-        otp = json_dict["otp"]
+        otp = json_dict["otp"].strip()
     except KeyError:
         raise ValidationError("Field 'otp' missing.")
     if len(str(otp)) != 8:
