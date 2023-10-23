@@ -8,6 +8,8 @@ from rest_framework.serializers import ValidationError
 from customer.models import Accounts, AccountTypes, Customer
 from staff.models import RequestCloseAccount, RequestOpenAccount, Tickets
 
+MAX_ACCOUNT_BALANCE = 9999999999.99
+
 
 def validate_nric_and_citizenship(nric, citizenship, birth_date):
     error_message = "Incorrect input in field 'identity_no'."
@@ -143,4 +145,9 @@ def validate_sender_recipient(sender, recipient):
 def validate_total_balance(initial_balance, sender_balance, recipient_balance):
     if initial_balance != (sender_balance + recipient_balance):
         raise ValidationError("Error in transfer calculation.")
+    return True
+
+def validate_not_too_much_amount(account, amount):
+    if account.balance + amount > MAX_ACCOUNT_BALANCE:
+        raise ValidationError("Total balance cannot exceed $9,999,999,999.99.")
     return True
