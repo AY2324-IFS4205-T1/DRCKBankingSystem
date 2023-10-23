@@ -65,6 +65,15 @@ class ViewAnonStatsSerializer(serializers.Serializer):
         self.stream = stream
 
 
+class GetKValueSerializer(serializers.Serializer):
+    def validate(self, attrs):
+        self.statistic = validate_k_is_set()
+        return super().validate(attrs)
+    
+    def get_k(self):
+        return self.statistic.k_value
+
+
 class SetKValueSerializer(serializers.Serializer):
     def __init__(self, json_dict, **kwargs):
         self.json_dict = json_dict

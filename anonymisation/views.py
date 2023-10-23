@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 
 from anonymisation.anonymise.overall import TooShortException
 from anonymisation.permissions import IsAnonymiser, IsResearcher, IsResearcherOrAnonymiser
-from anonymisation.serializers import (QueryAnonSerializer,
+from anonymisation.serializers import (GetKValueSerializer, QueryAnonSerializer,
                                        SetKValueSerializer,
                                        ViewAnonStatsSerializer)
 from anonymisation.wrapper import generate_statistics
@@ -14,8 +14,7 @@ from user.authentication import TokenAndTwoFactorAuthentication
 
 
 class CalculateAnonView(APIView):
-    """Get request
-    """
+    """Get request"""
 
     permission_classes = (permissions.IsAuthenticated, IsStaff, IsAnonymiser)
     authentication_classes = (TokenAndTwoFactorAuthentication,)
@@ -47,7 +46,7 @@ class ViewAnonStatsView(APIView):
         return FileResponse(graph, content_type="image/png")
 
 
-class SetKValueView(APIView):
+class KValueView(APIView):
     """Post request
 
     Args:
@@ -60,6 +59,13 @@ class SetKValueView(APIView):
     permission_classes = (permissions.IsAuthenticated, IsStaff, IsAnonymiser)
     authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "sensitive_request"
+
+    def get(self, request):
+        serialiser = GetKValueSerializer(request.data, data=request.data)
+        if serialiser.is_valid():
+            k_value = serialiser.get_k()
+            return Response({"k_value": k_value}, status=status.HTTP_200_OK)
+        return Response(serialiser.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def post(self, request):
         serialiser = SetKValueSerializer(request.data, data=request.data)
