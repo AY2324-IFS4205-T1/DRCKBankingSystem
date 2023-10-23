@@ -268,9 +268,3 @@ REST_KNOX = {
     'EXPIRY_DATETIME_FORMAT': api_settings.DATETIME_FORMAT,
 }
 
-# Clickjacking
-X_FRAME_OPTIONS = "DENY"
-
-# Race Conditions
-ATOMIC_REQUESTS = True
-
