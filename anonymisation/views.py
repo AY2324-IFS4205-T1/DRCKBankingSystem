@@ -133,8 +133,8 @@ class GetAnonDataView(APIView):
     authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "sensitive_request"
 
-    def post(self, request):
-        serialiser = GetAnonDataSerializer()
+    def get(self, request):
+        serialiser = GetAnonDataSerializer(data=request.data)
         if serialiser.is_valid():
             response = HttpResponse(
                 content_type="text/csv",
