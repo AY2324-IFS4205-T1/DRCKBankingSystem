@@ -27,7 +27,7 @@ class CalculateAnonView(APIView):
     def get(self, request):
         try:
             generate_statistics()
-            return Response({"success": "Statistics for latest k-anonymised data has been successfully generated."}status=status.HTTP_200_OK)
+            return Response({"success": "Statistics for latest k-anonymised data has been successfully generated."}, status=status.HTTP_200_OK)
         except TooShortException as error:
             return Response(error.__str__(), status=status.HTTP_200_OK)
         except Exception as error:
