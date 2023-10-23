@@ -21,4 +21,7 @@ def validate_open_ticket(ticket):
         raise ValidationError("Ticket has already been closed.")
     return True
 
-        
+def validate_closed_ticket_owner(ticket, user):
+    if ticket.closed_by == user:
+        return True
+    raise ValidationError("Closed ticket was not closed by the user.")

@@ -6,7 +6,7 @@ from django.utils import timezone
 from rest_framework import serializers
 
 from customer.models import Accounts, AccountTypes
-from staff.validations import validate_open_ticket, validate_ticket_id
+from staff.validations import validate_closed_ticket_owner, validate_open_ticket, validate_ticket_id
 
 from .models import RequestCloseAccount, RequestOpenAccount, Staff, Tickets
 
@@ -65,6 +65,7 @@ class TicketDetailsSerializer(serializers.Serializer):
 
     def validate(self, attrs):
         self.ticket = validate_ticket_id(self.json_dict)
+        validate_closed_ticket_owner(self.ticket, self.user_id)
         return super().validate(attrs)
 
     def get_ticket_details(self):
