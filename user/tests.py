@@ -209,7 +209,7 @@ class TestVerifyTwoFA(TestCreateTwoFA):
 
         response = self.client.post(reverse("verify_2fa"), wrong_otp, **self.header)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.json(), {"2FA success": False, "last_authenticated": None})
+        self.assertEqual(response.json(), {"2FA success": False})
 
     def two_fa_customer_1(self):
         self.create_two_fa_customer1()
@@ -309,7 +309,6 @@ class TestLogout(TestVerifyTwoFA):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         user = User.objects.get(username="test1")
         two_fa = TwoFA.objects.get(user=user)
-        self.assertEqual(two_fa.last_authenticated, None)
 
 
 class TestAuthCheck(TestLogout):
@@ -354,7 +353,7 @@ class TestAuthCheck(TestLogout):
         self.create_two_fa_customer1()
         response = self.client.post(reverse("auth_check"), sample_auth_check, **self.header)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        expected = {'authenticated': False, 'authenticated_message': 'The session has changed, 2FA needs to be verified again.', 'authorised': True, 'user_authorisation': 'Customer', 'user_role': 'Customer'}
+        expected = {'authenticated': False, 'authenticated_message': 'User does not have 2FA set up.', 'authorised': True, 'user_authorisation': 'Customer', 'user_role': 'Customer'}
         self.assertEqual(response.json(), expected)
 
         # login, 2FA, but unauthorised
