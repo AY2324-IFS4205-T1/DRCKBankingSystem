@@ -1,14 +1,14 @@
 from django.contrib.auth import authenticate
-from django.utils import timezone
 from pyotp import random_base32
 from rest_framework import serializers
 from rest_framework.exceptions import AuthenticationFailed
+from log.logging import AccessControlLogger
 
 from staff.models import Staff
 from user.authentication import TokenAndTwoFactorAuthentication
 from user.twofa import generate_qr, verify_otp
-from user.validations import (validate_new_user, validate_otp,
-                              validate_page_type, validate_user_2fa)
+from user.validations import (validate_new_user, validate_otp, validate_page,
+                              validate_user_2fa)
 
 from .models import TwoFA, User
 
@@ -27,7 +27,7 @@ class AuthCheckSerializer(serializers.Serializer):
         super().__init__(instance, data, **kwargs)
 
     def validate(self, attrs):
-        self.page_type = validate_page_type(self.json_dict)
+        self.page_name, self.page_type= validate_page(self.json_dict)
         return super().validate(attrs)
 
     def is_authenticated_and_forbidden(self):
@@ -57,11 +57,15 @@ class AuthCheckSerializer(serializers.Serializer):
         if self.page_type in [user_type, title]:
             self.response["authorised"] = True
             return True
+        self.log_violation()
         return False
 
     def get_response(self):
         self.is_authenticated_and_forbidden()
         return self.response
+    
+    def log_violation(self):
+        AccessControlLogger(self.request, self.page_type, self.page_name)
 
 
 class UserRegisterSerializer(serializers.ModelSerializer):

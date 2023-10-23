@@ -40,7 +40,6 @@ class AccessControlLoggingSerializer(serializers.Serializer):
         return list(logs.values())[:100]
 
 
-
 class ConflictOfInterestLoggingSerializer(serializers.Serializer):
     def __init__(self, user_id, json_dict, **kwargs):
         self.user_id = user_id
