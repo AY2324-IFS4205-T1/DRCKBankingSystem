@@ -56,4 +56,5 @@ class ConflictOfInterestLogs(models.Model):
     staff_username = models.CharField(max_length=150)
     staff_ip = models.GenericIPAddressField(null=True)
     time_to_approve = models.PositiveBigIntegerField(null=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
     severity = models.CharField(max_length=11, choices=Severity.choices, default=Severity.INFO)
