@@ -9,9 +9,9 @@ def validate_k_value(json_dict):
     try:
         k = int(json_dict["k_value"])
     except KeyError:
-        raise ValidationError("Field 'k_value' missing.")
+        raise ValidationError("Please input the k-value.")
     except ValueError:
-        raise ValidationError("K-value provided is not an integer.")
+        raise ValidationError("K-value provided must be an integer.")
     
     if k < MINIMUM_K_VALUE or k > MAXIMUM_K_VALUE:
         raise ValidationError("K-value provided is not within the acceptable k-value range.")
@@ -20,12 +20,12 @@ def validate_k_value(json_dict):
 
 def validate_query(json_dict):
     try:
-        query = json_dict["query"]
+        query = json_dict["query"].strip()
     except KeyError:
-        raise ValidationError("Field 'query' missing.")
+        raise ValidationError("Please input the query.")
 
     if query not in [option.value for option in QueryOptions]:
-        raise ValidationError("Value in 'query' field is not a recognised option")
+        raise ValidationError("The query given is not a recognised option.")
     
     return query
 

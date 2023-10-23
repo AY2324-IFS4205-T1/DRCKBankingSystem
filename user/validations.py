@@ -117,18 +117,35 @@ class SpecialCharacterValidator:
             )
         
 
-def validate_page_type(json_dict):
+frontend_page_authorisation = {
+  '/customer/dashboard': User.user_type.CUSTOMER,
+  '/customer/atm': User.user_type.CUSTOMER,
+  '/customer/setup': User.user_type.CUSTOMER,
+  '/customer/verify': User.user_type.CUSTOMER,
+  '/customer/accounts': User.user_type.CUSTOMER,
+  '/customer/tickets': User.user_type.CUSTOMER,
+  '/customer/transfer': User.user_type.CUSTOMER,
+
+  '/staff/dashboard': User.user_type.STAFF,
+  '/staff/setup': User.user_type.STAFF,
+  '/staff/verify': User.user_type.STAFF,
+  '/staff/anon': Staff.Title.ANONYMISER,
+  '/staff/research': Staff.Title.RESEARCHER,
+  '/staff/logs': Staff.Title.AUDITOR,
+  '/staff/tickets': Staff.Title.REVIEWER,
+}
+
+def validate_page(json_dict):
     try:
-        page_type = json_dict["page_type"]
+        page_name = json_dict["page_name"].strip()
     except KeyError:
-        raise ValidationError("Field 'page_type' missing.")
+        raise ValidationError("Please input the page name.")
+    
+    if page_name not in frontend_page_authorisation.keys():
+        raise ValidationError("The page name provided is invalid.")
 
-    user_types = User.user_type.values
-    staff_types = Staff.Title.values
-
-    if page_type in (user_types + staff_types):
-        return page_type
-    raise ValidationError("Invalid 'page_type' value.")
+    page_type = frontend_page_authorisation[page_name]
+    return page_name, page_type
     
 
 def validate_new_user(username, user_type):
@@ -138,18 +155,31 @@ def validate_new_user(username, user_type):
         return True
     raise ValidationError("This user of this user type already exists.")
 
+def validate_username_length(username):
+    if len(username) <= 150:
+        return True
+    raise ValidationError("Username length must be 150 characters or less")
+
+def validate_phone_number(phone_number):
+    try:
+        int(phone_number)
+        return True
+    except ValueError :
+        raise ValidationError("Phone number provided is invalid.")
+
 def validate_otp(json_dict):
     try:
-        otp = json_dict["otp"]
+        otp = json_dict["otp"].strip()
     except KeyError:
-        raise ValidationError("Field 'otp' missing.")
+        raise ValidationError("Please input yoour One-Time Pass.")
     if len(str(otp)) != 8:
-        raise ValidationError("OTP is not 8 characters long.")
+        raise ValidationError("OTP provided is not 8 characters long.")
     try:
         int(str(otp))
     except ValueError:
-        raise ValidationError("OTP does not have 8 digits.")
+        raise ValidationError("OTP provided does not have 8 digits.")
     return str(otp)
+
 
 def validate_user_2fa(user):
     try:

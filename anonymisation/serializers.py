@@ -65,6 +65,15 @@ class ViewAnonStatsSerializer(serializers.Serializer):
         self.stream = stream
 
 
+class GetKValueSerializer(serializers.Serializer):
+    def validate(self, attrs):
+        self.statistic = validate_k_is_set()
+        return super().validate(attrs)
+    
+    def get_k(self):
+        return self.statistic.k_value
+
+
 class SetKValueSerializer(serializers.Serializer):
     def __init__(self, json_dict, **kwargs):
         self.json_dict = json_dict
@@ -97,31 +106,33 @@ class QueryAnonSerializer(serializers.Serializer):
         results = dict()
         if self.query == "1":
             utility = self.statistic.utility_query1
-            results["first_average"] = self.statistic.first_average
-            results["second_average"] = self.statistic.second_average
-            results["third_average"] = self.statistic.third_average
-            results["fourth_average"] = self.statistic.fourth_average
-            results["fifth_average"] = self.statistic.fifth_average
+            results["average of 2019 sums"] = self.statistic.first_average
+            results["average of 2020 sums"] = self.statistic.second_average
+            results["average of 2021 sums"] = self.statistic.third_average
+            results["average of 2022 sums"] = self.statistic.fourth_average
+            results["average of 2023 sums"] = self.statistic.fifth_average
         else:
             utility = self.statistic.utility_query2
-            results["first_balance_average"] = self.statistic.first_balance_average
-            results["second_balance_average"] = self.statistic.second_balance_average
-            results["third_balance_average"] = self.statistic.third_balance_average
+            results["average savings balance"] = self.statistic.first_balance_average
+            results["average credit card balance"] = self.statistic.second_balance_average
+            results["average investment balance"] = self.statistic.third_balance_average
         
         response = dict()
         response["utility"] = utility
         response["results"] = results
         return response
-    
+
+
+class GetAnonDataSerializer(serializers.Serializer):
+    def validate(self, attrs):
+        self.statistic = validate_k_is_set()
+        return super().validate(attrs)
+
     def get_anon_data(self, response):
-        anon_fields = ["id", "age", "gender", "postal_code", "citizenship"]
-        if self.query == "1":
-            anon_fields.extend(["first_sum", "second_sum", "third_sum", "fourth_sum", "fifth_sum"])
-        else:
-            anon_fields.extend(["first_balance", "second_balance", "third_balance"])
-        
+        anon_fields = ["id", "age", "gender", "postal_code", "citizenship", "first_sum", "second_sum", "third_sum", "fourth_sum", "fifth_sum", "first_balance", "second_balance", "third_balance"]
+        header = ["id", "age", "gender", "postal_code", "citizenship", "2019 sum", "2020 sum", "2021 sum", "2022 sum", "2023 sum", "savings balance", "credit card balance", "investment balance"]        
         writer = csv.writer(response)
-        writer.writerow(anon_fields)
+        writer.writerow(header)
         for obj in Anonymisation.objects.all():
             writer.writerow([getattr(obj, field) for field in anon_fields])
         return response
