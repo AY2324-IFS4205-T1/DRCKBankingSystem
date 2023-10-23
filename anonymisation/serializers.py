@@ -97,16 +97,16 @@ class QueryAnonSerializer(serializers.Serializer):
         results = dict()
         if self.query == "1":
             utility = self.statistic.utility_query1
-            results["first_average"] = self.statistic.first_average
-            results["second_average"] = self.statistic.second_average
-            results["third_average"] = self.statistic.third_average
-            results["fourth_average"] = self.statistic.fourth_average
-            results["fifth_average"] = self.statistic.fifth_average
+            results["average of 2019 sums"] = self.statistic.first_average
+            results["average of 2020 sums"] = self.statistic.second_average
+            results["average of 2021 sums"] = self.statistic.third_average
+            results["average of 2022 sums"] = self.statistic.fourth_average
+            results["average of 2023 sums"] = self.statistic.fifth_average
         else:
             utility = self.statistic.utility_query2
-            results["first_balance_average"] = self.statistic.first_balance_average
-            results["second_balance_average"] = self.statistic.second_balance_average
-            results["third_balance_average"] = self.statistic.third_balance_average
+            results["average savings balance"] = self.statistic.first_balance_average
+            results["average credit card balance"] = self.statistic.second_balance_average
+            results["average investment balance"] = self.statistic.third_balance_average
         
         response = dict()
         response["utility"] = utility
@@ -115,13 +115,16 @@ class QueryAnonSerializer(serializers.Serializer):
     
     def get_anon_data(self, response):
         anon_fields = ["id", "age", "gender", "postal_code", "citizenship"]
+        header = anon_fields.copy()
         if self.query == "1":
             anon_fields.extend(["first_sum", "second_sum", "third_sum", "fourth_sum", "fifth_sum"])
+            header.extend(["2019 sum", "2020 sum", "2021 sum", "2022 sum", "2023 sum"])
         else:
             anon_fields.extend(["first_balance", "second_balance", "third_balance"])
+            header.extend(["savings balance", "credit card balance", "investment balance"])
         
         writer = csv.writer(response)
-        writer.writerow(anon_fields)
+        writer.writerow(header)
         for obj in Anonymisation.objects.all():
             writer.writerow([getattr(obj, field) for field in anon_fields])
         return response
