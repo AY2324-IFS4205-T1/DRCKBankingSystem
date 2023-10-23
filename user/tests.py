@@ -308,7 +308,7 @@ class TestLogout(TestVerifyTwoFA):
         response = self.logout_customer1()
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         user = User.objects.get(username="test1")
-        two_fa = TwoFA.objects.get(user=user)
+        TwoFA.objects.get(user=user)
 
 
 class TestAuthCheck(TestLogout):
