@@ -65,7 +65,7 @@ class TicketDetailsSerializer(serializers.Serializer):
 
     def validate(self, attrs):
         self.ticket = validate_ticket_id(self.json_dict)
-        validate_closed_ticket_owner(self.ticket, self.user_id)
+        assert validate_closed_ticket_owner(self.ticket, self.user_id)
         return super().validate(attrs)
 
     def get_ticket_details(self):
