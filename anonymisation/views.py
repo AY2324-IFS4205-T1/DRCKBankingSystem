@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 
 from anonymisation.anonymise.overall import TooShortException
 from anonymisation.permissions import IsAnonymiser, IsResearcher, IsResearcherOrAnonymiser
-from anonymisation.serializers import (GetKValueSerializer, QueryAnonSerializer,
+from anonymisation.serializers import (GetAnonDataSerializer, GetKValueSerializer, QueryAnonSerializer,
                                        SetKValueSerializer,
                                        ViewAnonStatsSerializer)
 from anonymisation.wrapper import generate_statistics
@@ -123,10 +123,7 @@ class QueryAnonView(APIView):
 
 
 class GetAnonDataView(APIView):
-    """Post request
-
-    Args:
-        query: integer
+    """Get request
 
     Returns:
         CSV file with anonymous data
@@ -137,7 +134,7 @@ class GetAnonDataView(APIView):
     throttle_scope = "sensitive_request"
 
     def post(self, request):
-        serialiser = QueryAnonSerializer(request.data, data=request.data)
+        serialiser = GetAnonDataSerializer()
         if serialiser.is_valid():
             response = HttpResponse(
                 content_type="text/csv",

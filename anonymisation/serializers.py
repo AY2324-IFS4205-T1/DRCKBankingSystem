@@ -121,17 +121,16 @@ class QueryAnonSerializer(serializers.Serializer):
         response["utility"] = utility
         response["results"] = results
         return response
-    
+
+
+class GetAnonDataSerializer(serializers.Serializer):
+    def validate(self, attrs):
+        self.statistic = validate_k_is_set()
+        return super().validate(attrs)
+
     def get_anon_data(self, response):
-        anon_fields = ["id", "age", "gender", "postal_code", "citizenship"]
-        header = anon_fields.copy()
-        if self.query == "1":
-            anon_fields.extend(["first_sum", "second_sum", "third_sum", "fourth_sum", "fifth_sum"])
-            header.extend(["2019 sum", "2020 sum", "2021 sum", "2022 sum", "2023 sum"])
-        else:
-            anon_fields.extend(["first_balance", "second_balance", "third_balance"])
-            header.extend(["savings balance", "credit card balance", "investment balance"])
-        
+        anon_fields = ["id", "age", "gender", "postal_code", "citizenship", "first_sum", "second_sum", "third_sum", "fourth_sum", "fifth_sum", "first_balance", "second_balance", "third_balance"]
+        header = ["id", "age", "gender", "postal_code", "citizenship", "2019 sum", "2020 sum", "2021 sum", "2022 sum", "2023 sum", "savings balance", "credit card balance", "investment balance"]        
         writer = csv.writer(response)
         writer.writerow(header)
         for obj in Anonymisation.objects.all():
