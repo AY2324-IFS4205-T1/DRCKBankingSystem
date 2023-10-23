@@ -6,9 +6,9 @@ from staff.models import Tickets
 
 def validate_ticket_id(json_dict):
     try:
-        ticket_id = json_dict["ticket_id"]
+        ticket_id = json_dict["ticket_id"].strip()
     except KeyError:
-        raise ValidationError("Field 'ticket_id' missing.")
+        raise ValidationError("Please input the ticket ID.")
 
     try:
         ticket = Tickets.objects.get(ticket=ticket_id)
@@ -21,4 +21,7 @@ def validate_open_ticket(ticket):
         raise ValidationError("Ticket has already been closed.")
     return True
 
-        
+def validate_closed_ticket_owner(ticket, user):
+    if ticket.closed_by in [user, None]:
+        return True
+    raise ValidationError("Closed ticket was not closed by the user.")

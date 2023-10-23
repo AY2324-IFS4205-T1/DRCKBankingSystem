@@ -62,7 +62,7 @@ class AuthenticationCheckView(APIView):
 
     Returns:
         authenticated: True/False
-        authenticated_message: string, options are ["User not logged in.", "The session has changed, 2FA needs to be verified again.", "2FA has not been verified.", "2FA timeout, 2FA needs to be verified again."]
+        authenticated_message: string, options are ["User not logged in.", "User does not have 2FA set up.", "2FA has not been verified."]
         authorised: True/False
         user_authorisation: string, options are ["Customer", "Staff"]
         user_role: ["Customer", "Ticket Reviewer", "Auditor", "Researcher"]

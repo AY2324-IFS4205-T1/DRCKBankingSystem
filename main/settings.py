@@ -241,8 +241,8 @@ AUTH_USER_MODEL = "user.User"
 AUTHENTICATION_BACKENDS = ['user.authentication.UserAuth'] #'django.contrib.auth.backends.ModelBackend'
 
 # Throttling
-sensitive_request_throttle_rate = "10/minute" if not DEBUG else "100000/second"
-non_sensitive_request_throttle_rate = "60/minute" if not DEBUG else "100000/second"
+sensitive_request_throttle_rate = "3/minute" if not DEBUG else "100000/second"
+non_sensitive_request_throttle_rate = "10/minute" if not DEBUG else "100000/second"
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication', ),
     "DEFAULT_THROTTLE_CLASSES": [
@@ -267,10 +267,4 @@ REST_KNOX = {
     'MIN_REFRESH_INTERVAL': 60, # This is the minimum time in seconds that needs to pass for the token expiry to be updated in the database.
     'EXPIRY_DATETIME_FORMAT': api_settings.DATETIME_FORMAT,
 }
-
-# Clickjacking
-X_FRAME_OPTIONS = "DENY"
-
-# Race Conditions
-ATOMIC_REQUESTS = True
 

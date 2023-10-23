@@ -4,17 +4,15 @@ from django.utils import timezone
 from anonymisation.models import Anonymisation, Statistics
 
 
-def reset_sequence():
-    with connections['default'].cursor() as cursor:
-        cursor.execute("ALTER SEQUENCE anonymisation.anon_id_seq RESTART;")
-
 def store_anon_database(anon_data):
     Anonymisation.objects.all().delete()
-    reset_sequence()
     if anon_data is None:
         return
+    count = 0
     for data in anon_data:
+        count += 1
         anon_instance = Anonymisation(
+            id=count,
             age=data['age'],
             gender=data['gender'],
             postal_code=data['postal_code'],

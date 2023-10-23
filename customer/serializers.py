@@ -4,9 +4,9 @@ from django.forms.models import model_to_dict
 from rest_framework import serializers
 
 from customer.validations import (validate_account, validate_account_owner,
-                                  validate_account_type, validate_amount,
-                                  validate_description,
-                                  validate_no_repeated_ticket,
+                                  validate_account_type, validate_address_length, validate_amount,
+                                  validate_description, validate_name_length,
+                                  validate_no_repeated_ticket, validate_not_too_much_amount,
                                   validate_nric_and_citizenship,
                                   validate_sender_recipient,
                                   validate_sufficient_amount,
@@ -39,6 +39,9 @@ class CustomerSerializer(serializers.ModelSerializer):
         super().__init__(instance, data, **kwargs)
 
     def validate(self, attrs):
+        assert validate_name_length(self.initial_data["first_name"])
+        assert validate_name_length(self.initial_data["last_name"])
+        assert validate_address_length(self.initial_data["address"])
         validate_password(self.initial_data["password"], user=self.user)
         validate_nric_and_citizenship(
             self.initial_data["identity_no"],
@@ -128,6 +131,7 @@ class DepositSerializer(serializers.Serializer):
         self.customer_account = validate_account(self.json_dict)
         assert validate_account_owner(self.user_id, self.customer_account)
         self.amount = validate_amount(self.json_dict)
+        assert validate_not_too_much_amount(self.customer_account, self.amount)
         return super().validate(attrs)
 
     def create(self, validated_data):
@@ -183,6 +187,7 @@ class TransferSerializer(serializers.Serializer):
         self.initial_total = self.sender_account.balance + self.recipient_account.balance
         self.amount = validate_amount(self.json_dict)
         assert validate_sufficient_amount(self.sender_account, self.amount)
+        assert validate_not_too_much_amount(self.recipient_account, self.amount)
         self.description = validate_description(self.json_dict)
         return super().validate(attrs)
 
