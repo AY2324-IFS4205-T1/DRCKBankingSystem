@@ -139,10 +139,10 @@ def validate_page(json_dict):
     try:
         page_name = json_dict["page_name"].strip()
     except KeyError:
-        raise ValidationError("Field 'page_name' missing.")
+        raise ValidationError("Please input the page name.")
     
     if page_name not in frontend_page_authorisation.keys():
-        raise ValidationError("Invalid 'page_name' value.")
+        raise ValidationError("The page name provided is invalid.")
 
     page_type = frontend_page_authorisation[page_name]
     return page_name, page_type
@@ -160,13 +160,13 @@ def validate_otp(json_dict):
     try:
         otp = json_dict["otp"].strip()
     except KeyError:
-        raise ValidationError("Field 'otp' missing.")
+        raise ValidationError("Please input yoour One-Time Pass.")
     if len(str(otp)) != 8:
-        raise ValidationError("OTP is not 8 characters long.")
+        raise ValidationError("OTP provided is not 8 characters long.")
     try:
         int(str(otp))
     except ValueError:
-        raise ValidationError("OTP does not have 8 digits.")
+        raise ValidationError("OTP provided does not have 8 digits.")
     return str(otp)
 
 

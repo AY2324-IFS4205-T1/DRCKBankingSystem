@@ -12,31 +12,32 @@ MAX_ACCOUNT_BALANCE = 9999999999.99
 
 
 def validate_nric_and_citizenship(nric, citizenship, birth_date):
-    error_message = "Incorrect input in field 'identity_no'."
+    id_citizenship_error = "Identity number does not match the Citizenship provided."
+    id_dob_error = "Identity number does not match the Date of Birth provided."
 
     if citizenship in [Customer.Citizenship.CITIZEN, Customer.Citizenship.PR]:
         if nric[0] not in ["S", "T"]:
-            raise ValidationError(error_message)
+            raise ValidationError(id_citizenship_error)
         if (
             datetime.strptime(birth_date, "%Y-%m-%d") < datetime(2000, 1, 1)
             and nric[0] != "S"
         ):
-            raise ValidationError(error_message)
+            raise ValidationError(id_dob_error)
         if (
             datetime.strptime(birth_date, "%Y-%m-%d") >= datetime(2000, 1, 1)
             and nric[0] != "T"
         ):
-            raise ValidationError(error_message)
+            raise ValidationError(id_dob_error)
     else:
         if nric[0] not in ["F", "G", "M"]:
-            raise ValidationError(error_message)
+            raise ValidationError(id_citizenship_error)
 
 
 def validate_ticket_input(json_dict):
     try:
         ticket_type = json_dict["ticket_type"].strip()
     except KeyError:
-        raise ValidationError("Field 'ticket_type' missing.")
+        raise ValidationError("Please input the ticket type.")
     
     if ticket_type not in Tickets.TicketType.values:
         raise ValidationError("Ticket type given does not exist.")
@@ -44,7 +45,7 @@ def validate_ticket_input(json_dict):
     try:
         value = json_dict["value"].strip()
     except KeyError:
-        raise ValidationError("Field 'value' missing.")
+        raise ValidationError("Please input the value.")
     
     return ticket_type, value
 
@@ -66,17 +67,17 @@ def validate_account(json_dict, id_type="account_id"):
     try:
         account_id = json_dict[id_type].strip()
     except KeyError:
-        raise ValidationError("Field '" + id_type + "' is missing.")
+        raise ValidationError("Please input the account ID.")
 
     try:
         account = Accounts.objects.get(account=account_id)
     except exceptions.ValidationError as validation_error:
         if "is not a valid UUID" in validation_error.message:
-            raise ValidationError("Account ID does not exist.")
+            raise ValidationError("Account ID provided does not exist.")
         else:
             raise validation_error
     except ObjectDoesNotExist:
-        raise ValidationError("Account ID does not exist.")
+        raise ValidationError("Account ID provided does not exist.")
     return account
 
 
@@ -84,7 +85,7 @@ def validate_account_owner(user_id, account):
     customer = Customer.objects.get(user=user_id)
     user_accounts = Accounts.objects.filter(user=customer)
     if account not in user_accounts:
-        raise ValidationError("Account does not belong to the user.")
+        raise ValidationError("Account provided does not belong to the user.")
     return True
 
 
@@ -104,17 +105,17 @@ def validate_amount(json_dict):
     try:
         amount = json_dict["amount"].strip()
     except KeyError:
-        raise ValidationError("Field 'amount' missing.")
+        raise ValidationError("Please input the amount.")
 
     try:
         amount = float(amount)
     except Exception:
-        raise ValidationError("Amount is not a number.")
+        raise ValidationError("Amount provided is not a number.")
     rounded = round(amount, 2)
     if rounded != amount:
-        raise ValidationError("Amount can only have a maximum of 2 decimal places.")
+        raise ValidationError("Amount provided can only have a maximum of 2 decimal places.")
     if amount <= 0:
-        raise ValidationError("Amount must be greater than 0.")
+        raise ValidationError("Amount provided must be greater than 0.")
     return decimal.Decimal(str(amount))
 
 
@@ -122,11 +123,11 @@ def validate_description(json_dict):
     try:
         description = json_dict["description"].strip()
     except KeyError:
-        raise ValidationError("Field 'description' missing.")
+        raise ValidationError("Please input the description.")
 
     description = str(description)
     if len(description) > 255:
-        raise ValidationError("Description cannot be longer than 255 characters")
+        raise ValidationError("Description provided cannot be longer than 255 characters")
     return description
 
 

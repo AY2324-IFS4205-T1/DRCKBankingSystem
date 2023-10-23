@@ -8,7 +8,7 @@ def validate_ticket_id(json_dict):
     try:
         ticket_id = json_dict["ticket_id"].strip()
     except KeyError:
-        raise ValidationError("Field 'ticket_id' missing.")
+        raise ValidationError("Please input the ticket ID.")
 
     try:
         ticket = Tickets.objects.get(ticket=ticket_id)
