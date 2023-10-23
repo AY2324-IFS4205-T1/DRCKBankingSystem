@@ -241,8 +241,8 @@ AUTH_USER_MODEL = "user.User"
 AUTHENTICATION_BACKENDS = ['user.authentication.UserAuth'] #'django.contrib.auth.backends.ModelBackend'
 
 # Throttling
-sensitive_request_throttle_rate = "10/minute" if not DEBUG else "100000/second"
-non_sensitive_request_throttle_rate = "60/minute" if not DEBUG else "100000/second"
+sensitive_request_throttle_rate = "3/minute" if not DEBUG else "100000/second"
+non_sensitive_request_throttle_rate = "10/minute" if not DEBUG else "100000/second"
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication', ),
     "DEFAULT_THROTTLE_CLASSES": [
@@ -250,7 +250,6 @@ REST_FRAMEWORK = {
         "rest_framework.throttling.ScopedRateThrottle",
     ],
     "DEFAULT_THROTTLE_RATES": {
-        "anon": sensitive_request_throttle_rate, # per IP address, for unauthenticated requests (all registration and login requests)
         "sensitive_request": sensitive_request_throttle_rate, # per authenticated user, for deposit, withdraw, transfer, approve, reject
         "non_sensitive_request": non_sensitive_request_throttle_rate, # per authenticated user, for get_account_types, apply, get_tickets, balance, get_open_tickets, get_closed_tickets, ticket_details 
     },
