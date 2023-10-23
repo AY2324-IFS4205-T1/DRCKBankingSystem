@@ -155,6 +155,17 @@ def validate_new_user(username, user_type):
         return True
     raise ValidationError("This user of this user type already exists.")
 
+def validate_username_length(username):
+    if len(username) <= 150:
+        return True
+    raise ValidationError("Username length must be 150 characters or less")
+
+def validate_phone_number(phone_number):
+    try:
+        int(phone_number)
+        return True
+    except ValueError :
+        raise ValidationError("Phone number provided is invalid.")
 
 def validate_otp(json_dict):
     try:

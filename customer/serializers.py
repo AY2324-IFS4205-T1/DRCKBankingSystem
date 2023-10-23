@@ -4,8 +4,8 @@ from django.forms.models import model_to_dict
 from rest_framework import serializers
 
 from customer.validations import (validate_account, validate_account_owner,
-                                  validate_account_type, validate_amount,
-                                  validate_description,
+                                  validate_account_type, validate_address_length, validate_amount,
+                                  validate_description, validate_name_length,
                                   validate_no_repeated_ticket, validate_not_too_much_amount,
                                   validate_nric_and_citizenship,
                                   validate_sender_recipient,
@@ -39,6 +39,9 @@ class CustomerSerializer(serializers.ModelSerializer):
         super().__init__(instance, data, **kwargs)
 
     def validate(self, attrs):
+        assert validate_name_length(self.initial_data["first_name"])
+        assert validate_name_length(self.initial_data["last_name"])
+        assert validate_address_length(self.initial_data["address"])
         validate_password(self.initial_data["password"], user=self.user)
         validate_nric_and_citizenship(
             self.initial_data["identity_no"],

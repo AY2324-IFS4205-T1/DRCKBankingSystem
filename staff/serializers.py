@@ -6,6 +6,7 @@ from django.utils import timezone
 from rest_framework import serializers
 
 from customer.models import Accounts, AccountTypes
+from customer.validations import validate_name_length
 from staff.validations import validate_closed_ticket_owner, validate_open_ticket, validate_ticket_id
 
 from .models import RequestCloseAccount, RequestOpenAccount, Staff, Tickets
@@ -24,6 +25,8 @@ class StaffSerializer(serializers.ModelSerializer):
         super().__init__(instance, data, **kwargs)
 
     def validate(self, attrs):
+        assert validate_name_length(self.initial_data["first_name"])
+        assert validate_name_length(self.initial_data["last_name"])
         validate_password(self.initial_data["password"], user=self.user)
         return super().validate(attrs)
 

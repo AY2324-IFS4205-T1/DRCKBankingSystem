@@ -11,6 +11,18 @@ from staff.models import RequestCloseAccount, RequestOpenAccount, Tickets
 MAX_ACCOUNT_BALANCE = 9999999999.99
 
 
+def validate_name_length(name):
+    if len(name) <= 100:
+        return True
+    raise ValidationError("The length of name provided must be of length 100 characters or less.")
+
+
+def validate_address_length(address):
+    if len(address) <= 255:
+        return True
+    raise ValidationError("The length of address provided must be of length 255 characters or less.")
+
+
 def validate_nric_and_citizenship(nric, citizenship, birth_date):
     id_citizenship_error = "Identity number does not match the Citizenship provided."
     id_dob_error = "Identity number does not match the Date of Birth provided."

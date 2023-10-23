@@ -7,8 +7,8 @@ from log.logging import AccessControlLogger
 from staff.models import Staff
 from user.authentication import TokenAndTwoFactorAuthentication
 from user.twofa import generate_qr, verify_otp
-from user.validations import (validate_new_user, validate_otp, validate_page,
-                              validate_user_2fa)
+from user.validations import (validate_new_user, validate_otp, validate_page, validate_phone_number,
+                              validate_user_2fa, validate_username_length)
 
 from .models import TwoFA, User
 
@@ -81,7 +81,9 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         username = attrs["username"]
+        assert validate_username_length(username)
         validate_new_user(username, self.user_type)
+        assert validate_phone_number(attrs["phone_no"])
         return super().validate(attrs)
 
     def create(self, validated_data):
