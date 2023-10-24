@@ -7,12 +7,11 @@ from rest_framework.throttling import AnonRateThrottle
 from rest_framework.views import APIView
 
 from user.serializers import (AuthCheckSerializer, GetTwoFASerializer,
-                              RemoveTwoFASerializer, VerifyTwoFASerializer)
+                              VerifyTwoFASerializer)
 
 
 class LogoutView(KnoxLogoutView):
     def post(self, request, format=None):
-        RemoveTwoFASerializer(request.user)
         request.user.auth_token_set.all().delete()
         return super().post(request, format)
 
