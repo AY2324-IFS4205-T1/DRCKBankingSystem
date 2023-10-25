@@ -52,7 +52,8 @@ class ConflictOfInterestLoggingSerializer(serializers.Serializer):
         return super().validate(attrs)
 
     def get_logs(self):
-        logs = ConflictOfInterestLogs.objects.filter(timestamp__gte=self.start_time, timestamp__lte=self.end_time).reverse().exclude("customer", "staff")
+        logs = ConflictOfInterestLogs.objects.filter(timestamp__gte=self.start_time, timestamp__lte=self.end_time).reverse()
         if self.severity != None:
             logs = logs.filter(severity=self.severity)
-        return list(logs.values())[:100]
+        logs = logs.values("ticket", "customer_username", "customer_ip", "staff_username", "staff_ip", "time_to_approve", "timestamp", "severity")
+        return list(logs)[:100]

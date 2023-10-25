@@ -3,7 +3,6 @@ from datetime import datetime, date
 import statistics
 
 from anonymisation.models import Anonymisation
-from django.db.models import Sum, Count, Avg
 
 from anonymisation.anonymise.utils.requirements import DecimalEncoder
 

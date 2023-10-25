@@ -1,5 +1,28 @@
 # DRCK Banking System
 
+The DRCK Banking System is a software platform developed to meet the diverse needs of multiple stakeholders within the banking ecosystem.
+This comprehensive web-based application offers a user-friendly interface to access and manage banking services securely.
+The system consists of four subsystems, each designed to fulfil specific functionalities, and it adheres with robust data management, access control and anonymisation principles.
+
+The primary goal of DRCK Banking System is to provide an efficient and user-friendly bank service for customers, allowing them to manage their accounts, conduct financial transactions and interact with the bank system efficiently.
+Additionally, ensuring the privacy and security of customer data is a top objective. Hence, access control mechanisms and encryption protocols are implemented to safeguard sensitive information.
+
+The system also aims to meet compliance and regulatory requirements.
+This is to ensure that compliance officers have access to relevant logs to ensure that the bank operates within legal frameworks.
+Lastly, the project aims to enable valuable research through data anonymisation.
+Researchers are provided access to anonymised banking data for analysis and business insights.
+
+## Roles and Access
+
+|   Roles  | Title                 | Access                                                                                                                                                                                                                                                                                                                      |
+|:--------:|-----------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Customer | -                     | customer/register: register as customer <br>customer/login: login as customer <br>customer/setup: set up 2FA <br>customer/verify: verify 2FA OTP <br>customer/dashboard: customer homepage <br>customer/accounts: view accounts <br>customer/tickets: view and create tickets <br>customer/atm: deposit and withdraw <br>customer/transfer: make a transfer |
+| Staff    | -                     | staff/login: login as staff <br>staff/setup: set up 2FA <br>staff/verify: verify 2FA OTP <br>staff/dashboard: staff homepage                                                                                                                                                                                                            |
+| Staff    | Ticket Reviewer       | staff/tickets: view, approve, and reject customer tickets                                                                                                                                                                                                                                                                   |
+|Staff      | Auditor               | staff/logs: view different sets of logs                                                                                                                                                                                                                                                                                     |
+|Staff     | Anonymisation Officer | staff/anon: view anonymised data statistics and set k-values for researcher                                                                                                                                                                                                                                                 |
+|Staff     | Researcher            | staff/anon: view query results and download k-anonymised data                                                                                                                                                                                                                                                               |
+
 ## Access to Website
 
 You can access the DRCK Banking System at <https://ifs4205-23s1-1-1.comp.nus.edu.sg/>.
@@ -21,78 +44,5 @@ For example:
 * `group2_user4_Researcher`
 * `group3_user4_Anonymity_Officer`
 
-The password for all sample accounts is `G00dP@55word`.
+The password for all sample accounts is provided in the summary report.
 Note that you will be required to set up two-factor authentication upon login.
-
-## Setup Instructions
-
-* Log in to Postgres
-
-```bash
-psql -U postgres
-# OR
-sudo -u postgres psql
-```
-
-* Set up database
-
-```sql
-postgres=# CREATE DATABASE drck_banking;
-postgres=# CREATE USER django with encrypted password 'XXX'; # not needed if user alr created
-postgres=# GRANT ALL PRIVILEGES ON DATABASE drck_banking to django;
-postgres=# \c drck_banking postgres;
-drck_banking=# CREATE SCHEMA django;
-drck_banking=# CREATE SCHEMA customer;
-drck_banking=# CREATE SCHEMA staff;
-drck_banking=# CREATE SCHEMA log;
-drck_banking=# CREATE SCHEMA anonymisation;
-drck_banking=# GRANT ALL ON SCHEMA django to django;
-drck_banking=# GRANT ALL ON SCHEMA customer to django;
-drck_banking=# GRANT ALL ON SCHEMA staff to django;
-drck_banking=# GRANT ALL ON SCHEMA log to django;
-drck_banking=# GRANT ALL ON SCHEMA anonymisation to django;
-drck_banking=# exit
-```
-
-* Set up Django
-
-```bash
-python manage.py makemigrations
-python manage.py migrate
-```
-
-## For testing purposes
-
-```sql
-postgres=# CREATE DATABASE test_drck_banking;
-postgres=# GRANT ALL PRIVILEGES ON DATABASE test_drck_banking to django;
-postgres=# \c test_drck_banking postgres;
-drck_banking=# CREATE SCHEMA django;
-drck_banking=# CREATE SCHEMA customer;
-drck_banking=# CREATE SCHEMA staff;
-drck_banking=# CREATE SCHEMA log;
-drck_banking=# CREATE SCHEMA anonymisation;
-drck_banking=# GRANT ALL ON SCHEMA django to django;
-drck_banking=# GRANT ALL ON SCHEMA customer to django;
-drck_banking=# GRANT ALL ON SCHEMA staff to django;
-drck_banking=# GRANT ALL ON SCHEMA log to django;
-drck_banking=# GRANT ALL ON SCHEMA anonymisation to django;
-drck_banking=# exit
-```
-
-To run tests: `python manage.py test --keepdb`. This is because with Postgres, Django cannot create new schemas on its own, so we have to preserve the above setup. By default, all entries should be deleted after testing.
-
-When generating `tests.json` test fixtures, after completing the API calls, there are a few things to note:
-
-* Delete all default tables
-* Delete the user.two_fa table
-* Edit account_id in `customer/tests.py`
-* Edit ticket_id in `staff/test.py`
-
-## For code coverage
-
-```bash
-pip install coverage==7.3.1
-coverage run manage.py test --keepdb
-coverage xml -o coverage-reports/coverage-report.xml
-```

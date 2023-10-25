@@ -8,7 +8,7 @@ from rest_framework.serializers import ValidationError
 from customer.models import Accounts, AccountTypes, Customer
 from staff.models import RequestCloseAccount, RequestOpenAccount, Tickets
 
-MAX_ACCOUNT_BALANCE = 9999999999.99
+MAX_ACCOUNT_BALANCE = decimal.Decimal("9999999999.99")
 
 
 def validate_name_length(name):
