@@ -1,6 +1,5 @@
 import json
 
-from django.contrib.auth.password_validation import validate_password
 from django.core.serializers import serialize
 from django.utils import timezone
 from rest_framework import serializers
@@ -10,28 +9,6 @@ from customer.validations import validate_name_length
 from staff.validations import validate_ticket_owner_if_closed, validate_open_ticket, validate_ticket_id
 
 from .models import RequestCloseAccount, RequestOpenAccount, Staff, Tickets
-
-
-
-class StaffSerializer(serializers.ModelSerializer):
-    user = serializers.Field(required=False)
-
-    class Meta:
-        model = Staff
-        fields = ("user", "first_name", "last_name", "title", "birth_date", "gender")
-    
-    def __init__(self, instance=None, data=..., user=user, **kwargs):
-        self.user = user
-        super().__init__(instance, data, **kwargs)
-
-    def validate(self, attrs):
-        assert validate_name_length(self.initial_data["first_name"])
-        assert validate_name_length(self.initial_data["last_name"])
-        validate_password(self.initial_data["password"], user=self.user)
-        return super().validate(attrs)
-
-    def create(self, validated_data):
-        return Staff.objects.create(**validated_data)
 
 
 class GetOpenTicketsSerializer(serializers.Serializer):
