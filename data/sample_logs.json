@@ -1,0 +1,94 @@
+[
+    {
+        "model": "staff.tickets",
+        "pk": "95f43081-9009-4556-913d-f634092ad8a0",
+        "fields": {
+            "ticket_type": "Opening Account",
+            "status": "Approved",
+            "created_by": "c6064cfa-6ce2-4536-8a85-5c252ade2d00",
+            "created_date": "2023-10-18T20:02:28.601Z",
+            "closed_by": "63029ad4-30d1-4868-93b4-180f7fd359ff",
+            "closed_date": "2023-10-18T20:04:04.318Z"
+        }
+    },
+    {
+        "model": "staff.requestopenaccount",
+        "pk": "95f43081-9009-4556-913d-f634092ad8a0",
+        "fields": {
+            "account_type": 1
+        }
+    },
+    {
+        "model": "user.user",
+        "pk": "c6064cfa-6ce2-4536-8a85-5c252ade2d00",
+        "fields": {
+            "is_superuser": false,
+            "username": "evil_person",
+            "password": "pbkdf2_sha256$600000$KLy9CA9QVWBY1CVVrzbgVx$3SV+jX4NQkE3nql8BRJEm5VNOQdQWsz0sMn15A/HKL0=",
+            "email": "evil_person@gmail.com",
+            "phone_no": "12345678",
+            "type": "Customer",
+            "date_joined": "2023-10-18T19:59:44.113Z",
+            "last_login": "2023-10-18T20:00:05.052Z",
+            "is_active": true,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "customer.customer",
+        "pk": "c6064cfa-6ce2-4536-8a85-5c252ade2d00",
+        "fields": {
+            "first_name": "evil",
+            "last_name": "customer",
+            "birth_date": "1999-01-01",
+            "identity_no": "S9934567B",
+            "address": "jurong",
+            "postal_code": "123456",
+            "citizenship": "Singaporean Citizen",
+            "gender": "Male"
+        }
+    },
+    {
+        "model": "user.user",
+        "pk": "63029ad4-30d1-4868-93b4-180f7fd359ff",
+        "fields": {
+            "is_superuser": false,
+            "username": "evil_person",
+            "password": "pbkdf2_sha256$600000$hVEyV4O1r5Ei72J5jDo89s$ATP4xzHJfyLBdoLwzaatze0hQawQHK3VsU2duosGKPg=",
+            "email": "evil_person@gmail.com",
+            "phone_no": "12345678",
+            "type": "Staff",
+            "date_joined": "2023-10-18T20:02:53.267Z",
+            "last_login": "2023-10-18T20:02:56.661Z",
+            "is_active": true,
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "staff.staff",
+        "pk": "63029ad4-30d1-4868-93b4-180f7fd359ff",
+        "fields": {
+            "first_name": "evil",
+            "last_name": "staff",
+            "title": "Ticket Reviewer",
+            "birth_date": "2023-01-01",
+            "gender": "Male"
+        }
+    },
+    {
+        "model": "log.conflictofinterestlogs",
+        "pk": 1,
+        "fields": {
+            "ticket": "95f43081-9009-4556-913d-f634092ad8a0",
+            "customer_username": "evil_person",
+            "customer_ip": "127.0.0.1",
+            "staff_username": "evil_person",
+            "staff_ip": "127.0.0.1",
+            "time_to_approve": 1,
+            "severity": "High",
+            "timestamp": "2023-10-18T20:04:04.318Z"
+        }
+    }
+]
