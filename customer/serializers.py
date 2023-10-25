@@ -3,7 +3,7 @@ from django.db.models import Q
 from django.forms.models import model_to_dict
 from rest_framework import serializers
 
-from customer.validations import (validate_account, validate_account_owner,
+from customer.validations import (validate_account, validate_account_not_closed, validate_account_owner,
                                   validate_account_type, validate_address_length, validate_amount,
                                   validate_description, validate_name_length,
                                   validate_no_repeated_ticket, validate_not_too_much_amount,
@@ -129,6 +129,7 @@ class DepositSerializer(serializers.Serializer):
 
     def validate(self, attrs):
         self.customer_account = validate_account(self.json_dict)
+        assert validate_account_not_closed(self.customer_account)
         assert validate_account_owner(self.user_id, self.customer_account)
         self.amount = validate_amount(self.json_dict)
         assert validate_not_too_much_amount(self.customer_account, self.amount)
@@ -155,6 +156,7 @@ class WithdrawSerializer(serializers.Serializer):
 
     def validate(self, attrs):
         self.customer_account = validate_account(self.json_dict)
+        assert validate_account_not_closed(self.customer_account)
         assert validate_account_owner(self.user_id, self.customer_account)
         self.amount = validate_amount(self.json_dict)
         assert validate_sufficient_amount(self.customer_account, self.amount)
@@ -181,8 +183,10 @@ class TransferSerializer(serializers.Serializer):
 
     def validate(self, attrs):
         self.sender_account = validate_account(self.json_dict, "sender_id")
+        assert validate_account_not_closed(self.sender_account)
         assert validate_account_owner(self.user_id, self.sender_account)
         self.recipient_account = validate_account(self.json_dict, "recipient_id")
+        assert validate_account_not_closed(self.recipient_account)
         assert validate_sender_recipient(self.sender_account, self.recipient_account)
         self.initial_total = self.sender_account.balance + self.recipient_account.balance
         self.amount = validate_amount(self.json_dict)

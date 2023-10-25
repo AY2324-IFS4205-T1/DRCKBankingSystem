@@ -164,3 +164,8 @@ def validate_not_too_much_amount(account, amount):
     if account.balance + amount > MAX_ACCOUNT_BALANCE:
         raise ValidationError("Total balance cannot exceed $9,999,999,999.99.")
     return True
+
+def validate_account_not_closed(account):
+    if account.status == Accounts.AccountStatus.CLOSED:
+        raise ValidationError("Account provided is closed. No transactions can be done on this account.")
+    return True
