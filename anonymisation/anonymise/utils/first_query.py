@@ -9,15 +9,17 @@ from anonymisation.anonymise.utils.requirements import DecimalEncoder
 
 
 def calculate_utility(anon_list, unanon_list):
-    absolute_differences = [abs(anon_avg - actual_avg) for anon_avg, actual_avg in zip(anon_list, unanon_list)]
-    mae = sum(absolute_differences) / len(absolute_differences)
-    average_average = statistics.mean(anon_list)
+    weighted_absolute_differences = list()
+    for anon_avg, actual_avg in zip(anon_list, unanon_list):
+        weighted_absolute_difference = 0
+        if actual_avg != 0:
+            weighted_absolute_difference = abs(anon_avg - actual_avg) / actual_avg
+        weighted_absolute_differences.append(weighted_absolute_difference)
 
-    if average_average != 0:
-        utility = 1 - (mae / average_average)
-    else:
-        utility = 0
+    mean_weighted_absolute_error = sum(weighted_absolute_differences) / len(weighted_absolute_differences)
+    utility = 1 - mean_weighted_absolute_error
     return round(utility * 100, 2)
+
 
 def retrieve_data(citizenship):
     

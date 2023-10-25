@@ -39,7 +39,7 @@ def get_random_datetime():
     return formatted_datetime
 
 def get_random_balance():
-    balance = secrets.randbelow(5000) + 1
+    balance = secrets.randbelow(5001) + 5000 # Generates a value between 5000 and 100,000
     return str(balance)
     
 

@@ -15,7 +15,7 @@ from generate_data.utils.utility import get_random_datetime, load_data, execute_
 
 # Define number of users and number of transactions you want to generate
 CUSTOMER_NUM = 200
-TRANSACTION_NUM = 10000
+TRANSACTION_NUM = 50 * CUSTOMER_NUM  
 
 TRANSACTIONS_MODEL = "customer.Transactions"
 
@@ -58,13 +58,26 @@ class GenerateAuthUsers:
         with open(self.file_path, "w") as json_file:
             json.dump(data, json_file, indent=4)
 
-    def generate_random_password(self, length=15):
+    def generate_random_password(self, length=18):
         """
-        Generates a random string of minimum length 12 and default length of 15
+        Generates a random string of minimum length 12 and default length of 18
         """
+        uppercase_letters = ''.join(random.choice(string.ascii_uppercase) for _ in range(2))
+        lowercase_letters = ''.join(random.choice(string.ascii_lowercase) for _ in range(2))
+        digits = ''.join(random.choice(string.digits) for _ in range(1))
+        special_characters = ''.join(random.choice(string.punctuation) for _ in range(1))
+
         characters = string.ascii_letters + string.digits + string.punctuation
-        length = max(length, 12)
-        password = ''.join(choice(characters) for _ in range(length))
+
+        remaining_length = max(length - 6, 2)  # 6 = 2 uppercase + 2 lowercase + 1 numeric + 1 special
+
+        random_characters = ''.join(random.choice(characters) for _ in range(remaining_length))
+
+        password = uppercase_letters + lowercase_letters + digits + special_characters + random_characters
+
+        password_list = list(password)
+        random.shuffle(password_list)
+        password = ''.join(password_list)
         return password
 
  
@@ -134,22 +147,27 @@ class GenerateAccounts:
     def generate_account(self):
         user_ids = get_userids()
         data = []
-        for _,user_id in tqdm(enumerate(user_ids)):
-            user_data = {
-                "model": "customer.Accounts",
-                "fields": {
-                    "user": str(user_id),
-                    "type": self.get_random_account_type(),
-                    "balance": get_random_balance(),
-                    # Write a function to get different kind of status
-                    "status": "Active",
-                    "date_created": get_random_datetime()
-                }
-            }
-            data.append(user_data)
 
+        for _,user_id in tqdm(enumerate(user_ids)):
+            for i in range(3):
+                user_data = self.one_account(user_id, i)
+                data.append(user_data)
         with open(self.file_path, "w") as json_file:
             json.dump(data, json_file, indent=4)
+
+    def one_account(self, user_id, index):
+        one_account = {
+            "model": "customer.Accounts",
+            "fields": {
+                "user": str(user_id),
+                "type": str(index+1),
+                "balance": get_random_balance(),
+                # Write a function to get different kind of status
+                "status": "Active",
+                "date_created": get_random_datetime()
+            }
+        }
+        return one_account
         
     def get_random_account_type(self):
         """
