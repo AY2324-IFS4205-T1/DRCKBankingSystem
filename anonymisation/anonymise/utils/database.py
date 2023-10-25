@@ -1,8 +1,18 @@
+from decimal import Decimal
+
 from django.db import connections
 from django.utils import timezone
 
 from anonymisation.models import Anonymisation, Statistics
 
+MAX_VALUE = Decimal('9999999999999999999999999.99')
+
+def clean_sum(check_sum):
+    check_sum = Decimal(check_sum)
+    if check_sum > MAX_VALUE:
+        return MAX_VALUE
+    else:
+        return check_sum
 
 def store_anon_database(anon_data):
     Anonymisation.objects.all().delete()
@@ -17,11 +27,11 @@ def store_anon_database(anon_data):
             gender=data['gender'],
             postal_code=data['postal_code'],
             citizenship=data['citizenship'],
-            first_sum=data['first_sum'],
-            second_sum=data['second_sum'],
-            third_sum=data['third_sum'],
-            fourth_sum=data['fourth_sum'],
-            fifth_sum=data['fifth_sum'],
+            first_sum=clean_sum(data['first_sum']),
+            second_sum=clean_sum(data['second_sum']),
+            third_sum=clean_sum(data['third_sum']),
+            fourth_sum=clean_sum(data['fourth_sum']),
+            fifth_sum=clean_sum(data['fifth_sum']),
             first_balance=data['first_balance'],
             second_balance=data['second_balance'],
             third_balance=data['third_balance']

@@ -187,6 +187,7 @@ def first_query_wrapper(anon_data, raw_data):
     unanon_first_query = UnanonymisedFirstQuery(TYPE_OF_CITIZEN1, NUM_YEARS1, TRANSACTION_TYPE1)
     _, unanon_list = unanon_first_query.first_query(raw_data)
 
+
     utility = calculate_utility(anon_list, unanon_list)
     return anon_list, utility, anon_first_json
 
