@@ -171,7 +171,7 @@ def validate_otp(json_dict):
     try:
         otp = json_dict["otp"].strip()
     except KeyError:
-        raise ValidationError("Please input yoour One-Time Pass.")
+        raise ValidationError("Please input your One-Time Pass.")
     if len(str(otp)) != 8:
         raise ValidationError("OTP provided is not 8 characters long.")
     try:

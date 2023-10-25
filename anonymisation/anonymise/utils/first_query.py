@@ -3,7 +3,6 @@ from datetime import datetime, date
 import statistics
 
 from anonymisation.models import Anonymisation
-from django.db.models import Sum, Count, Avg
 
 from anonymisation.anonymise.utils.requirements import DecimalEncoder
 
@@ -17,7 +16,7 @@ def calculate_utility(anon_list, unanon_list):
         utility = 1 - (mae / average_average)
     else:
         utility = 0
-    return round(utility * 100, 2)
+    return max(round(utility * 100, 2), 0)
 
 def retrieve_data(citizenship):
     
