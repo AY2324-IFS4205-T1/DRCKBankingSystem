@@ -151,13 +151,3 @@ class VerifyTwoFASerializer(serializers.Serializer):
         return {
             "2FA success": result,
         }
-
-
-class RemoveTwoFASerializer(serializers.Serializer):
-    def __init__(self, user, **kwargs):
-        self.user = user
-        two_fa = TwoFA.objects.get(user=self.user)
-        two_fa.last_authenticated = None
-        two_fa.knox_token = ""
-        two_fa.save()
-        super().__init__(**kwargs)

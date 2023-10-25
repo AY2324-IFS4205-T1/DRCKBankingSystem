@@ -55,6 +55,6 @@ class ConflictOfInterestLogs(models.Model):
     staff = models.ForeignKey(Staff, on_delete=models.CASCADE, null=True)
     staff_username = models.CharField(max_length=150)
     staff_ip = models.GenericIPAddressField(null=True)
-    time_to_approve = models.PositiveBigIntegerField(null=True)
+    time_to_approve = models.PositiveBigIntegerField(default=0)
     timestamp = models.DateTimeField(auto_now_add=True)
     severity = models.CharField(max_length=11, choices=Severity.choices, default=Severity.INFO)

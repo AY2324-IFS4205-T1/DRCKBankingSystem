@@ -1,4 +1,4 @@
-name: DRCK Backend Workflow CI
+name: DRCK Backend Workflow CICD
 
 on:
   push:
@@ -16,7 +16,7 @@ env:
   POSTGRES_PASSWORD_AUTH: ${{ secrets.POSTGRES_PASSWORD }}
   
 jobs:
-  build:
+  ci:
     if: github.actor!= 'dependabot[bot]'
     name: DRCK Backend Workflow CI
     runs-on: ubuntu-latest
@@ -103,3 +103,23 @@ jobs:
         timeout-minutes: 5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  
+  cd:
+    runs-on: self-hosted
+    name: Deploy Backend and Postgresql
+    needs: ci
+    if: github.event_name == 'push'
+    env:
+      SUDO_PASSWORD: ${{ secrets.SUDO_PASS }}
+      
+    steps:
+    - name: Run Ansible playbooks
+      working-directory: /home/sadm/DRCK-Ansible
+      run: |
+        ansible-playbook playbooks/cleanup_database.yaml -i inventory.yaml -e "ansible_become_pass=$SUDO_PASSWORD"
+        ansible-playbook playbooks/cleanup_backend.yaml -i inventory.yaml -e "ansible_become_pass=$SUDO_PASSWORD"
+        ansible-playbook playbooks/deploy_database.yaml -i inventory.yaml -e "ansible_become_pass=$SUDO_PASSWORD"
+        ansible-playbook playbooks/deploy_backend.yaml -i inventory.yaml -e "ansible_become_pass=$SUDO_PASSWORD"
+     
+      
+          

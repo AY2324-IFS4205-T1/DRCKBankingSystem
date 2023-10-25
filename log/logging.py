@@ -6,7 +6,7 @@ from staff.models import Staff
 
 from user.models import User
 
-NUMBER_OF_SECONDS_FOR_SESSION = 300 # 5 minutes
+MINUTES_FOR_SESSION = 5
 
 def get_ip_address_from_request(request):
         ip, _ = IpWare().get_client_ip(meta=request.META)
@@ -29,8 +29,7 @@ class LoginLogger:
         ip = get_ip_address_from_request(self.login_request)
         logs_by_ip = LoginLog.objects.filter(ip=ip).order_by("-timestamp")
         count = self.get_count(is_success, logs_by_ip)
-        logs_by_username = LoginLog.objects.filter(login_type=self.login_type, username=username).order_by("-timestamp")
-        severity = self.get_severity(is_success, ip, count, logs_by_username)
+        severity = self.get_severity(is_success, count)
         LoginLog.objects.create(login_type=self.login_type, is_success=is_success, username=username, user=self.user, ip=ip, count=count, severity=severity)
 
     def get_count(self, is_success, logs_by_ip):
@@ -42,24 +41,18 @@ class LoginLogger:
                 return 1
             # new login session after attempting more than 5 min ago
             time_delta = (timezone.now() - log.timestamp).total_seconds()
-            if time_delta > NUMBER_OF_SECONDS_FOR_SESSION:
+            if time_delta > (MINUTES_FOR_SESSION * 60):
                 return 1
             return log.count + 1
         return 1
 
-    def get_severity(self, is_success, ip, count, logs_by_username):
+    def get_severity(self, is_success, count):
         if is_success:
             return Severity.INFO
-        
-        for log in logs_by_username:
-            time_delta = (timezone.now() - log.timestamp).total_seconds()
-            if time_delta <= NUMBER_OF_SECONDS_FOR_SESSION and ip != log.ip:
-                return Severity.HIGH
-            if count > 4:
-                return Severity.HIGH
-            if count > 2:
-                return Severity.MEDIUM
-            return Severity.LOW
+        if count > 4:
+            return Severity.HIGH
+        if count > 2:
+            return Severity.MEDIUM
         return Severity.LOW
 
 
@@ -122,7 +115,7 @@ class ConflictOfInterestLogger:
         self.log.staff = self.log.ticket.closed_by
         self.log.staff_username = self.log.staff.user.username
         self.log.staff_ip = self.ip
-        self.log.time_to_approve = (self.log.ticket.closed_date - self.log.ticket.created_date).total_seconds()
+        self.log.time_to_approve = (self.log.ticket.closed_date - self.log.ticket.created_date).total_seconds() // 60
         self.log.severity = self.get_severity()
         self.log.save()
 
@@ -134,6 +127,6 @@ class ConflictOfInterestLogger:
             return Severity.HIGH
         if same_username:
             return Severity.MEDIUM
-        if self.log.time_to_approve <= NUMBER_OF_SECONDS_FOR_SESSION:
+        if self.log.time_to_approve <= MINUTES_FOR_SESSION:
             return Severity.LOW
         return Severity.INFO
