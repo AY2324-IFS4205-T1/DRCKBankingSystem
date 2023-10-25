@@ -7,11 +7,8 @@ Logs are marked with higher severity if:
 
 1. Login attempt was unsuccessful.
 2. Many unsuccessful attempts were executed within a short timeframe (5 minutes).
-3. An unsuccessful attempt were made after a successful login from a different IP address.
 
-This log aims to identify two situations.
-The first situation is a bruteforcing attack where an attacker repeatedly attempts to log into a user's account.
-The other situation is a replay attack where an attacker attempts to log into a user's account relatively immediately after the legitimately login.
+This log aims to identify a bruteforcing attack where an attacker repeatedly attempts to log into a user's account.
 
 ## Access Control Logs
 

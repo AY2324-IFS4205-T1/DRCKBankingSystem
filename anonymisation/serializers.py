@@ -45,9 +45,9 @@ class ViewAnonStatsSerializer(serializers.Serializer):
         axis1 = plt.figure().add_axes((0.15,0.15,0.7,0.7))
         axis2 = axis1.twinx()
 
-        axis1.plot(self.k_values, self.info_losses, "r", label="Information Loss")
-        axis2.plot(self.k_values, self.utilities_query1, "b", label="Utility for Query 1")
-        axis2.plot(self.k_values, self.utilities_query2, "g", label="Utility for Query 2")
+        axis1.plot(self.k_values, self.info_losses, "r", label="Information Loss (%)")
+        axis2.plot(self.k_values, self.utilities_query1, "b", label="Utility for Query 1 (%)")
+        axis2.plot(self.k_values, self.utilities_query2, "g", label="Utility for Query 2 (%)")
         
         axis1.set_xlabel('k-value')
         axis1.set_ylabel('Information Loss')

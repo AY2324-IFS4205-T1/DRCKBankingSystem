@@ -6,7 +6,7 @@ from rest_framework import serializers
 
 from customer.models import Accounts, AccountTypes
 from customer.validations import validate_name_length
-from staff.validations import validate_closed_ticket_owner, validate_open_ticket, validate_ticket_id
+from staff.validations import validate_ticket_owner_if_closed, validate_open_ticket, validate_ticket_id
 
 from .models import RequestCloseAccount, RequestOpenAccount, Staff, Tickets
 
@@ -45,7 +45,7 @@ class TicketDetailsSerializer(serializers.Serializer):
 
     def validate(self, attrs):
         self.ticket = validate_ticket_id(self.json_dict)
-        assert validate_closed_ticket_owner(self.ticket, self.user_id)
+        assert validate_ticket_owner_if_closed(self.ticket, self.user_id)
         return super().validate(attrs)
 
     def get_ticket_details(self):
