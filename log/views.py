@@ -84,7 +84,8 @@ class ConflictOfInterestLoggingView(APIView):
 
     Args:
         severity: ("High", "Medium", "Low") defaults to None
-        log_id: int to view logs with id <= log_id, defaults to -1 (last possible log)
+        start: datetime string defaults to 1 day ago (e.g. 2023-10-28T01:30)
+        end: datetime string defaults to now (e.g. 2023-10-28T01:30)
 
     Returns:
         List of conflict of interest logs capped at the most recent 100
