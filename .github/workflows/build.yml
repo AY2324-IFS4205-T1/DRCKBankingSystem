@@ -106,7 +106,7 @@ jobs:
   
   cd:
     runs-on: self-hosted
-    name: Deploy Backend and Postgresql
+    name: Deploy Backend
     needs: ci
     if: github.event_name == 'push'
     env:
@@ -116,9 +116,7 @@ jobs:
     - name: Run Ansible playbooks
       working-directory: /home/sadm/DRCK-Ansible
       run: |
-        ansible-playbook playbooks/cleanup_database.yaml -i inventory.yaml -e "ansible_become_pass=$SUDO_PASSWORD"
         ansible-playbook playbooks/cleanup_backend.yaml -i inventory.yaml -e "ansible_become_pass=$SUDO_PASSWORD"
-        ansible-playbook playbooks/deploy_database.yaml -i inventory.yaml -e "ansible_become_pass=$SUDO_PASSWORD"
         ansible-playbook playbooks/deploy_backend.yaml -i inventory.yaml -e "ansible_become_pass=$SUDO_PASSWORD"
      
       
