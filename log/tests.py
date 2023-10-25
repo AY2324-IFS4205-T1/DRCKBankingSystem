@@ -7,6 +7,15 @@ from user.tests import TestLogout
 
 good_start = "2023-03-09T00:00"
 good_end = "2023-11-09T00:00"
+sample_logs = {"severity": "High", "start": good_start, "end": good_end}
+bad_field_severity = {"ssssseverity": "High", "start": good_start, "end": good_end}
+bad_field_start = {"severity": "High", "sssstart": good_start, "end": good_end}
+bad_field_end = {"severity": "High", "start": good_start, "eeeeend": good_end}
+bad_value_severity = {"severity": "HHHHigh", "start": good_start, "end": good_end}
+bad_value_start = {"severity": "High", "start": "2023-0ferg00:00", "end": good_end}
+bad_value_end = {"severity": "High", "start": good_start, "end": "2023-grdnyt0:00"}
+bad_value_end_after_now = {"severity": "High", "start": good_start, "end": "2050-11-09T00:00"}
+bad_value_end_before_start = {"severity": "High", "start": "2023-09-09T00:00", "end": good_start}
 
 class TestLoginLogging(TestLogout): # staff action
     def test_should_log(self):
@@ -17,32 +26,23 @@ class TestLoginLogging(TestLogout): # staff action
         self.assertEqual(len(logs), 5)
 
     def test_login_logs_view(self):
-        sample_login_logs = {"severity": "High", "start": good_start, "end": good_end}
-        bad_field_severity = {"ssssseverity": "High", "start": good_start, "end": good_end}
-        bad_field_start = {"severity": "High", "sssstart": good_start, "end": good_end}
-        bad_field_end = {"severity": "High", "start": good_start, "eeeeend": good_end}
-        bad_value_severity = {"severity": "HHHHigh", "start": good_start, "end": good_end}
-        bad_value_start = {"severity": "High", "start": "2023-0ferg00:00", "end": good_end}
-        bad_value_end = {"severity": "High", "start": good_start, "end": "2023-grdnyt0:00"}
-        bad_value_end_after_now = {"severity": "High", "start": good_start, "end": "2050-11-09T00:00"}
-        bad_value_end_before_start = {"severity": "High", "start": "2023-09-09T00:00", "end": good_start}
 
-        response = self.client.post(reverse("login_logs"), sample_login_logs)
+        response = self.client.post(reverse("login_logs"), sample_logs)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
         self.two_fa_customer_1()
-        response = self.client.post(reverse("login_logs"), sample_login_logs, **self.header)
+        response = self.client.post(reverse("login_logs"), sample_logs, **self.header)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
         self.two_fa_staff1()
-        response = self.client.post(reverse("login_logs"), sample_login_logs, **self.header)
+        response = self.client.post(reverse("login_logs"), sample_logs, **self.header)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
         self.two_fa_staff3()
         response = self.client.post(reverse("login_logs"), bad_value_end_before_start, **self.header)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         
-        requests = [sample_login_logs, bad_field_severity, bad_field_start, bad_field_end, bad_value_severity, bad_value_start, bad_value_end, bad_value_end_after_now]
+        requests = [sample_logs, bad_field_severity, bad_field_start, bad_field_end, bad_value_severity, bad_value_start, bad_value_end, bad_value_end_after_now]
         for request in requests:
             response = self.client.post(reverse("login_logs"), request, **self.header)
             self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -65,32 +65,22 @@ class TestAccessControlLogging(TestLogout): # staff action
         self.assertEqual(len(logs), 5)
 
     def test_access_control_logs_view(self):
-        sample_login_logs = {"severity": "High", "start": good_start, "end": good_end}
-        bad_field_severity = {"ssssseverity": "High", "start": good_start, "end": good_end}
-        bad_field_start = {"severity": "High", "sssstart": good_start, "end": good_end}
-        bad_field_end = {"severity": "High", "start": good_start, "eeeeend": good_end}
-        bad_value_severity = {"severity": "HHHHigh", "start": good_start, "end": good_end}
-        bad_value_start = {"severity": "High", "start": "2023-0ferg00:00", "end": good_end}
-        bad_value_end = {"severity": "High", "start": good_start, "end": "2023-grdnyt0:00"}
-        bad_value_end_after_now = {"severity": "High", "start": good_start, "end": "2050-11-09T00:00"}
-        bad_value_end_before_start = {"severity": "High", "start": "2023-09-09T00:00", "end": good_start}
-
-        response = self.client.post(reverse("access_control_logs"), sample_login_logs)
+        response = self.client.post(reverse("access_control_logs"), sample_logs)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
         self.two_fa_customer_1()
-        response = self.client.post(reverse("access_control_logs"), sample_login_logs, **self.header)
+        response = self.client.post(reverse("access_control_logs"), sample_logs, **self.header)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
         self.two_fa_staff1()
-        response = self.client.post(reverse("access_control_logs"), sample_login_logs, **self.header)
+        response = self.client.post(reverse("access_control_logs"), sample_logs, **self.header)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
         self.two_fa_staff3()
         response = self.client.post(reverse("access_control_logs"), bad_value_end_before_start, **self.header)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         
-        requests = [sample_login_logs, bad_field_severity, bad_field_start, bad_field_end, bad_value_severity, bad_value_start, bad_value_end, bad_value_end_after_now]
+        requests = [sample_logs, bad_field_severity, bad_field_start, bad_field_end, bad_value_severity, bad_value_start, bad_value_end, bad_value_end_after_now]
         for request in requests:
             response = self.client.post(reverse("access_control_logs"), request, **self.header)
             self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -112,25 +102,22 @@ class TestConflictOfInterestLogging(TestLogout): # staff action
         self.assertEqual(len(logs), 1)
 
     def test_conflict_of_interest_logs_view(self):
-        sample_login_logs = {"severity": "High", "log_id": 1}
-        bad_field_severity = {"ssssseverity": "High", "log_id": 1}
-        bad_field_log_id = {"severity": "High", "lllllog_id": 1}
-        bad_value_severity = {"severity": "HHHHigh", "log_id": 1}
-        bad_value_log_id = {"severity": "High", "log_id": -1000000}
-
-        response = self.client.post(reverse("access_control_logs"), sample_login_logs)
+        response = self.client.post(reverse("conflict_interest_logs"), sample_logs)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
         self.two_fa_customer_1()
-        response = self.client.post(reverse("access_control_logs"), sample_login_logs, **self.header)
+        response = self.client.post(reverse("conflict_interest_logs"), sample_logs, **self.header)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
         self.two_fa_staff1()
-        response = self.client.post(reverse("access_control_logs"), sample_login_logs, **self.header)
+        response = self.client.post(reverse("conflict_interest_logs"), sample_logs, **self.header)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-        self.two_fa_staff3()        
-        requests = [sample_login_logs, bad_field_severity, bad_field_log_id, bad_value_severity, bad_value_log_id]
+        self.two_fa_staff3()
+        response = self.client.post(reverse("conflict_interest_logs"), bad_value_end_before_start, **self.header)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        
+        requests = [sample_logs, bad_field_severity, bad_field_start, bad_field_end, bad_value_severity, bad_value_start, bad_value_end, bad_value_end_after_now]
         for request in requests:
-            response = self.client.post(reverse("access_control_logs"), request, **self.header)
+            response = self.client.post(reverse("conflict_interest_logs"), request, **self.header)
             self.assertEqual(response.status_code, status.HTTP_200_OK)
