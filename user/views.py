@@ -5,6 +5,7 @@ from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle
 from rest_framework.views import APIView
+from user.permissions import HasNotSetupTwoFA
 
 from user.serializers import (AuthCheckSerializer, GetTwoFASerializer,
                               VerifyTwoFASerializer)
@@ -22,7 +23,7 @@ class SetupTwoFactorAuthenticationView(APIView):
     Returns:
         FileReponse
     """
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated, HasNotSetupTwoFA)
     authentication_classes = (TokenAuthentication,)
     throttle_scope = "sensitive_request"
 
