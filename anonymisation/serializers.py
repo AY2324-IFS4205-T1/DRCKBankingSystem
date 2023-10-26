@@ -50,8 +50,8 @@ class ViewAnonStatsSerializer(serializers.Serializer):
         axis2.plot(self.k_values, self.utilities_query2, "g", label="Utility for Query 2 (%)")
         
         axis1.set_xlabel('k-value')
-        axis1.set_ylabel('Information Loss')
-        axis2.set_ylabel("Utility")
+        axis1.set_ylabel('Information Loss (%)')
+        axis2.set_ylabel("Utility (%)")
         lines, labels = axis1.get_legend_handles_labels()
         lines2, labels2 = axis2.get_legend_handles_labels()
         axis2.legend(lines + lines2, labels + labels2)

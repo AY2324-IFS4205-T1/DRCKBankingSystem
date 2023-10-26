@@ -4,7 +4,7 @@ from anonymisation.anonymise.utils.database import store_stats_database, store_a
 from anonymisation.models import Statistics
 
 MINIMUM_K_VALUE = 3
-MAXIMUM_K_VALUE = 10
+MAXIMUM_K_VALUE = 20
 
 
 def generate_statistics():
