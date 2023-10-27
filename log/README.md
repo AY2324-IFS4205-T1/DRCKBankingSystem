@@ -6,7 +6,7 @@ The Login Logs records all login attempts.
 Logs are marked with higher severity if:
 
 1. Login attempt was unsuccessful.
-2. Many unsuccessful attempts were executed within a short timeframe (5 minutes).
+2. Many unsuccessful attempts were executed within a short timeframe (5 minutes) from the same IP address.
 
 This log aims to identify a bruteforcing attack where an attacker repeatedly attempts to log into a user's account.
 
