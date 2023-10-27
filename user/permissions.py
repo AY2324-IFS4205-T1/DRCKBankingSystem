@@ -13,4 +13,4 @@ class HasNotSetupTwoFA(BasePermission):
             two_fa = TwoFA.objects.get(user=request.user)
         except TwoFA.DoesNotExist:
             return True
-        return two_fa.knox_token != ""
+        return two_fa.knox_token == ""
