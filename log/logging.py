@@ -34,16 +34,16 @@ class LoginLogger:
 
     def get_count(self, is_success, logs_by_ip):
         if is_success:
-            return 1
+            return 0
+        # how many unsuccessful attempts from this ip address?
         for log in logs_by_ip:
-            # new login session because previous login was successful
+            # look for the most recent unsuccessful attempt
             if log.is_success:
-                return 1
-            # new login session after attempting more than 5 min ago
+                continue
+            # if unsuccessful attempt is recent, add to previous count
             time_delta = (timezone.now() - log.timestamp).total_seconds()
-            if time_delta > (MINUTES_FOR_SESSION * 60):
-                return 1
-            return log.count + 1
+            if time_delta <= (MINUTES_FOR_SESSION * 60):
+                return log.count + 1
         return 1
 
     def get_severity(self, is_success, count):
