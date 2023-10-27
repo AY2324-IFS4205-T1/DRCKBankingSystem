@@ -28,8 +28,8 @@ class LoginLoggingView(APIView):
         List of login logs capped at the first 100
     """
 
-    # permission_classes = (permissions.IsAuthenticated, IsStaff, IsAuditor)
-    # authentication_classes = (TokenAndTwoFactorAuthentication,)
+    permission_classes = (permissions.IsAuthenticated, IsStaff, IsAuditor)
+    authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "sensitive_request"
 
     def post(self, request):

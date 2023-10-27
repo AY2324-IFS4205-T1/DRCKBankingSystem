@@ -58,7 +58,7 @@ class AuthenticationCheckView(APIView):
     """Post Request
 
     Args:
-        page_type: string, options are: ["Customer", "Staff", "Ticket Reviewer", "Auditor", "Researcher"]
+        page_name: string
 
     Returns:
         authenticated: True/False
