@@ -17,7 +17,7 @@ def calculate_utility(anon_list, unanon_list):
 
     mean_weighted_absolute_error = sum(weighted_absolute_differences) / len(weighted_absolute_differences)
     utility = 1 - mean_weighted_absolute_error
-    return round(utility * 100, 2)
+    return max(round(utility * 100, 2), 0)
 
 
 def retrieve_data(citizenship):
