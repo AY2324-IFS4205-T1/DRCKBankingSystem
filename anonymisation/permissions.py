@@ -1,11 +1,13 @@
+from django.db import transaction
 from rest_framework.permissions import BasePermission
-from log.logging import AccessControlLogger
 
+from log.logging import AccessControlLogger
 from staff.models import Staff
 
 
 class IsResearcher(BasePermission):
     
+    @transaction.atomic
     def has_permission(self, request, view):
         """
         Return `True` if permission is granted, `False` otherwise.
@@ -19,6 +21,7 @@ class IsResearcher(BasePermission):
 
 class IsAnonymiser(BasePermission):
     
+    @transaction.atomic
     def has_permission(self, request, view):
         """
         Return `True` if permission is granted, `False` otherwise.
@@ -32,6 +35,7 @@ class IsAnonymiser(BasePermission):
 
 class IsResearcherOrAnonymiser(BasePermission):
     
+    @transaction.atomic
     def has_permission(self, request, view):
         """
         Return `True` if permission is granted, `False` otherwise.

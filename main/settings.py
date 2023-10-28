@@ -39,7 +39,6 @@ else:
     ALLOWED_HOSTS = ['ifs4205-23s1-1-2-i.comp.nus.edu.sg']
     SECURE_SSL_REDIRECT = True
     SECURE_HSTS_SECONDS = 31536000
-    ATOMIC_REQUESTS = True
     X_FRAME_OPTIONS = "DENY"
     SECURE_REFERRER_POLICY = "same-origin"
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
@@ -110,7 +109,7 @@ if DEBUG:
             'PORT': os.environ["POSTGRES_PORT_AUTH"], 
             'TEST': { 
                 'NAME': 'test_drck_banking', 
-            } 
+            }
         }, 
     }  
 else:

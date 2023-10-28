@@ -1,15 +1,14 @@
 from django.contrib.auth import login
+from django.db import transaction
 from knox.views import LoginView as KnoxLoginView
 from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle
 from rest_framework.views import APIView
 
-
 from log.logging import ConflictOfInterestLogger, LoginLogger
 from staff.permissions import IsStaff, IsTicketReviewer
 from staff.serializers import (ApproveSerializer, GetClosedTicketsSerializer,
-                               GetClosedTicketsSerializer,
                                GetOpenTicketsSerializer, RejectSerializer,
                                TicketDetailsSerializer)
 from user.authentication import TokenAndTwoFactorAuthentication
@@ -31,6 +30,7 @@ class StaffLoginView(KnoxLoginView):
     permission_classes = (permissions.AllowAny,)
     throttle_classes = [AnonRateThrottle]
 
+    @transaction.atomic
     def post(self, request):
         serializer = LoginSerializer(User.user_type.STAFF, data=request.data)
 
@@ -56,6 +56,7 @@ class StaffWelcomeView(APIView):
     permission_classes = (permissions.IsAuthenticated, IsStaff)
     authentication_classes = (TokenAndTwoFactorAuthentication,)
 
+    @transaction.atomic
     # Displays the user's first name, last name, last login in Dashboard
     def get(self, request):
         data = {
@@ -77,6 +78,7 @@ class GetOpenTicketsView(APIView):
     permission_classes = (permissions.IsAuthenticated, IsStaff, IsTicketReviewer,)
     authentication_classes = (TokenAndTwoFactorAuthentication,)
 
+    @transaction.atomic
     def get(self, request):
         serializer = GetOpenTicketsSerializer().get_open_tickets_list()
         return Response({"tickets": serializer}, status=status.HTTP_200_OK)
@@ -92,6 +94,7 @@ class GetClosedTicketsView(APIView):
     permission_classes = (permissions.IsAuthenticated, IsStaff, IsTicketReviewer,)
     authentication_classes = (TokenAndTwoFactorAuthentication,)
 
+    @transaction.atomic
     def get(self, request):
         serializer = GetClosedTicketsSerializer(request.user).get_closed_tickets_list()
         return Response({"tickets": serializer}, status=status.HTTP_200_OK)
@@ -113,6 +116,7 @@ class StaffTicketView(APIView):
     authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "non_sensitive_request"
 
+    @transaction.atomic
     def post(self, request):
         serializer = TicketDetailsSerializer(
             request.user, request.data, data=request.data
@@ -137,6 +141,7 @@ class ApproveView(APIView):
     authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "sensitive_request"
 
+    @transaction.atomic
     def post(self, request):
         serializer = ApproveSerializer(request.user, request.data, data=request.data)
         if serializer.is_valid():
@@ -162,6 +167,7 @@ class RejectView(APIView):
     authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "sensitive_request"
 
+    @transaction.atomic
     def post(self, request):
         serializer = RejectSerializer(request.user, request.data, data=request.data)
         if serializer.is_valid():

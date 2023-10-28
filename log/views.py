@@ -1,3 +1,4 @@
+from django.db import transaction
 from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -32,6 +33,7 @@ class LoginLoggingView(APIView):
     authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "sensitive_request"
 
+    @transaction.atomic
     def post(self, request):
         serializer = LoginLoggingSerializer(
             request.user, request.data, data=request.data
@@ -62,6 +64,7 @@ class AccessControlLoggingView(APIView):
     authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "sensitive_request"
 
+    @transaction.atomic
     def post(self, request):
         serializer = AccessControlLoggingSerializer(
             request.user, request.data, data=request.data
@@ -95,6 +98,7 @@ class ConflictOfInterestLoggingView(APIView):
     authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "sensitive_request"
 
+    @transaction.atomic
     def post(self, request):
         serializer = ConflictOfInterestLoggingSerializer(
             request.user, request.data, data=request.data

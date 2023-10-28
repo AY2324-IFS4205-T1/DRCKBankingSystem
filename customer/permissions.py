@@ -1,11 +1,13 @@
+from django.db import transaction
 from rest_framework import permissions
-from log.logging import AccessControlLogger
 
+from log.logging import AccessControlLogger
 from user.models import User
 
 
 class IsCustomer(permissions.BasePermission):
 
+    @transaction.atomic
     def has_permission(self, request, view):
         """
         Return `True` if permission is granted, `False` otherwise.

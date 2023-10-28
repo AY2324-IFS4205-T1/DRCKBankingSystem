@@ -1,3 +1,4 @@
+from django.db import transaction
 from rest_framework.permissions import BasePermission
 
 from user.models import TwoFA
@@ -5,6 +6,7 @@ from user.models import TwoFA
 
 class HasNotSetupTwoFA(BasePermission):
 
+    @transaction.atomic
     def has_permission(self, request, view):
         """
         Return `True` if permission is granted, `False` otherwise.

@@ -1,10 +1,13 @@
+from django.db import transaction
 from rest_framework.permissions import BasePermission
+
 from log.logging import AccessControlLogger
 from staff.models import Staff
 
 
 class IsAuditor(BasePermission):
     
+    @transaction.atomic
     def has_permission(self, request, view):
         """
         Return `True` if permission is granted, `False` otherwise.

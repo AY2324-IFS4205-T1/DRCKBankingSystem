@@ -1,4 +1,5 @@
 from django.contrib.auth import login
+from django.db import transaction
 from django.db.models import F
 from knox.views import LoginView as KnoxLoginView
 from rest_framework import permissions, status
@@ -54,6 +55,7 @@ class CustomerRegistrationView(APIView):
 
     throttle_classes = [AnonRateThrottle]
 
+    @transaction.atomic
     def post(self, request):
         user_serializer = UserRegisterSerializer(
             User.user_type.CUSTOMER, data=request.data
@@ -90,6 +92,7 @@ class CustomerLoginView(KnoxLoginView):
     permission_classes = (permissions.AllowAny,)
     throttle_classes = [AnonRateThrottle]
 
+    @transaction.atomic
     def post(self, request):
         serializer = LoginSerializer(User.user_type.CUSTOMER, data=request.data)
 
@@ -116,6 +119,7 @@ class CustomerWelcomeView(APIView):
     authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "non_sensitive_request"
 
+    @transaction.atomic
     def get(self, request):
         data = {
             "last_login": request.user.last_login,
@@ -136,6 +140,7 @@ class AccountTypesView(APIView):
     authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "non_sensitive_request"
 
+    @transaction.atomic
     def get(self, request):
         account_types = AccountTypes.objects.values()
         return Response({"account_types": account_types}, status=status.HTTP_200_OK)
@@ -152,6 +157,7 @@ class AccountsView(APIView):
     authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "non_sensitive_request"
 
+    @transaction.atomic
     # Get all accounts of the user
     def get(self, request):
         accounts = Accounts.objects.filter(
@@ -173,6 +179,7 @@ class TransactionsView(APIView):
     permission_classes = (permissions.IsAuthenticated, IsCustomer,)
     authentication_classes = (TokenAndTwoFactorAuthentication,)
 
+    @transaction.atomic
     # Get all transactions of an account
     def post(self, request):
         # Check if the account belong to the user
@@ -206,10 +213,12 @@ class CustomerTicketsView(APIView):
     authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "non_sensitive_request"
 
+    @transaction.atomic
     def get(self, request):
         serializer = GetTicketsSerializer(request.user).get_customer_tickets()
         return Response({"tickets": serializer}, status=status.HTTP_200_OK)
 
+    @transaction.atomic
     def post(self, request):
         serializer = CreateTicketSerializer(
             request.user, request.data, data=request.data
@@ -239,6 +248,7 @@ class DepositView(APIView):
     authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "sensitive_request"
 
+    @transaction.atomic
     def post(self, request):
         serializer = DepositSerializer(request.user, request.data, data=request.data)
         if serializer.is_valid():
@@ -263,6 +273,7 @@ class WithdrawView(APIView):
     authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "sensitive_request"
 
+    @transaction.atomic
     def post(self, request):
         serializer = WithdrawSerializer(request.user, request.data, data=request.data)
         if serializer.is_valid():
@@ -288,6 +299,7 @@ class TransferView(APIView):
     authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "sensitive_request"
 
+    @transaction.atomic
     def post(self, request):
         serializer = TransferSerializer(request.user, request.data, data=request.data)
         if serializer.is_valid():

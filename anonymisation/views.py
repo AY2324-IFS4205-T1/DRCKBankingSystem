@@ -1,11 +1,15 @@
+from django.db import transaction
 from django.http import FileResponse, HttpResponse
 from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from anonymisation.anonymise.overall import TooShortException
-from anonymisation.permissions import IsAnonymiser, IsResearcher, IsResearcherOrAnonymiser
-from anonymisation.serializers import (GetAnonDataSerializer, GetKValueSerializer, QueryAnonSerializer,
+from anonymisation.permissions import (IsAnonymiser, IsResearcher,
+                                       IsResearcherOrAnonymiser)
+from anonymisation.serializers import (GetAnonDataSerializer,
+                                       GetKValueSerializer,
+                                       QueryAnonSerializer,
                                        SetKValueSerializer,
                                        ViewAnonStatsSerializer)
 from anonymisation.wrapper import generate_statistics
@@ -24,6 +28,7 @@ class CalculateAnonView(APIView):
     authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "sensitive_request"
 
+    @transaction.atomic
     def get(self, request):
         try:
             generate_statistics()
@@ -45,6 +50,7 @@ class ViewAnonStatsView(APIView):
     authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "non_sensitive_request"
 
+    @transaction.atomic
     def get(self, request):
         graph = ViewAnonStatsSerializer().get_graph()
         return FileResponse(graph, content_type="image/png")
@@ -64,6 +70,7 @@ class KValueView(APIView):
     authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "sensitive_request"
 
+    @transaction.atomic
     def get(self, request):
         serialiser = GetKValueSerializer(request.data, data=request.data)
         if serialiser.is_valid():
@@ -71,6 +78,7 @@ class KValueView(APIView):
             return Response({"k_value": k_value}, status=status.HTTP_200_OK)
         return Response(serialiser.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    @transaction.atomic
     def post(self, request):
         serialiser = SetKValueSerializer(request.data, data=request.data)
         if serialiser.is_valid():
@@ -118,6 +126,7 @@ class QueryAnonView(APIView):
     authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "non_sensitive_request"
 
+    @transaction.atomic
     def post(self, request):
         serialiser = QueryAnonSerializer(request.data, data=request.data)
         if serialiser.is_valid():
@@ -137,6 +146,7 @@ class GetAnonDataView(APIView):
     authentication_classes = (TokenAndTwoFactorAuthentication,)
     throttle_scope = "sensitive_request"
 
+    @transaction.atomic
     def get(self, request):
         serialiser = GetAnonDataSerializer(data=request.data)
         if serialiser.is_valid():

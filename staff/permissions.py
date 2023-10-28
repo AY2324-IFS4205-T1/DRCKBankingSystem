@@ -1,12 +1,14 @@
+from django.db import transaction
 from rest_framework.permissions import BasePermission
-from log.logging import AccessControlLogger
 
+from log.logging import AccessControlLogger
 from staff.models import Staff
 from user.models import User
 
 
 class IsStaff(BasePermission):
 
+    @transaction.atomic
     def has_permission(self, request, view):
         """
         Return `True` if permission is granted, `False` otherwise.
@@ -18,6 +20,7 @@ class IsStaff(BasePermission):
 
 class IsTicketReviewer(BasePermission):
     
+    @transaction.atomic
     def has_permission(self, request, view):
         """
         Return `True` if permission is granted, `False` otherwise.

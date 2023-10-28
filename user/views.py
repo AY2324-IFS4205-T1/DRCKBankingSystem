@@ -1,3 +1,4 @@
+from django.db import transaction
 from django.http import FileResponse
 from knox.auth import TokenAuthentication
 from knox.views import LogoutAllView as KnoxLogoutView
@@ -5,13 +6,14 @@ from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle
 from rest_framework.views import APIView
-from user.permissions import HasNotSetupTwoFA
 
+from user.permissions import HasNotSetupTwoFA
 from user.serializers import (AuthCheckSerializer, GetTwoFASerializer,
                               VerifyTwoFASerializer)
 
 
 class LogoutView(KnoxLogoutView):
+    @transaction.atomic
     def post(self, request, format=None):
         request.user.auth_token_set.all().delete()
         return super().post(request, format)
@@ -27,6 +29,7 @@ class SetupTwoFactorAuthenticationView(APIView):
     authentication_classes = (TokenAuthentication,)
     throttle_scope = "sensitive_request"
 
+    @transaction.atomic
     def get(self, request):
         qr_code = GetTwoFASerializer(request.user).get_qr_code()
         return FileResponse(qr_code, content_type="image/png")
@@ -46,6 +49,7 @@ class VerifyTwoFactorAuthenticationView(APIView):
     authentication_classes = (TokenAuthentication,)
     throttle_scope = "non_sensitive_request"
 
+    @transaction.atomic
     def post(self, request):
         serializer = VerifyTwoFASerializer(request.user, request.data, request.headers.get('Authorization'), data=request.data)
         if serializer.is_valid():
@@ -71,6 +75,7 @@ class AuthenticationCheckView(APIView):
     authentication_classes = (TokenAuthentication,)
     throttle_classes = [AnonRateThrottle]
 
+    @transaction.atomic
     def post(self, request):
         serialiser = AuthCheckSerializer(request, data=request.data)
         if serialiser.is_valid():
