@@ -178,6 +178,7 @@ class TransactionsView(APIView):
 
     permission_classes = (permissions.IsAuthenticated, IsCustomer,)
     authentication_classes = (TokenAndTwoFactorAuthentication,)
+    throttle_scope = "non_sensitive_request"
 
     @transaction.atomic
     # Get all transactions of an account

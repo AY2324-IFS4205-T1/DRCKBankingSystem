@@ -55,6 +55,7 @@ class StaffWelcomeView(APIView):
 
     permission_classes = (permissions.IsAuthenticated, IsStaff)
     authentication_classes = (TokenAndTwoFactorAuthentication,)
+    throttle_scope = "non_sensitive_request"
 
     @transaction.atomic
     # Displays the user's first name, last name, last login in Dashboard
@@ -77,6 +78,7 @@ class GetOpenTicketsView(APIView):
 
     permission_classes = (permissions.IsAuthenticated, IsStaff, IsTicketReviewer,)
     authentication_classes = (TokenAndTwoFactorAuthentication,)
+    throttle_scope = "non_sensitive_request"
 
     @transaction.atomic
     def get(self, request):
@@ -93,6 +95,7 @@ class GetClosedTicketsView(APIView):
 
     permission_classes = (permissions.IsAuthenticated, IsStaff, IsTicketReviewer,)
     authentication_classes = (TokenAndTwoFactorAuthentication,)
+    throttle_scope = "non_sensitive_request"
 
     @transaction.atomic
     def get(self, request):
