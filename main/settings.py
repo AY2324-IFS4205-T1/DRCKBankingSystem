@@ -113,7 +113,7 @@ if DEBUG:
         }, 
     }  
 else:
-    if 'migrate' in sys.argv or 'makemigrations' in sys.argv:
+    if 'migrate' in sys.argv or 'makemigrations' in sys.argv or 'createcachetable' in sys.argv:
         DATABASES = {
             'default': {
                 'ENGINE': 'django.db.backends.postgresql_psycopg2',
