@@ -145,8 +145,6 @@ class VerifyTwoFASerializer(serializers.Serializer):
         result = verify_otp(self.two_fa.key, self.otp)
         if result:
             self.two_fa.knox_token = self.authorisation_header
-        else:
-            self.two_fa.knox_token = ""
         self.two_fa.save()
         return {
             "2FA success": result,
