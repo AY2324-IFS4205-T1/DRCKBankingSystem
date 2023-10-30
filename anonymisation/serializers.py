@@ -25,7 +25,7 @@ class ViewAnonStatsSerializer(serializers.Serializer):
         self.info_losses = list()
         self.utilities_query1 = list()
         self.utilities_query2 = list()
-        self.last_updated = timezone.now().astimezone().isoformat()
+        self.last_updated = timezone.now()
 
         for stat in Statistics.objects.all().order_by("k_value"):
             self.k_values.append(stat.k_value)
@@ -39,7 +39,7 @@ class ViewAnonStatsSerializer(serializers.Serializer):
         self.info_losses = np.array(self.info_losses)
         self.utilities_query1 = np.array(self.utilities_query1)
         self.utilities_query2 = np.array(self.utilities_query2)
-        self.text = "Last updated: " + self.last_updated.__str__()
+        self.text = "Last updated: " + self.last_updated.astimezone().isoformat()
     
     def plot_graph(self):
         axis1 = plt.figure().add_axes((0.15,0.15,0.7,0.7))
