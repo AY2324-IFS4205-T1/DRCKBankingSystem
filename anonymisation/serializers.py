@@ -25,7 +25,7 @@ class ViewAnonStatsSerializer(serializers.Serializer):
         self.info_losses = list()
         self.utilities_query1 = list()
         self.utilities_query2 = list()
-        self.last_updated = timezone.now()
+        self.last_updated = timezone.now().astimezone().isoformat()
 
         for stat in Statistics.objects.all().order_by("k_value"):
             self.k_values.append(stat.k_value)
