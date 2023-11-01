@@ -1,5 +1,5 @@
 asgiref==3.7.2 # ASGI specs, helper code, and adapters
-Django==4.2.6 # A high-level Python web framework that encourages rapid development and clean, pragmatic design.
+Django==4.2.7 # A high-level Python web framework that encourages rapid development and clean, pragmatic design.
 django-cors-headers==4.3.0 # django-cors-headers is a Django application for handling the server headers required for Cross-Origin Resource Sharing (CORS).
 django-rest-knox==4.2.0 # Django-rest-knox library provides models and views to handle token-based authentication in a more secure and extensible wa
 djangorestframework==3.14.0 # Web APIs for Django, made easy.
